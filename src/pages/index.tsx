@@ -1,9 +1,1 @@
-// import {NextPage} from "next";
-
-// const Home: NextPage =() => (
-//   <div className="text-3xl font bold underline p-10">
-//     <h1 className="text-blue-500">MoCamp</h1>
-//   </div>
-// )
-
-// export default Home;
+/* 로그인 페이지 리다이렉션 시킴*/
