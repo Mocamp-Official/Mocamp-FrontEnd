@@ -48,9 +48,8 @@ jobs:
         id: fix-image
         run: |
           echo "${{ steps.md2jira.outputs.output-text }}" | \
-          sed -E 's/!\[.*?\]\((.*?)\)/!\1!/g' | \
-          sed -E 's#<img [^>]*src=[\"'\'']([^\"'\'']+)[\"'\''][^>]*[/]?>#!\1!#g' > jira-ready.txt
-
+          sed -E 's#<img[^>]*src="([^"]+)"[^>]*>#!\1!#g' > jira-ready.txt
+      
           echo "output<<EOF" >> $GITHUB_OUTPUT
           cat jira-ready.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
