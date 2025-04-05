@@ -35,8 +35,8 @@ body:
 
         ### 🗣️ ETC(선택)
 
-        ### 📸 피그마 스크린샷
-        이미지 링크 또는 첨부 스크린샷 설명
+         ### 📸 피그마 스크린샷
+        ![피그마 화면](https://example.com/image.png)
     validations:
       required: true
 

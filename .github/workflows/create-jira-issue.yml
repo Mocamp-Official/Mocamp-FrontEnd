@@ -43,6 +43,14 @@ jobs:
             ${{ github.event.issue.body }}
           mode: md2jira
 
+      - name: Replace markdown images with Jira format
+        id: fix-image
+        run: |
+          echo "${{ steps.md2jira.outputs.output-text }}" | sed -E 's/!\[.*?\]\((.*?)\)/!\1!/g' > jira-ready.txt
+          echo "output<<EOF" >> $GITHUB_OUTPUT
+          cat jira-ready.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create Issue
         id: create
         uses: atlassian/gajira-create@v3
@@ -50,7 +58,7 @@ jobs:
           project: MCP
           issuetype: Subtask
           summary: '${{ github.event.issue.title }}'
-          description: '${{ steps.md2jira.outputs.output-text }}'
+          description: '${{ steps.fix-image.outputs.output }}'
           fields: |
             {
               "parent": {
