@@ -5,6 +5,7 @@ on:
       - opened
 permissions:
   contents: write
+  issues: write
 jobs:
   create-issue:
     name: Create Jira issue
@@ -43,10 +44,13 @@ jobs:
             ${{ github.event.issue.body }}
           mode: md2jira
 
-      - name: Replace markdown images with Jira format
+      - name: Replace images with Jira syntax
         id: fix-image
         run: |
-          echo "${{ steps.md2jira.outputs.output-text }}" | sed -E 's/!\[.*?\]\((.*?)\)/!\1!/g' > jira-ready.txt
+          echo "${{ steps.md2jira.outputs.output-text }}" | \
+          sed -E 's/!\[.*?\]\((.*?)\)/!\1!/g' | \
+          sed -E 's#<img [^>]*src=[\"'\'']([^\"'\'']+)[\"'\''][^>]*[/]?>#!\1!#g' > jira-ready.txt
+
           echo "output<<EOF" >> $GITHUB_OUTPUT
           cat jira-ready.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
