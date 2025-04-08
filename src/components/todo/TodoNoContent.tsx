@@ -1,6 +1,6 @@
 const TodoNoContent = () => {
   return (
-    <div className="flex flex-col items-center w-full h-full pt-[255px] gap-5 bg-[#FEFEFE]  rounded-[20px]">
+    <div className="flex flex-col items-center w-[480px] h-full pt-[255px] gap-5 bg-[#FEFEFE]  rounded-[20px]">
       <span className="text-[#C4C4C4] font-semibold text-2xl">
         오늘의 목표는 무엇인가요?
       </span>
