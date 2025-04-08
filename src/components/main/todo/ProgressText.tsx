@@ -8,7 +8,7 @@ const ProgressText = ({ progress }: ProgressTextProps) => {
     if (progress >= 80) return '거의 다 왔어요!';
     if (progress >= 50) return '좋아요! 절반 넘었어요';
     if (progress >= 20) return '천천히 올라가고 있어요';
-    return '시작이 반이에요! 🚀';
+    return '시작이 반이에요!';
   };
 
   return (
