@@ -1,8 +1,9 @@
 import NoContent from './NoContent';
 import ProgressCard from './ProgressCard';
+import TodoList from './TodoList';
 
 interface TodoCardProps {
-  items: { done: boolean }[];
+  items: { text: string; done: boolean }[];
 }
 
 const TodoCard = ({ items }: TodoCardProps) => {
@@ -12,10 +13,12 @@ const TodoCard = ({ items }: TodoCardProps) => {
     : 0;
 
   return (
-    <div className="w-[480px] h-[630px] flex items-center justify-center">
+    <div className="w-[480px] h-[630px] flex items-center justify-center ">
       {items.length ? (
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full h-full relative items-center">
+          <div className="absolute top-[149.5px] w-[445px] h-[2px] bg-[length:20px_2px] bg-repeat-x bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)]" />
           <ProgressCard progress={progress} />
+          <TodoList items={items} />
         </div>
       ) : (
         <NoContent />
