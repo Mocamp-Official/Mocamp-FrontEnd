@@ -9,7 +9,7 @@ interface TodoCardProps {
   items: Todo[];
 }
 
-const TodoList = ({ items }: TodoCardProps) => {
+const TodoCard = ({ items }: TodoCardProps) => {
   const [todos, setTodos] = useState(items);
 
   const toggleDone = (idx: number) => {
@@ -45,4 +45,4 @@ const TodoList = ({ items }: TodoCardProps) => {
   );
 };
 
-export default TodoList;
+export default TodoCard;

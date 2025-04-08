@@ -1,4 +1,4 @@
-import TodoCard from '@/components/main/todo/TodoCard';
+import TodoContainer from '@/components/todo/TodoContainer';
 
 const mockTodos = [
   {
@@ -12,10 +12,7 @@ const mockTodos = [
       { text: '할 일 2', done: false },
       { text: '할 일 2', done: false },
       { text: '할 일 2', done: false },
-      { text: '할 일 2', done: false },
-      { text: '할 일 2', done: false },
-      { text: '할 일 2', done: false },
-      { text: '할 일 2', done: false },
+      { text: '할 일 2', done: true },
       { text: '할 일 2', done: false },
       { text: '할 일 2', done: false },
       { text: '할 일 2', done: false },
@@ -29,7 +26,7 @@ const WorkspacePage = () => {
   return (
     <div className="flex items-center justify-center gap-5 bg-[#F2F2F2] w-screen h-screen">
       {mockTodos.map((todo) => (
-        <TodoCard key={todo.id} items={todo.items} />
+        <TodoContainer key={todo.id} items={todo.items} />
       ))}
     </div>
   );
