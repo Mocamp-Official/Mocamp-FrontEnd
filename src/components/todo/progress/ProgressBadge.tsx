@@ -1,8 +1,11 @@
 interface ProgressBadgeProps {
-  progress: number;
+  done: number;
+  total: number;
 }
 
-const ProgressBadge = ({ progress }: ProgressBadgeProps) => {
+const ProgressBadge = ({ done, total }: ProgressBadgeProps) => {
+  const progressPercent = total === 0 ? 0 : Math.round((done / total) * 100);
+
   const getBadgeStyle = (value: number) => {
     if (value === 100) {
       return {
@@ -21,19 +24,21 @@ const ProgressBadge = ({ progress }: ProgressBadgeProps) => {
     }
 
     return {
-      text: 'text-white',
-      border: 'border-blue-400',
-      bg: 'bg-blue-400',
+      text: 'text-[#C4C4C4]',
+      border: 'border-[#E6E6E6]',
+      bg: 'bg-[#F2F2F2]',
     };
   };
 
-  const { text, border, bg } = getBadgeStyle(progress);
+  const { text, border, bg } = getBadgeStyle(progressPercent);
 
   return (
     <div
       className={`flex justify-center items-center w-[100px] h-[40.64px] rounded-[20px] border-[1px] ${text} ${border} ${bg}`}
     >
-      <span className="text-lg font-semibold">{progress}%</span>
+      <span className="text-lg font-semibold">
+        {done} / {total}
+      </span>
     </div>
   );
 };
