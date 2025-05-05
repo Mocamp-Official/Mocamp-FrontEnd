@@ -3,7 +3,7 @@ import TodoMoreIcon from '@/public/svgs/TodoMoreIcon.svg';
 import PencilIcon from '@/public/svgs/PencilIcon.svg';
 
 interface MoreMenuProps {
-  onEditGoal?: () => void;
+  onEditGoal: () => void;
   onEditCommitment?: () => void;
 }
 
@@ -46,7 +46,10 @@ const MoreMenu = ({ onEditGoal, onEditCommitment }: MoreMenuProps) => {
           <div className="my-5 h-[1px] bg-[#e8e8e8]" />
           <div
             className="flex items-center gap-[9px] cursor-pointer"
-            onClick={onEditGoal}
+            onClick={() => {
+              setIsOpen(false);
+              onEditGoal(); // 🔥 모달 열기 콜백
+            }}
           >
             <PencilIcon className="w-[21px] h-[15px]" />
             <button className="w-full text-base font-medium">

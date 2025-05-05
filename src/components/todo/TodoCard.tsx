@@ -19,7 +19,7 @@ const TodoCard = ({ items, onToggle }: TodoCardProps) => {
             onClick={() => onToggle(index)}
           >
             <div
-              className={`w-[40px] h-[40.645px] rounded-[10px] border-[1px] transition-colors duration-200 
+              className={`w-[40px] h-[40.645px] rounded-[10px] border transition-colors duration-200 
               ${item.done ? 'bg-[#BEF1E4] border-[#27cfa5]' : 'bg-[#ffffff] border-[#E8E8E8]'}`}
             />
             <span

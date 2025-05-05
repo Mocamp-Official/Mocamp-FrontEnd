@@ -1,14 +1,19 @@
+import { useState } from 'react';
 import ProgressBadge from './ProgressBadge';
 import ProgressText from './ProgressText';
 import ProgressBar from './ProgressBar';
 import MoreMenu from './MoreMenu';
+import ModalWrapper from '@/components/todo/modal/ModalWrapper';
+import { Todo } from '@/types/todo';
 
 interface ProgressCardProps {
   done: number;
   total: number;
+  todos: Todo[];
 }
 
-const ProgressCard = ({ done, total }: ProgressCardProps) => {
+const ProgressCard = ({ done, total, todos }: ProgressCardProps) => {
+  const [showModal, setShowModal] = useState(false);
   const progress = total === 0 ? 0 : Math.round((done / total) * 100);
 
   return (
@@ -20,10 +25,18 @@ const ProgressCard = ({ done, total }: ProgressCardProps) => {
         </div>
         <MoreMenu
           onEditCommitment={() => console.log('다짐 수정')}
-          onEditGoal={() => console.log('목표 수정')}
+          onEditGoal={() => setShowModal(true)}
         />
       </div>
       <ProgressBar progress={progress} />
+
+      {showModal && (
+        <ModalWrapper
+          onClose={() => setShowModal(false)}
+          mode="edit"
+          todos={todos}
+        />
+      )}
     </div>
   );
 };
