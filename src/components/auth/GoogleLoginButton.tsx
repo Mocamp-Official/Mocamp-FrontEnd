@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function GoogleLoginButton() {
+const GoogleLoginButton = () => {
   return (
     <button className="flex bg-white w-full h-16 justify-center items-center relative border border-gray-300 group">
       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded pointer-events-none transition-opacity duration-200"></div>
@@ -15,4 +15,6 @@ export default function GoogleLoginButton() {
       </div>
     </button>
   );
-}
+};
+
+export default GoogleLoginButton;

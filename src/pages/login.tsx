@@ -3,7 +3,7 @@ import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 import NaverLoginButton from '@/components/auth/NaverLoginButton';
 import MocampIcon from '@/public/svgs/MocampIcon.svg';
 
-export default function LoginPage() {
+const LoginPage = () => {
   return (
     <div className="flex bg-[#ffffff] w-screen h-screen">
       <div className="h-100% mx-auto justify-center items-center flex flex-col bg-[#ffffff]">
@@ -24,4 +24,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;

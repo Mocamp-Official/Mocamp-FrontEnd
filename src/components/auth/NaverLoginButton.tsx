@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NaverLoginButton() {
+const NaverLoginButton = () => {
   return (
     <button className="flex bg-[#05C050] w-full h-16 justify-center items-center relative border border-gray-300 rounded-[5px] group">
       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded-[5px] pointer-events-none transition-opacity duration-200"></div>
@@ -15,4 +15,6 @@ export default function NaverLoginButton() {
       </div>
     </button>
   );
-}
+};
+
+export default NaverLoginButton;
