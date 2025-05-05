@@ -27,8 +27,14 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85">
-      <div className="flex flex-col w-[660px] h-[880px] rounded-[20px] bg-white px-[50px] py-11 gap-10">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85"
+      onClick={onClose}
+    >
+      <div
+        className="flex flex-col w-[660px] h-[880px] rounded-[20px] bg-white px-[50px] py-11 gap-10"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* 방 이름 + 마이크 설정 */}
         <div className="flex mt-3 gap-5">
           <LabeledBox label="방 이름 *">
