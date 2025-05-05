@@ -18,10 +18,10 @@ const TodoContainer = ({ items }: TodoContainerProps) => {
   const doneCount = todos.filter((item) => item.done).length;
   const totalCount = todos.length;
 
-  const toggleDone = (index: number) => {
+  const toggleDone = (targetIndex: number) => {
     setTodos((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, done: !item.done } : item,
+      prev.map((todo, index) =>
+        index === targetIndex ? { ...todo, done: !todo.done } : todo,
       ),
     );
   };
