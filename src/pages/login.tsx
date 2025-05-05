@@ -5,16 +5,21 @@ import MocampIcon from '@/public/svgs/MocampIcon.svg';
 
 export default function LoginPage() {
   return (
-    <div className="flex bg-[#F2F2F2] w-screen h-screen">
-      <div className="w-[660px] h-100% mx-auto justify-center items-center flex flex-col bg-[#ffffff]">
+    <div className="flex bg-[#ffffff] w-screen h-screen">
+      <div className="h-100% mx-auto justify-center items-center flex flex-col bg-[#ffffff]">
         <MocampIcon />
-        <p className="my-10 text-2xl font-medium">
-          함께 모여 캠키고 성취하는 우리만의 공간
-        </p>
-        <div className="flex flex-col gap-3 w-[450px]">
-          <NaverLoginButton></NaverLoginButton>
-          <KakaoLoginButton></KakaoLoginButton>
-          <GoogleLoginButton></GoogleLoginButton>
+        <div className="mt-8 mb-32 text-2xl font-medium">
+          <p>
+            모캠프는{' '}
+            <span className="text-[#27CFA5] font-semibold">로그인</span> 후
+          </p>
+          <p className="mt-2">시작할 수 있어요 :D</p>
+        </div>
+
+        <div className="flex flex-col gap-5 w-[600px]">
+          <NaverLoginButton />
+          <KakaoLoginButton />
+          <GoogleLoginButton />
         </div>
       </div>
     </div>
