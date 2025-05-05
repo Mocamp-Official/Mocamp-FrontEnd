@@ -1,6 +1,15 @@
 /* 모캠프(방) 생성 페이지 */
-import React from 'react';
+import { useState } from 'react';
+import CreateRoom from '@/components/create/CreateRoom';
 
-export default function create() {
-  return <div>create</div>;
-}
+const Create = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      <div onClick={() => setIsOpen(true)}>create</div>
+      {isOpen && <CreateRoom onClose={() => setIsOpen(false)} />}
+    </>
+  );
+};
+
+export default Create;
