@@ -1,11 +1,19 @@
 import React from 'react';
+import { useRouter } from 'next/router';
+
 const OnboardingHeader = () => {
+const router = useRouter();
+
+const handleLogoClick = () => {
+    router.push('/login'); 
+};
     return (
     <header className="w-full bg-white h-[100px] min-w-[1920px]">
     <div className="relative w-[1920px] h-full mx-auto">
-    {/* 버튼(기존 디자인에서 패딩값, 폰트 크기 차이 존재재*/}
+    {/* 버튼(기존 디자인에서 패딩값, 폰트 크기 차이 존재*/}
     <button
         type="button"
+        onClick={handleLogoClick}
         className="
             absolute top-[25px] left-[1410px]
             w-[190px] h-[51px]
@@ -26,4 +34,5 @@ const OnboardingHeader = () => {
 };
 
 export default OnboardingHeader;
+
 
