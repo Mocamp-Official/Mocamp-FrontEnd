@@ -1,4 +1,5 @@
 // 모캠프프 생성 페이지 + 웹 캠 프리뷰 페이지 사용 예정
+import React from 'react';
 import { useRouter } from 'next/router';
 
 const BasicHeader = () => {

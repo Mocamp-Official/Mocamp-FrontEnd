@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 const OnboardingHeader = () => {
 const router = useRouter();
 
-const handleLogoClick = () => {
+const handleLoginClick = () => {
     router.push('/login'); 
 };
     return (
@@ -13,7 +13,7 @@ const handleLogoClick = () => {
     {/* 버튼(기존 디자인에서 패딩값, 폰트 크기 차이 존재*/}
     <button
         type="button"
-        onClick={handleLogoClick}
+        onClick={handleLoginClick}
         className="
             absolute top-[25px] left-[1410px]
             w-[190px] h-[51px]
