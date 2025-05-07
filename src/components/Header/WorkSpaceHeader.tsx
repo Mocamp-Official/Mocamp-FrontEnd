@@ -1,11 +1,22 @@
+//메인 작업 공간 사용 예정
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+//세팅 모달 개발 후 import
+
+interface WorkspaceHeaderProps {
+    roomName?: string;
+    initialNotice?: string;
+    isOwner?: boolean;
+}
 
 const WorkspaceHeader = ({
-    // api 연결 : roomname & Owner 판단 
+    // api 연결 후: roomname & Owner 판단 
     roomName = '은학샘과 아이들',
     initialNotice = '',
     isOwner = true,
-}) => {
+}: WorkspaceHeaderProps) => {
+
+    const router = useRouter();
     const [notice, setNotice] = useState(initialNotice);
     const [editing, setEditing] = useState(isOwner && !notice);
 
@@ -13,17 +24,43 @@ const WorkspaceHeader = ({
     const handleNoticeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') setEditing(false);
     };
-    const handleNoticeBlur = (e: React.FocusEvent<HTMLInputElement>) => setEditing(false);
+
+    const handleNoticeBlur = (e: React.FocusEvent<HTMLInputElement>) => 
+        setEditing(false);
+
 
     const handleNoticeClick = () => {
     if (isOwner) setEditing(true);
     };
 
+    const handleKakaoShare = () => {
+        alert('추후 구현');
+    }
+
+    const handleCopyLink = async () => {
+        try {
+            const link = window.location.href;
+            await navigator.clipboard.writeText(link);
+            alert('링크가 복사되었습니다!');
+        } catch (err) {
+            console.error('링크 복사에 실패하였습니다:', err);
+        }
+    };
+    
+    //설정 모달 열고 닫기
+    // const handleSettingClick = () => {
+    //     setShowModal(true);
+    // };
+
+    // const closeModal = () => {
+    //     setShowModal(false);
+    // };
+
 return (
     <header className="w-full bg-white h-[100px] min-w-[1920px] border-b-0">
     <div className="relative w-[1920px] h-full mx-auto">
         <img
-        src="/mocamp_logo.svg"
+        src="/svgs/MocampIcon.svg"
         alt="모캠프 로고"
         className="absolute top-[26px] left-[320px] w-[120px] h-[48.46px]"
         />
@@ -74,7 +111,7 @@ return (
             <span
             className={`
                 w-full h-full
-                font-pre font-medium font-pre text-[20px] leading-[100%] tracking-[-0.02em]
+                font-pre font-medium text-[20px] leading-[100%] tracking-[-0.02em]
                 ${notice ? 'text-[#555555] font-semibold' : 'text-[#C4C4C4]'}
                 text-left flex items-center
             `}
@@ -87,6 +124,7 @@ return (
 
         {/* 링크 복사 버튼 */}
         <button
+        onClick={handleCopyLink}
         className="
             absolute top-[20px] left-[1600px]
             w-[60px] h-[60px]
@@ -94,11 +132,12 @@ return (
             flex items-center justify-center
         "
         >
-        <img src="/link_icon.svg" alt="링크 복사" className="w-[28px] h-[28px]" />
+        <img src="/svgs/link_icon.svg" alt="링크 복사" className="w-[28px] h-[28px]" />
         </button>
 
         {/* 카카오 공유 버튼 */}
         <button
+        onClick={handleKakaoShare}
         className="
             absolute top-[20px] left-[1670px]
             w-[60px] h-[60px]
@@ -106,11 +145,12 @@ return (
             flex items-center justify-center
         "
         >
-        <img src="/Kakao_link_icon.svg" alt="카카오톡 공유유" className="w-[26px] h-[24px]" />
+        <img src="/svgs/Kakao_link_icon.svg" alt="카카오톡 공유" className="w-[26px] h-[24px]" />
         </button>
 
         {/* 설정(?) 버튼 */}
         <button
+        // onClick={handleSettingClick}
         className="
             absolute top-[20px] left-[1740px]
             w-[60px] h-[60px]
@@ -118,7 +158,7 @@ return (
             flex items-center justify-center
         "
         >
-        <img src="/setting_icon.svg" alt="설정" className="w-[28px] h-[28px]" />
+        <img src="/svgs/setting_icon.svg" alt="설정" className="w-[28px] h-[28px]" />
         </button>
     </div>
     </header>
@@ -126,3 +166,5 @@ return (
 };
 
 export default WorkspaceHeader;
+
+
