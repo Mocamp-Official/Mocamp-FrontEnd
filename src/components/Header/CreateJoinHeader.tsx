@@ -66,7 +66,7 @@ return (
     </div>
     {/* 추 후 추가 */}
     {/* {/*<Modal isOpen={isJoinModalOpen} onClose={closeModals} title="모캠프 참여하기">
-        <p>링크 복사 모달창</p></Modal> */}
+        <p>링크 붙여넣기 모달창</p></Modal> */}
 
 
     {/* <Modal isOpen={isCreateModalOpen} onClose={closeModals} title="모캠프 생성하기기">
