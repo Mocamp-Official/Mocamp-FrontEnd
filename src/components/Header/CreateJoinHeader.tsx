@@ -1,6 +1,6 @@
 //마이 홈 헤더
 import React, { useState } from 'react';
-//모달 개발 후 import
+//생성 & 링크 붙여넣기 모달 개발 후 import
 
 const CreateJoinHeader = () => {
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
