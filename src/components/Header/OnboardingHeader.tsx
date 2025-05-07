@@ -26,3 +26,4 @@ const OnboardingHeader = () => {
 };
 
 export default OnboardingHeader;
+
