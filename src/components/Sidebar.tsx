@@ -2,9 +2,6 @@ import React from 'react';
 import SidebarTimer from '../components/Sidebar/SidebarTimer'; 
 import SidebarParticipants from '../components/Sidebar/SidebarParticipants'
 import SidebarExit from '../components/Sidebar/SidebarExitButton';
-import { formatTime } from '@/utils/timeUtils';
-
-
 
 interface SidebarProps {
     startTime: Date;
@@ -15,15 +12,16 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({
     startTime,
     endTime,
-    participants
+    participants,
 }) => {
     return (
-        <aside className="w-[200px] h-[1080px] bg-white flex flex-col justify-between">
+        <aside className="w-[200px] h-[1080px] bg-white flex flex-col justify-between border-r border-solid border-[#E6E6E6]">
             <SidebarTimer startTime={startTime} endTime={endTime} />
-            <SidebarParticipants participants={6} />
+            <SidebarParticipants participants={participants} />
             <SidebarExit />
         </aside>
     );
 };
 
 export default Sidebar;
+

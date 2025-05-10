@@ -7,17 +7,16 @@ interface SidebarParticipantsProps {
 
 const SidebarParticipants: React.FC<SidebarParticipantsProps> = ({ participants }) => {
     return (
-        <div className="w-[200px] h-[1080px] bg-white relative">
-            <div className="w-[150px] h-[126px] absolute top-[130px] left-[25px] rounded-[10px] border border-[#E8E8E8] bg-white flex flex-col gap-[19px] p-[20px]">
-                <div className="w-[73px] h-[24px] flex items-center justify-center font-pre font-semibold text-[18x] leading-[1] tracking-[-0.02em] text-[#27CFA5] bg-transparent rounded ">
-                    참여 인원
-                </div>
-                <div className="w-[110px] h-[1px] bg-[#E8E8E8] mx-[2px]" />
-                <div className="w-[110px] h-[24px] flex items-center justify-center font-pre font-medium text-[18px] leading-[1] tracking-[-0.02em] text-[#555555] bg-transparent rounded">
-                    {participants}명
-                </div>
-            </div>
+    <div className="w-[200px] h-[1080px] bg-white flex items-center justify-center">
+        <div className="w-[151px] h-[64px] absolute top-[450px] rounded-[7.5px] border border-[#E8E8E8] bg-white flex flex-row items-center justify-between px-[15px] py-[10px] gap-[10px]">
+            <span className="font-pre font-semibold text-[18px] leading-[1] tracking-[-0.02em] text-[#27CFA5]">
+                참여 인원
+            </span>
+            <span className="font-pre font-medium text-[18px] leading-[1] tracking-[-0.02em] text-[#555555]">
+                {participants}
+            </span>
         </div>
+    </div>
     );
 };
 export default  SidebarParticipants;
