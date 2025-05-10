@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import getKakaoProcess from '@/apis/getKakaoProcess';
 import type { NextPage } from 'next';
+import getGoogleProcess from '@/apis/getGoogleProcess';
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -13,19 +14,21 @@ const LoginPage: NextPage = () => {
   useEffect(() => {
     // const handleNaverLogin = async (): Promise<void> => {};
 
-    // const handleKakaoLogin = async (): Promise<void> => {
-    //   const code: string | null = new URL(window.location.href).searchParams.get('code');
-    //   const success: boolean | undefined = await getKakaoProcess(code);
-    //   if (success) {
-    //     router.push('/myhome');
-    //   }
-    // };
+    const handleGoogleLogin = async () => {
+      const code: string | null = new URL(window.location.href).searchParams.get('code');
+      const success: boolean | undefined = await getGoogleProcess(code);
+      success && router.push('/myhome');
+    };
 
-    const handleGoogleLogin = async (): Promise<void> => {};
+    const handleKakaoLogin = async (): Promise<void> => {
+      const code: string | null = new URL(window.location.href).searchParams.get('code');
+      const success: boolean | undefined = await getKakaoProcess(code);
+      success && router.push('/myhome');
+    };
 
     // handleNaverLogin();
-    // handleKakaoLogin();
-    // handleGoogleLogin();
+    handleKakaoLogin();
+    handleGoogleLogin();
   }, []);
 
   return (
