@@ -2,17 +2,14 @@ import { useState } from 'react';
 import TodoNoContent from './TodoNoContent';
 import ProgressCard from '@/components/todo/progress/ProgressCard';
 import TodoCard from './TodoCard';
-
-interface Todo {
-  text: string;
-  done: boolean;
-}
+import { Todo } from '@/types/todo';
 
 interface TodoContainerProps {
   items: Todo[];
+  onUpdateTodos: (updatedTodos: Todo[]) => void;
 }
 
-const TodoContainer = ({ items }: TodoContainerProps) => {
+const TodoContainer = ({ items, onUpdateTodos }: TodoContainerProps) => {
   const [todos, setTodos] = useState(items);
 
   const doneCount = todos.filter((item) => item.done).length;
@@ -31,11 +28,20 @@ const TodoContainer = ({ items }: TodoContainerProps) => {
       {totalCount ? (
         <div className="flex flex-col w-full h-full relative items-center">
           <div className="absolute top-[149.5px] w-[445px] h-[2px] bg-[length:20px_2px] bg-repeat-x bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)]" />
-          <ProgressCard done={doneCount} total={totalCount} />
+          <ProgressCard
+            todos={todos}
+            done={doneCount}
+            total={totalCount}
+            onUpdateTodos={setTodos}
+          />
           <TodoCard items={todos} onToggle={handleToggleDone} />
         </div>
       ) : (
-        <TodoNoContent />
+        <TodoNoContent
+          onAddTodos={(newTodos) => {
+            setTodos(newTodos);
+          }}
+        />
       )}
     </div>
   );
