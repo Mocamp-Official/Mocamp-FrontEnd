@@ -6,9 +6,10 @@ import ImageUploadBox from './ImageUploadBox';
 
 interface CreateRoomProps {
   onClose: () => void;
+  isOpen: boolean;
 }
 
-const CreateRoom = ({ onClose }: CreateRoomProps) => {
+const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
   const [micOn, setMicOn] = useState(true);
   const [roomName, setRoomName] = useState('');
   const [hour, setHour] = useState('');
@@ -22,13 +23,22 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
     parseInt(headcount || '0') >= 1 &&
     imageFile !== null;
 
+  const isValidHour = (val: string) =>
+    val === '' || (Number(val) >= 0 && Number(val) <= 12);
+
+  const isValidMinute = (val: string) =>
+    val === '' || (Number(val) >= 0 && Number(val) <= 59);
+
+  const isValidHeadcount = (val: string) =>
+    val === '' || (Number(val) >= 1 && Number(val) <= 4);
+
   const handleMicClick = () => {
     setMicOn((prev) => !prev);
   };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#e6e6e6]"
       onClick={onClose}
     >
       <div
@@ -62,14 +72,20 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               <NumberInput
                 placeholder="00"
                 value={hour}
-                onChange={(event) => setHour(event.target.value)}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  if (isValidHour(value)) setHour(value);
+                }}
                 width="max-w-[70px]"
               />
               시간
               <NumberInput
                 placeholder="00"
                 value={minute}
-                onChange={(event) => setMinute(event.target.value)}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  if (isValidMinute(value)) setMinute(value);
+                }}
                 width="max-w-[70px]"
               />
               분
@@ -81,7 +97,10 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               <NumberInput
                 placeholder="0"
                 value={headcount}
-                onChange={(event) => setHeadcount(event.target.value)}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  if (isValidHeadcount(value)) setHeadcount(value);
+                }}
                 width="max-w-[55px]"
                 minWidth="min-w-[15px]"
               />
