@@ -1,10 +1,24 @@
-import React from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
 const KakaoLoginButton = () => {
+  const router = useRouter();
+  const rest_api_key = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+  const redirect_url = 'http://localhost:3000/login';
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${rest_api_key}&redirect_uri=${redirect_url}&response_type=code`;
+  const handleKakaoLogin = async () => {
+    window.location.href = kakaoURL;
+  };
+
   return (
-    <button className="flex bg-[#FEE500] w-full h-16 justify-center items-center relative border border-gray-300 rounded-[5px] group ">
+    <button
+      onClick={() => {
+        handleKakaoLogin();
+      }}
+      className="flex bg-[#FEE500] w-full h-16 justify-center items-center relative border border-gray-300 rounded-[5px] group"
+    >
       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded-[5px] pointer-events-none transition-opacity duration-200"></div>
-      {/* <div className="absolute left-8 w-6 h-6 bg-gray-400">로고로 변경 예정 (구글)</div> */}
       <p className="text-[#3C1E1E] text-lg font-semibold">
         카카오톡 계정으로 시작하기
       </p>
