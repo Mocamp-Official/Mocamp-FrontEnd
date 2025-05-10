@@ -1,18 +1,24 @@
+import { useState, useEffect } from 'react';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 import NaverLoginButton from '@/components/auth/NaverLoginButton';
 import MocampIcon from '@/public/svgs/MocampIcon.svg';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import getKakaoProcess from '@/apis/getKakaoProcess';
-import type { NextPage } from 'next';
-import getGoogleProcess from '@/apis/getGoogleProcess';
+import { getGoogleProcess, getNaverProcess, getKakaoProcess } from '@/apis/auth';
+
+type platformType = 'naver' | 'kakao' | 'google' | null;
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
+  const [platform, setPlatform] = useState<platformType>(null);
 
   useEffect(() => {
-    // const handleNaverLogin = async (): Promise<void> => {};
+    const handleNaverLogin = async (): Promise<void> => {
+      const code: string | null = new URL(window.location.href).searchParams.get('code');
+      const success: boolean | undefined = await getNaverProcess(code);
+      success && router.push('/myhome');
+    };
 
     const handleGoogleLogin = async () => {
       const code: string | null = new URL(window.location.href).searchParams.get('code');
