@@ -1,6 +1,19 @@
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <g id="Group 2085666385">
-    <path id="Line 227" d="M2.4707 2L18.0004 18" stroke="currentColor" stroke-width="2.24615" stroke-linecap="round"/>
-    <path id="Line 228" d="M17.5293 2L1.99956 18" stroke="currentColor" stroke-width="2.24615" stroke-linecap="round"/>
-  </g>
+<svg
+  viewBox="0 0 20 20"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  class="w-5 h-5"
+>
+  <path
+    d="M2.4707 2L18.0004 18"
+    stroke="currentColor"
+    stroke-width="2.24615"
+    stroke-linecap="round"
+  />
+  <path
+    d="M17.5293 2L1.99956 18"
+    stroke="currentColor"
+    stroke-width="2.24615"
+    stroke-linecap="round"
+  />
 </svg>

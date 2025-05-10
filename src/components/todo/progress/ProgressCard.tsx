@@ -11,9 +11,15 @@ interface ProgressCardProps {
   done: number;
   total: number;
   todos: Todo[];
+  onUpdateTodos: (updatedTodos: Todo[]) => void;
 }
 
-const ProgressCard = ({ done, total, todos }: ProgressCardProps) => {
+const ProgressCard = ({
+  done,
+  total,
+  todos,
+  onUpdateTodos,
+}: ProgressCardProps) => {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showCommitmentModal, setShowCommentModal] = useState(false);
   const progress = total === 0 ? 0 : Math.round((done / total) * 100);
@@ -37,6 +43,7 @@ const ProgressCard = ({ done, total, todos }: ProgressCardProps) => {
           onClose={() => setShowGoalModal(false)}
           mode="edit"
           todos={todos}
+          onSubmit={onUpdateTodos}
         />
       )}
 

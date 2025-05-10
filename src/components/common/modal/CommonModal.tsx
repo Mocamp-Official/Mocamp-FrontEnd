@@ -23,13 +23,13 @@ const CommonModal = ({
 
   return (
     <ModalLayout onClose={onClose} width="660px" height="406px">
-      {/* <button
+      <button
         type="button"
         onClick={onClose}
-        className="absolute top-7 right-7 text-gray-500 cursor-pointer"
+        className="w-[25px] h-[25px] absolute top-[50px] right-[50px] text-[#d9d9d9] cursor-pointer"
       >
         <CloseButton />
-      </button> */}
+      </button>
 
       {/* 헤더 */}
       <div className="flex flex-col gap-[10px] mb-[50px]">
@@ -37,7 +37,7 @@ const CommonModal = ({
           <span className="text-[32px] text-[#555555] font-semibold">
             {title}
           </span>
-          <UnsecretIcon className="w-[30px] h-[38px]" />
+          {/* <UnsecretIcon className="w-[30px] h-[38px]" /> */}
         </div>
         <span className="text-lg text-[#a7a7a7] font-semibold">
           {description}
@@ -58,7 +58,10 @@ const CommonModal = ({
               : 'bg-[#e9e9e9] cursor-not-allowed'
           }`}
           disabled={!isActive}
-          onClick={() => onSubmit?.(inputValue)}
+          onClick={() => {
+            onSubmit?.(inputValue);
+            onClose();
+          }}
         >
           완료하기
         </button>
