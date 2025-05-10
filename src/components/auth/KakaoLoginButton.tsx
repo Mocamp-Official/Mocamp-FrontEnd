@@ -1,26 +1,35 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
+import { platformType } from 'src/pages/login';
 
-const KakaoLoginButton = () => {
+interface KakaoLoginButtonProps {
+  platform: platformType;
+}
+
+const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = ({ platform }) => {
   const router = useRouter();
-  const rest_api_key = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
-  const redirect_url = 'http://localhost:3000/login';
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${rest_api_key}&redirect_uri=${redirect_url}&response_type=code`;
+
   const handleKakaoLogin = async () => {
+    const rest_api_key = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+    const redirect_url = 'http://localhost:3000/login';
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${rest_api_key}&redirect_uri=${redirect_url}&response_type=code`;
+    localStorage.setItem('platform', 'kakao');
     window.location.href = kakaoURL;
   };
 
   return (
     <button
-      onClick={() => {
-        handleKakaoLogin();
-      }}
+      onClick={handleKakaoLogin}
       className="flex bg-[#FEE500] w-full h-[100px] justify-center items-center relative border border-gray-300 rounded-[5px] group"
     >
-      <div className="absolute inset-0 pbg-black opacity-0 group-hover:opacity-5 rounded-[5px] pointer-events-none transition-opacity duration-200"></div>
+      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded-[5px] pointer-events-none transition-opacity duration-200"></div>
       <p className="text-[#3C1E1E] text-[28px] font-semibold">카카오톡 계정으로 시작하기</p>
-      <div className="absolute right-[15px] top-[-26px] items-center justify-center px-5 py-2.5 rounded-tl-[10px] rounded-tr-[10px] rounded-br-[10px] bg-white border border-[#00af83]">
+      <div
+        className={`absolute right-[15px] top-[-26px] items-center justify-center px-5 py-2.5 rounded-tl-[10px] rounded-tr-[10px] rounded-br-[10px] bg-white border border-[#00af83] ${
+          platform === 'kakao' ? 'flex' : 'hidden'
+        }`}
+      >
         <p className="flex w-22.5 h-8 text-xl justify-center items-center font-semibold text-[#00af83] text-center">
           최근 로그인
         </p>
