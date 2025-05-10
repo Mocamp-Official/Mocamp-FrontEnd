@@ -20,7 +20,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
   );
 
   return (
-    <div className="flex flex-col gap-[10px] h-[470px] overflow-auto custom-scrollbar">
+    <div className="flex flex-col gap-[10px] h-[470px] overflow-auto overflow-x-hidden custom-scrollbar">
       {todos.length === 0 ? (
         <span className="flex flex-1 justify-center items-center text-[20px] font-medium text-[#c4c4c4] tracking-[0.02em]">
           목표 생성하기 버튼을 눌러 <br /> 오늘의 목표를 설정하세요
@@ -43,7 +43,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
               {isEditing ? (
                 <input
                   autoFocus
-                  className="w-full bg-transparent outline-none text-[20px] font-medium text-[#555555] placeholder:text-[#c4c4c4]"
+                  className="w-full h-6 bg-transparent outline-none pr-5 text-[20px] font-medium text-[#555555] placeholder:text-[#c4c4c4]"
                   placeholder="세부 목표를 입력하세요"
                   value={todoItem.text}
                   onChange={(e) => {

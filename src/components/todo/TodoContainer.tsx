@@ -37,7 +37,11 @@ const TodoContainer = ({ items, onUpdateTodos }: TodoContainerProps) => {
           <TodoCard items={todos} onToggle={handleToggleDone} />
         </div>
       ) : (
-        <TodoNoContent />
+        <TodoNoContent
+          onAddTodos={(newTodos) => {
+            setTodos(newTodos);
+          }}
+        />
       )}
     </div>
   );

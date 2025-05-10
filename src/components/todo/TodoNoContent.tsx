@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import ModalWrapper from '@/components/todo/modal/GoalModalWrapper';
+import { Todo } from '@/types/todo';
+import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 
-const TodoNoContent = () => {
+interface TodoNoContentProps {
+  onAddTodos: (newTodos: Todo[]) => void;
+}
+
+const TodoNoContent = ({ onAddTodos }: TodoNoContentProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpen = () => setShowModal(true);
@@ -21,7 +26,16 @@ const TodoNoContent = () => {
         </button>
       </div>
 
-      {showModal && <ModalWrapper onClose={handleClose} mode="add" />}
+      {showModal && (
+        <GoalModalWrapper
+          onClose={handleClose}
+          mode="add"
+          onSubmit={(newTodos) => {
+            onAddTodos(newTodos); // ✅ 추가된 todos 부모에게 넘김
+            handleClose();
+          }}
+        />
+      )}
     </>
   );
 };
