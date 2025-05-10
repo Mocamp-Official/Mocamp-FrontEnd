@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Todo } from '@/types/todo';
 import CloseButton from '@/public/svgs/CloseButton.svg';
 
-interface ModalContentProps {
+interface GoalModalContentProps {
   todos: Todo[];
   mode: 'add' | 'edit';
 }
 
-const ModalContent = ({ todos, mode }: ModalContentProps) => {
+const GoalModalContent = ({ todos, mode }: GoalModalContentProps) => {
   const [currentTodos, setCurrentTodos] = useState<Todo[]>(
     mode === 'edit' ? todos : [],
   );
@@ -62,4 +62,4 @@ const ModalContent = ({ todos, mode }: ModalContentProps) => {
   );
 };
 
-export default ModalContent;
+export default GoalModalContent;

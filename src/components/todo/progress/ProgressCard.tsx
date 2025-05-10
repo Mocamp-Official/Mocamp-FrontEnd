@@ -3,7 +3,8 @@ import ProgressBadge from './ProgressBadge';
 import ProgressText from './ProgressText';
 import ProgressBar from './ProgressBar';
 import MoreMenu from './MoreMenu';
-import ModalWrapper from '@/components/todo/modal/ModalWrapper';
+import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
+import CommonModal from '@/components/common/modal/CommonModal';
 import { Todo } from '@/types/todo';
 
 interface ProgressCardProps {
@@ -13,7 +14,8 @@ interface ProgressCardProps {
 }
 
 const ProgressCard = ({ done, total, todos }: ProgressCardProps) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const [showCommitmentModal, setShowCommentModal] = useState(false);
   const progress = total === 0 ? 0 : Math.round((done / total) * 100);
 
   return (
@@ -24,17 +26,26 @@ const ProgressCard = ({ done, total, todos }: ProgressCardProps) => {
           <ProgressText progress={progress} />
         </div>
         <MoreMenu
-          onEditCommitment={() => console.log('다짐 수정')}
-          onEditGoal={() => setShowModal(true)}
+          onEditCommitment={() => setShowCommentModal(true)}
+          onEditGoal={() => setShowGoalModal(true)}
         />
       </div>
       <ProgressBar progress={progress} />
 
-      {showModal && (
-        <ModalWrapper
-          onClose={() => setShowModal(false)}
+      {showGoalModal && (
+        <GoalModalWrapper
+          onClose={() => setShowGoalModal(false)}
           mode="edit"
           todos={todos}
+        />
+      )}
+
+      {showCommitmentModal && (
+        <CommonModal
+          onClose={() => setShowCommentModal(false)}
+          title="오늘의 다짐"
+          description="오늘의 다짐이나 포부를 한 줄로 작성할 수 있어요"
+          placeholder="다짐 쓰기를 통해 꿈을 이루기 위한 첫 걸음을 내딛으세요"
         />
       )}
     </div>

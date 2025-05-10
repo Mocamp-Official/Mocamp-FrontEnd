@@ -48,7 +48,7 @@ const MoreMenu = ({ onEditGoal, onEditCommitment }: MoreMenuProps) => {
             className="flex items-center gap-[9px] cursor-pointer"
             onClick={() => {
               setIsOpen(false);
-              onEditGoal(); // 🔥 모달 열기 콜백
+              onEditGoal();
             }}
           >
             <PencilIcon className="w-[21px] h-[15px]" />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ModalWrapper from '@/components/todo/modal/ModalWrapper';
+import ModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 
 const TodoNoContent = () => {
   const [showModal, setShowModal] = useState(false);
