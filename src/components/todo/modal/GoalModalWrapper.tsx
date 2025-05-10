@@ -13,12 +13,12 @@ interface GoalModalWrapperProps {
 const GoalModalWrapper = ({ onClose, mode, todos }: GoalModalWrapperProps) => {
   return (
     <ModalLayout onClose={onClose} width="660px" height="880px">
-      <button
+      {/* <button
         className="absolute top-7 right-7 text-gray-500"
         onClick={onClose}
       >
         <CloseButton />
-      </button>
+      </button> */}
 
       {/* 헤더 */}
       <div className="flex flex-col gap-[10px] mb-[50px]">

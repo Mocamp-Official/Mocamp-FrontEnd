@@ -23,13 +23,13 @@ const CommonModal = ({
 
   return (
     <ModalLayout onClose={onClose} width="660px" height="406px">
-      <button
+      {/* <button
         type="button"
         onClick={onClose}
         className="absolute top-7 right-7 text-gray-500 cursor-pointer"
       >
         <CloseButton />
-      </button>
+      </button> */}
 
       {/* 헤더 */}
       <div className="flex flex-col gap-[10px] mb-[50px]">
