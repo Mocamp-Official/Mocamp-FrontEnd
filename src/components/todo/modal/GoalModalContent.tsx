@@ -55,7 +55,11 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
                     );
                   }}
                   onBlur={() => {
-                    if (todoItem.text.trim() !== '') setEditingId(null);
+                    if (todoItem.text.trim() === '') {
+                      handleRemove(todoItem.id);
+                    } else {
+                      setEditingId(null);
+                    }
                   }}
                   onFocus={() => setEditingId(todoItem.id)}
                 />

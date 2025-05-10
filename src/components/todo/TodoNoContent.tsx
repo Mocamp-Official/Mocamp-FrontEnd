@@ -31,7 +31,7 @@ const TodoNoContent = ({ onAddTodos }: TodoNoContentProps) => {
           onClose={handleClose}
           mode="add"
           onSubmit={(newTodos) => {
-            onAddTodos(newTodos); // ✅ 추가된 todos 부모에게 넘김
+            onAddTodos(newTodos);
             handleClose();
           }}
         />
