@@ -22,7 +22,7 @@ const GoalModalWrapper = ({ onClose, mode, todos }: GoalModalWrapperProps) => {
 
       {/* 헤더 */}
       <div className="flex flex-col gap-[10px] mb-[50px]">
-        <div className="w-full flex justify-between">
+        <div className="w-[530px] flex justify-between">
           <span className="text-[32px] text-[#555555] font-semibold">
             나의 목표 관리
           </span>

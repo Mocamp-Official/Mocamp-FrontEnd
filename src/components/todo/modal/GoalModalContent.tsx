@@ -18,6 +18,10 @@ const GoalModalContent = ({ todos, mode }: GoalModalContentProps) => {
     );
   };
 
+  const sortedTodos = [...currentTodos].sort((a, b) => {
+    return Number(a.done) - Number(b.done);
+  });
+
   return (
     <div className="flex flex-col gap-[25px] h-[460px] overflow-auto custom-scrollbar">
       {currentTodos.length === 0 ? (
@@ -30,33 +34,37 @@ const GoalModalContent = ({ todos, mode }: GoalModalContentProps) => {
           </button>
         </div>
       ) : (
-        currentTodos.map((todoItem, todoIndex) => {
-          const isCompleted = todoItem.done;
+        [...currentTodos]
+          .sort((a, b) => Number(a.done) - Number(b.done))
+          .map((todoItem, todoIndex) => {
+            const isCompleted = todoItem.done;
 
-          return (
-            <div
-              key={todoIndex}
-              className={`flex justify-between items-center w-[530px] h-[70px] px-[40px] py-[20px] border rounded-[10px]
+            return (
+              <div
+                key={todoIndex}
+                className={`flex justify-between items-center w-[530px] h-[70px] px-[40px] py-[20px] border rounded-[10px]
                 ${isCompleted ? 'bg-[#bef1e4] border-[#27cfa5]' : 'bg-white border-[#e8e8e8]'}
               `}
-            >
-              <span
-                className={`font-medium text-[20px] ${
-                  isCompleted ? 'text-[#27cfa5] line-through' : 'text-[#555555]'
-                }`}
               >
-                {todoItem.text}
-              </span>
-              <button onClick={() => handleRemove(todoIndex)}>
-                <CloseButton
-                  className={`w-[20px] h-[20px] cursor-pointer ${
-                    isCompleted ? 'text-[#27cfa5]' : 'text-[#A7A7A7]'
+                <span
+                  className={`font-medium text-[20px] ${
+                    isCompleted
+                      ? 'text-[#27cfa5] line-through'
+                      : 'text-[#555555]'
                   }`}
-                />
-              </button>
-            </div>
-          );
-        })
+                >
+                  {todoItem.text}
+                </span>
+                <button onClick={() => handleRemove(todoIndex)}>
+                  <CloseButton
+                    className={`w-[20px] h-[20px] cursor-pointer ${
+                      isCompleted ? 'text-[#27cfa5]' : 'text-[#A7A7A7]'
+                    }`}
+                  />
+                </button>
+              </div>
+            );
+          })
       )}
     </div>
   );
