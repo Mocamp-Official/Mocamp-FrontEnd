@@ -30,7 +30,7 @@ const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = ({ platform }) => {
           platform === 'kakao' ? 'flex' : 'hidden'
         }`}
       >
-        <p className="flex w-[5.625rem] h-8 text-xl justify-center items-center font-semibold text-[#00af83] text-center">
+        <p className="flex w-24 h-8 text-xl justify-center items-center font-semibold text-[#00af83] text-center">
           최근 로그인
         </p>
       </div>
