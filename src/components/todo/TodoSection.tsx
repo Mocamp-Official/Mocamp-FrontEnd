@@ -1,43 +1,41 @@
 import { useState } from 'react';
-import TodoNoContent from './TodoNoContent';
+import TodoEmptyContent from './TodoEmptyContent';
 import ProgressCard from '@/components/todo/progress/ProgressCard';
 import TodoCard from './TodoCard';
 import { Todo } from '@/types/todo';
 
-interface TodoContainerProps {
-  items: Todo[];
-  onUpdateTodos: (updatedTodos: Todo[]) => void;
+interface TodoSectionProps {
+  todos: Todo[];
 }
 
-const TodoContainer = ({ items, onUpdateTodos }: TodoContainerProps) => {
-  const [todos, setTodos] = useState(items);
+const TodoSection = ({ todos: initialTodos }: TodoSectionProps) => {
+  const [todos, setTodos] = useState(initialTodos);
 
   const doneCount = todos.filter((item) => item.done).length;
-  const totalCount = todos.length;
 
-  const handleToggleDone = (targetIndex: number) => {
+  const handleToggleDone = (targetId: string) => {
     setTodos((prev) =>
-      prev.map((todo, index) =>
-        index === targetIndex ? { ...todo, done: !todo.done } : todo,
+      prev.map((todo) =>
+        todo.id === targetId ? { ...todo, done: !todo.done } : todo,
       ),
     );
   };
 
   return (
     <div className="flex h-[630px] w-[480px] items-center justify-center">
-      {totalCount ? (
+      {todos.length > 0 ? (
         <div className="relative flex h-full w-full flex-col items-center">
           <div className="absolute top-[149.5px] h-[2px] w-[445px] bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)] bg-[length:20px_2px] bg-repeat-x" />
           <ProgressCard
             todos={todos}
             done={doneCount}
-            total={totalCount}
+            total={todos.length}
             onUpdateTodos={setTodos}
           />
           <TodoCard items={todos} onToggle={handleToggleDone} />
         </div>
       ) : (
-        <TodoNoContent
+        <TodoEmptyContent
           onAddTodos={(newTodos) => {
             setTodos(newTodos);
           }}
@@ -47,4 +45,4 @@ const TodoContainer = ({ items, onUpdateTodos }: TodoContainerProps) => {
   );
 };
 
-export default TodoContainer;
+export default TodoSection;

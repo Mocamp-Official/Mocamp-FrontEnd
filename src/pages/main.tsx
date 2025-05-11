@@ -1,5 +1,19 @@
 import { useState } from 'react';
-import TodoContainer from '@/components/todo/TodoContainer';
+import TodoSection from '@/components/todo/TodoSection';
+
+const WorkspacePage = () => {
+  const [todoGroups, setTodoGroups] = useState(initialTodos);
+
+  return (
+    <div className="flex h-screen w-screen items-center justify-center gap-5 bg-[#F2F2F2]">
+      {todoGroups.map((group) => (
+        <TodoSection key={group.id} todos={group.items} />
+      ))}
+    </div>
+  );
+};
+
+export default WorkspacePage;
 
 const initialTodos = [
   {
@@ -28,32 +42,3 @@ const initialTodos = [
     items: [{ id: '3-1', text: '할 일 3', done: true }],
   },
 ];
-
-const WorkspacePage = () => {
-  const [todoGroups, setTodoGroups] = useState(initialTodos);
-
-  const handleUpdateTodos = (
-    groupId: string,
-    updatedTodos: (typeof initialTodos)[0]['items'],
-  ) => {
-    setTodoGroups((prev) =>
-      prev.map((group) =>
-        group.id === groupId ? { ...group, items: updatedTodos } : group,
-      ),
-    );
-  };
-
-  return (
-    <div className="flex items-center justify-center gap-5 bg-[#F2F2F2] w-screen h-screen">
-      {todoGroups.map((group) => (
-        <TodoContainer
-          key={group.id}
-          items={group.items}
-          onUpdateTodos={(updated) => handleUpdateTodos(group.id, updated)}
-        />
-      ))}
-    </div>
-  );
-};
-
-export default WorkspacePage;

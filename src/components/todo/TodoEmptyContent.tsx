@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Todo } from '@/types/todo';
 import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 
-interface TodoNoContentProps {
+interface TodoEmptyContentProps {
   onAddTodos: (newTodos: Todo[]) => void;
 }
 
-const TodoNoContent = ({ onAddTodos }: TodoNoContentProps) => {
+const TodoEmptyContent = ({ onAddTodos }: TodoEmptyContentProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpen = () => setShowModal(true);
@@ -40,4 +40,4 @@ const TodoNoContent = ({ onAddTodos }: TodoNoContentProps) => {
   );
 };
 
-export default TodoNoContent;
+export default TodoEmptyContent;

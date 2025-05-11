@@ -36,7 +36,7 @@ const ProgressCard = ({
           onEditGoal={() => setShowGoalModal(true)}
         />
       </div>
-      <ProgressBar progress={progress} />
+      <ProgressBar value={progress} />
 
       {showGoalModal && (
         <GoalModalWrapper
