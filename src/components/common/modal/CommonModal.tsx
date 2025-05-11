@@ -35,12 +35,12 @@ const CommonModal = ({
       {/* 헤더 */}
       <div className="mb-[50px] flex flex-col gap-[10px]">
         <div className="flex w-full justify-between">
-          <span className="text-[32px] font-semibold text-[#555555]">
+          <span className="h-[38px] text-[32px] font-semibold leading-normal text-[#555555]">
             {title}
           </span>
           {/* <UnsecretIcon className="w-[30px] h-[38px]" /> */}
         </div>
-        <span className="text-lg font-semibold text-[#a7a7a7]">
+        <span className="text-lg font-medium text-[#a7a7a7]">
           {description}
         </span>
       </div>
