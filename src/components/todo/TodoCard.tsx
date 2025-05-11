@@ -26,7 +26,7 @@ const TodoCard = ({ items, onToggle }: TodoCardProps) => {
             aria-disabled={false}
             onClick={() => onToggle(item.id)}
             onKeyDown={(e) => handleKeyDown(e, item.id)}
-            className="flex cursor-pointer items-center gap-5 outline-none focus:ring-1 focus:ring-[#27cfa5]"
+            className="flex cursor-pointer gap-5"
           >
             <div
               className={clsx(
@@ -38,7 +38,7 @@ const TodoCard = ({ items, onToggle }: TodoCardProps) => {
             />
             <span
               className={clsx(
-                'w-full max-w-[320px] overflow-hidden whitespace-nowrap text-xl font-medium transition-all duration-200',
+                'w-full max-w-[320px] overflow-hidden whitespace-pre-line text-xl font-medium transition-all duration-200',
                 item.done ? 'text-[#a7a7a7] line-through' : 'text-[#555]',
               )}
             >

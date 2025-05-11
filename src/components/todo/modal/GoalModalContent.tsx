@@ -33,46 +33,53 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
           return (
             <div
               key={todoItem.id}
-              className={`flex h-[70px] w-full max-w-[560px] items-center justify-between rounded-[10px] border px-[40px] py-[20px] ${isCompleted ? 'border-[#e8e8e8] bg-[#fafafa]' : 'border-[#e8e8e8] bg-white'} `}
+              className={`flex h-auto min-h-[70px] w-full max-w-[560px] items-center justify-between rounded-[10px] border px-10 py-[23px] ${isCompleted ? 'border-[#e8e8e8] bg-[#fafafa]' : 'border-[#e8e8e8] bg-white'} `}
               style={{
                 maxWidth: todos.length > 6 ? '530px' : '560px',
               }}
             >
-              {isEditing ? (
-                <input
-                  autoFocus
-                  className="h-6 w-full bg-transparent pr-5 text-[20px] font-medium text-[#555555] outline-none placeholder:text-[#c4c4c4]"
-                  placeholder="세부 목표를 입력하세요"
-                  value={todoItem.text}
-                  onChange={(e) => {
-                    const newText = e.target.value;
-                    setTodos((prev) =>
-                      prev.map((t) =>
-                        t.id === todoItem.id ? { ...t, text: newText } : t,
-                      ),
-                    );
-                  }}
-                  onBlur={() => {
-                    if (todoItem.text.trim() === '') {
-                      handleRemove(todoItem.id);
-                    } else {
-                      setEditingId(null);
-                    }
-                  }}
-                  onFocus={() => setEditingId(todoItem.id)}
-                />
-              ) : (
-                <span
-                  onClick={() => setEditingId(todoItem.id)}
-                  className={`cursor-text text-[20px] font-medium ${
-                    isCompleted
-                      ? 'text-[#c4c4c4] line-through'
-                      : 'text-[#555555]'
-                  }`}
-                >
-                  {todoItem.text}
-                </span>
-              )}
+              <div className="flex min-h-6 w-[404px]">
+                {isEditing ? (
+                  <textarea
+                    autoFocus
+                    rows={1}
+                    maxLength={40}
+                    className="h-6 w-full resize-none overflow-hidden bg-transparent pt-[2px] text-[20px] font-medium leading-none text-[#555555] outline-none placeholder:text-[#c4c4c4]"
+                    placeholder="세부 목표를 입력하세요"
+                    value={todoItem.text}
+                    onChange={(e) => {
+                      const text = e.target.value;
+                      const maxNewlines = 2; // 3줄까지 허용
+
+                      const newlineCount = (text.match(/\n/g) || []).length;
+                      if (newlineCount > maxNewlines) return; // 무시
+
+                      setTodos((prev) =>
+                        prev.map((t) =>
+                          t.id === todoItem.id ? { ...t, text } : t,
+                        ),
+                      );
+                    }}
+                    onFocus={() => setEditingId(todoItem.id)}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = `${target.scrollHeight}px`;
+                    }}
+                  />
+                ) : (
+                  <span
+                    onClick={() => setEditingId(todoItem.id)}
+                    className={`cursor-text text-[20px] font-medium ${
+                      isCompleted
+                        ? 'text-[#c4c4c4] line-through'
+                        : 'text-[#555555]'
+                    }`}
+                  >
+                    {todoItem.text}
+                  </span>
+                )}
+              </div>
 
               <button onClick={() => handleRemove(todoItem.id)}>
                 <CloseButton

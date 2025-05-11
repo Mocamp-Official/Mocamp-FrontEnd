@@ -69,7 +69,10 @@ const GoalModalWrapper = ({
         </button>
         <button
           onClick={() => {
-            onSubmit(currentTodos);
+            const filtered = currentTodos.filter(
+              (todo) => todo.text.trim() !== '',
+            );
+            onSubmit(filtered);
             onClose();
           }}
           className="w-[353px] rounded-[10px] bg-[#27cfa5] px-10 py-[30px] text-[20px] font-semibold text-white"
