@@ -24,10 +24,10 @@ const TodoContainer = ({ items, onUpdateTodos }: TodoContainerProps) => {
   };
 
   return (
-    <div className="w-[480px] h-[630px] flex items-center justify-center ">
+    <div className="flex h-[630px] w-[480px] items-center justify-center">
       {totalCount ? (
-        <div className="flex flex-col w-full h-full relative items-center">
-          <div className="absolute top-[149.5px] w-[445px] h-[2px] bg-[length:20px_2px] bg-repeat-x bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)]" />
+        <div className="relative flex h-full w-full flex-col items-center">
+          <div className="absolute top-[149.5px] h-[2px] w-[445px] bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)] bg-[length:20px_2px] bg-repeat-x" />
           <ProgressCard
             todos={todos}
             done={doneCount}

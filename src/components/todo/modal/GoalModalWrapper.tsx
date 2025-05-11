@@ -35,21 +35,21 @@ const GoalModalWrapper = ({
   return (
     <ModalLayout onClose={onClose} width="660px" height="880px">
       <button
-        className="w-[25px] h-[25px] absolute top-[50px] right-[50px] text-[#d9d9d9]"
+        className="absolute right-[50px] top-[50px] h-[25px] w-[25px] text-[#d9d9d9]"
         onClick={onClose}
       >
         <CloseButton />
       </button>
 
       {/* 헤더 */}
-      <div className="flex flex-col gap-[10px] mb-[50px]">
-        <div className="w-[530px] flex justify-between">
-          <span className="text-[32px] text-[#555555] font-semibold">
+      <div className="mb-[50px] flex flex-col gap-[10px]">
+        <div className="flex w-[530px] justify-between">
+          <span className="text-[32px] font-semibold text-[#555555]">
             나의 목표 관리
           </span>
           {/* <UnsecretIcon className="w-[30px] h-[38px]" /> */}
         </div>
-        <span className="text-lg text-[#a7a7a7] font-semibold">
+        <span className="text-lg font-semibold text-[#a7a7a7]">
           나의 목표를 자유롭게 설정할 수 있어요
         </span>
       </div>
@@ -60,10 +60,10 @@ const GoalModalWrapper = ({
       />
 
       {/* 하단 버튼 */}
-      <div className="w-full absolute bottom-[50px] flex items-center gap-5 h-[84px]">
+      <div className="absolute bottom-[50px] flex h-[84px] w-full items-center gap-5">
         <button
           onClick={handleAddTodo}
-          className="w-[187px] px-10 py-[30px] border border-[#e8e8e8] text-[#27cfa5] tracking-[-0.02em] bg-white rounded-[10px] text-[18px] font-semibold"
+          className="w-[187px] rounded-[10px] border border-[#e8e8e8] bg-white px-10 py-[30px] text-[18px] font-semibold tracking-[-0.02em] text-[#27cfa5]"
         >
           목표 생성하기
         </button>
@@ -72,7 +72,7 @@ const GoalModalWrapper = ({
             onSubmit(currentTodos);
             onClose();
           }}
-          className="w-[353px] px-10 py-[30px] text-white bg-[#27cfa5] rounded-[10px] text-[20px] font-semibold"
+          className="w-[353px] rounded-[10px] bg-[#27cfa5] px-10 py-[30px] text-[20px] font-semibold text-white"
         >
           완료하기
         </button>

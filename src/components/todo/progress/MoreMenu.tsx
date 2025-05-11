@@ -33,25 +33,25 @@ const MoreMenu = ({ onEditGoal, onEditCommitment }: MoreMenuProps) => {
         onClick={() => setIsOpen((prev) => !prev)}
       />
       {isOpen && (
-        <div className="absolute right-0 top-[35px] w-[155px] bg-white rounded-[10px] border border-[#e8e8e8] p-5 z-10">
+        <div className="absolute right-0 top-[35px] z-10 w-[155px] rounded-[10px] border border-[#e8e8e8] bg-white p-5">
           <div
-            className="flex items-center gap-[9px] cursor-pointer"
+            className="flex cursor-pointer items-center gap-[9px]"
             onClick={onEditCommitment}
           >
-            <PencilIcon className="w-[21px] h-[15px]" />
+            <PencilIcon className="h-[15px] w-[21px]" />
             <button className="w-full text-base font-medium">
               다짐 수정하기
             </button>
           </div>
           <div className="my-5 h-[1px] bg-[#e8e8e8]" />
           <div
-            className="flex items-center gap-[9px] cursor-pointer"
+            className="flex cursor-pointer items-center gap-[9px]"
             onClick={() => {
               setIsOpen(false);
               onEditGoal();
             }}
           >
-            <PencilIcon className="w-[21px] h-[15px]" />
+            <PencilIcon className="h-[15px] w-[21px]" />
             <button className="w-full text-base font-medium">
               목표 수정하기
             </button>

@@ -14,13 +14,13 @@ const TodoNoContent = ({ onAddTodos }: TodoNoContentProps) => {
 
   return (
     <>
-      <div className="flex flex-col items-center w-[480px] h-full pt-[255px] gap-5 bg-[#FEFEFE] rounded-[20px]">
-        <span className="text-[#C4C4C4] font-semibold text-2xl">
+      <div className="flex h-full w-[480px] flex-col items-center gap-5 rounded-[20px] bg-[#FEFEFE] pt-[255px]">
+        <span className="text-2xl font-semibold text-[#C4C4C4]">
           오늘의 목표는 무엇인가요?
         </span>
         <button
           onClick={handleOpen}
-          className="w-[160px] h-[60px] rounded-[10px] bg-[#27CFA5] text-2xl text-white font-semibold"
+          className="h-[60px] w-[160px] rounded-[10px] bg-[#27CFA5] text-2xl font-semibold text-white"
         >
           추가하기
         </button>

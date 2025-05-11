@@ -20,9 +20,9 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
   );
 
   return (
-    <div className="flex flex-col gap-[10px] h-[470px] overflow-auto overflow-x-hidden custom-scrollbar">
+    <div className="custom-scrollbar flex h-[470px] flex-col gap-[10px] overflow-auto overflow-x-hidden">
       {todos.length === 0 ? (
-        <span className="flex flex-1 justify-center items-center text-[20px] font-medium text-[#c4c4c4] tracking-[0.02em]">
+        <span className="flex flex-1 items-center justify-center text-[20px] font-medium tracking-[0.02em] text-[#c4c4c4]">
           목표 생성하기 버튼을 눌러 <br /> 오늘의 목표를 설정하세요
         </span>
       ) : (
@@ -33,9 +33,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
           return (
             <div
               key={todoItem.id}
-              className={`flex justify-between items-center w-full max-w-[560px] h-[70px] px-[40px] py-[20px] border rounded-[10px]
-                ${isCompleted ? 'bg-[#fafafa] border-[#e8e8e8]' : 'bg-white border-[#e8e8e8]'}
-              `}
+              className={`flex h-[70px] w-full max-w-[560px] items-center justify-between rounded-[10px] border px-[40px] py-[20px] ${isCompleted ? 'border-[#e8e8e8] bg-[#fafafa]' : 'border-[#e8e8e8] bg-white'} `}
               style={{
                 maxWidth: todos.length > 6 ? '530px' : '560px',
               }}
@@ -43,7 +41,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
               {isEditing ? (
                 <input
                   autoFocus
-                  className="w-full h-6 bg-transparent outline-none pr-5 text-[20px] font-medium text-[#555555] placeholder:text-[#c4c4c4]"
+                  className="h-6 w-full bg-transparent pr-5 text-[20px] font-medium text-[#555555] outline-none placeholder:text-[#c4c4c4]"
                   placeholder="세부 목표를 입력하세요"
                   value={todoItem.text}
                   onChange={(e) => {
@@ -66,7 +64,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
               ) : (
                 <span
                   onClick={() => setEditingId(todoItem.id)}
-                  className={`font-medium text-[20px] cursor-text ${
+                  className={`cursor-text text-[20px] font-medium ${
                     isCompleted
                       ? 'text-[#c4c4c4] line-through'
                       : 'text-[#555555]'
@@ -78,7 +76,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
 
               <button onClick={() => handleRemove(todoItem.id)}>
                 <CloseButton
-                  className={`w-4 h-4 cursor-pointer ${
+                  className={`h-4 w-4 cursor-pointer ${
                     isCompleted ? 'hidden' : 'text-[#A7A7A7]'
                   }`}
                 />
