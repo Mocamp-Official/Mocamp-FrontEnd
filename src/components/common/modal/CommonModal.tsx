@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import UnsecretIcon from '@/public/svgs/UnsecretIcon.svg';
 import ModalLayout from './ModalLayout';
 import CloseButton from '@/public/svgs/CloseButton.svg';
@@ -26,37 +27,39 @@ const CommonModal = ({
       <button
         type="button"
         onClick={onClose}
-        className="w-[25px] h-[25px] absolute top-[50px] right-[50px] text-[#d9d9d9] cursor-pointer"
+        className="absolute right-[50px] top-[50px] h-[25px] w-[25px] cursor-pointer text-[#d9d9d9]"
       >
         <CloseButton />
       </button>
 
       {/* 헤더 */}
-      <div className="flex flex-col gap-[10px] mb-[50px]">
-        <div className="w-full flex justify-between">
-          <span className="text-[32px] text-[#555555] font-semibold">
+      <div className="mb-[50px] flex flex-col gap-[10px]">
+        <div className="flex w-full justify-between">
+          <span className="text-[32px] font-semibold text-[#555555]">
             {title}
           </span>
           {/* <UnsecretIcon className="w-[30px] h-[38px]" /> */}
         </div>
-        <span className="text-lg text-[#a7a7a7] font-semibold">
+        <span className="text-lg font-semibold text-[#a7a7a7]">
           {description}
         </span>
       </div>
 
-      <div className="flex flex-col gap-5 items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-5">
         <input
-          className="w-[560px] h-[83px] px-10 py-5 rounded-[10px] border border-[#e8e8e8] text-[20px] font-medium placeholder:text-[#c4c4c4] outline-none"
+          className="h-[83px] w-[560px] rounded-[10px] border border-[#e8e8e8] px-10 py-5 text-[20px] font-medium outline-none placeholder:text-[#c4c4c4]"
           placeholder={placeholder}
+          maxLength={15}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
         <button
-          className={`w-[560px] h-[84px] px-10 py-[30px] rounded-[10px] text-[20px] font-semibold text-white tracking-[-0.02em] transition-colors duration-200 ${
+          className={clsx(
+            'h-[84px] w-[560px] rounded-[10px] px-10 py-[30px] text-[20px] font-semibold tracking-[-0.02em] text-white transition-colors duration-200',
             isActive
-              ? 'bg-[#27cfa5] cursor-pointer'
-              : 'bg-[#e9e9e9] cursor-not-allowed'
-          }`}
+              ? 'cursor-pointer bg-[#27cfa5]'
+              : 'cursor-not-allowed bg-[#e9e9e9]',
+          )}
           disabled={!isActive}
           onClick={() => {
             onSubmit?.(inputValue);

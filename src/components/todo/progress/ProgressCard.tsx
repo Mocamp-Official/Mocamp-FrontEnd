@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import ProgressBadge from './ProgressBadge';
-import ProgressText from './ProgressText';
 import ProgressBar from './ProgressBar';
 import MoreMenu from './MoreMenu';
 import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
@@ -21,7 +20,8 @@ const ProgressCard = ({
   onUpdateTodos,
 }: ProgressCardProps) => {
   const [showGoalModal, setShowGoalModal] = useState(false);
-  const [showCommitmentModal, setShowCommentModal] = useState(false);
+  const [showCommitmentModal, setShowCommitmentModal] = useState(false);
+  const [todayCommitment, setTodayCommitment] = useState('');
   const progress = total === 0 ? 0 : Math.round((done / total) * 100);
 
   return (
@@ -29,10 +29,14 @@ const ProgressCard = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <ProgressBadge done={done} total={total} />
-          <ProgressText progress={progress} />
+          <span className="ml-5 text-xl font-medium text-[#555555]">
+            {todayCommitment.trim() !== ''
+              ? todayCommitment
+              : '오늘의 다짐을 작성해주세요'}
+          </span>
         </div>
         <MoreMenu
-          onEditCommitment={() => setShowCommentModal(true)}
+          onEditCommitment={() => setShowCommitmentModal(true)}
           onEditGoal={() => setShowGoalModal(true)}
         />
       </div>
@@ -49,10 +53,14 @@ const ProgressCard = ({
 
       {showCommitmentModal && (
         <CommonModal
-          onClose={() => setShowCommentModal(false)}
+          onClose={() => setShowCommitmentModal(false)}
           title="오늘의 다짐"
           description="오늘의 다짐이나 포부를 한 줄로 작성할 수 있어요"
           placeholder="다짐 쓰기를 통해 꿈을 이루기 위한 첫 걸음을 내딛으세요"
+          onSubmit={(value) => {
+            setTodayCommitment(value);
+            setShowCommitmentModal(false);
+          }}
         />
       )}
     </div>

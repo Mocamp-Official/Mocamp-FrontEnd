@@ -44,15 +44,15 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
                     autoFocus
                     rows={1}
                     maxLength={40}
-                    className="h-6 w-full resize-none overflow-hidden bg-transparent pt-[2px] text-[20px] font-medium leading-none text-[#555555] outline-none placeholder:text-[#c4c4c4]"
+                    className="h-6 max-h-12 w-full resize-none overflow-hidden bg-transparent pt-[2px] text-[20px] font-medium leading-none text-[#555555] outline-none placeholder:text-[#c4c4c4]"
                     placeholder="세부 목표를 입력하세요"
                     value={todoItem.text}
                     onChange={(e) => {
                       const text = e.target.value;
-                      const maxNewlines = 2; // 3줄까지 허용
+                      const maxNewlines = 1; // 2줄까지 허용
 
                       const newlineCount = (text.match(/\n/g) || []).length;
-                      if (newlineCount > maxNewlines) return; // 무시
+                      if (newlineCount > maxNewlines) return;
 
                       setTodos((prev) =>
                         prev.map((t) =>
