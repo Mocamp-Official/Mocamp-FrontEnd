@@ -1,17 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-/* 커스텀 스크롤바 */
-.custom-scrollbar::-webkit-scrollbar {
+@layer utilities {
+  /* 커스텀 스크롤바 */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e8e8e8;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f7f7f7;
+  }
+}
+
+/* 온보딩 스와이퍼 */
+.swiper-custom-pagination .swiper-pagination-bullet {
   width: 10px;
+  height: 10px;
+  margin: 0 !important;
+  border-radius: 9999px;
+  background-color: #d9d9d9;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #e8e8e8;
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background-color: #f7f7f7;
+.swiper-custom-pagination .swiper-pagination-bullet-active {
+  background-color: #27cfa5;
 }
