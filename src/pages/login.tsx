@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { getGoogleProcess, getNaverProcess, getKakaoProcess } from '@/apis/auth';
