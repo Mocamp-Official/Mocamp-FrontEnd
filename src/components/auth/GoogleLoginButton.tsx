@@ -1,22 +1,25 @@
-import React from 'react';
-import axios from 'axios';
-import { platformType } from 'src/pages/login';
+import { platformType } from '@/types/auth';
+import { useAuthStore } from '@/stores/auth-store';
 
 interface NaverLoginButtonProps {
   platform: platformType;
 }
 
-const GoogleLoginButton: React.FC<NaverLoginButtonProps> = ({ platform }) => {
-  // localStorage.setItem('platform', 'google');
-  const handleGoogleLogin = async () => {
-    try {
-      // const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google/page`);
-      // const data = res.data;
-      // window.location.href = data;
-      localStorage.setItem('platform', 'google'); // 플랫폼 저장
-    } catch (err) {
-      console.error(err);
-    }
+const GoogleLoginButton: React.FC<NaverLoginButtonProps> = () => {
+  const { platform, setPlatform } = useAuthStore();
+
+  const handleGoogleLogin = () => {
+    setPlatform('google');
+    localStorage.setItem('platform', 'google');
+    const GOOGLE_REST_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI;
+    const scope = [
+      'openid',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ].join(' ');
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_REST_API_KEY}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline&prompt=consent`;
+    window.location.href = googleURL;
   };
 
   return (
@@ -26,8 +29,7 @@ const GoogleLoginButton: React.FC<NaverLoginButtonProps> = ({ platform }) => {
       }}
       className="flex bg-white w-full h-[6.25rem] justify-center items-center relative border border-gray-300 group"
     >
-      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded pointer-events-none transition-opacity duration-200"></div>
-      {/* <div className="absolute left-8 w-6 h-6 bg-gray-400">로고로 변경 예정 (구글)</div> */}
+      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded pointer-events-none transition-opacity duration-200" />
       <p className="text-gray-700 text-[1.75rem] font-semibold">구글 계정으로 시작하기</p>
       <div
         className={`absolute right-[0.9375rem] top-[-1.625rem] items-center justify-center px-5 py-2.5 rounded-tl-[0.625rem] rounded-tr-[0.625rem] rounded-br-[0.625rem] bg-white border border-[#00af83] ${
