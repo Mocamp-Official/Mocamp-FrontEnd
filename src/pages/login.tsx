@@ -6,33 +6,46 @@ import MocampIcon from '@/public/svgs/MocampIcon.svg';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 import NaverLoginButton from '@/components/auth/NaverLoginButton';
-
-type platformType = 'naver' | 'kakao' | 'google' | null;
+import { platformType } from '@/types/auth';
+import { useAuthStore } from '@/stores/auth-store';
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
-  const [platform, setPlatform] = useState<platformType>(null);
+  const { platform, setPlatform } = useAuthStore();
 
   useEffect(() => {
-    // 이전 로그인
     const storedPlatform = localStorage.getItem('platform');
-    const code = new URL(window.location.href).searchParams.get('code');
-
-    if (storedPlatform === 'naver' || storedPlatform === 'kakao' || storedPlatform === 'google') {
-      setPlatform(storedPlatform);
-    } else {
-      setPlatform(null);
-    }
-
-    if (storedPlatform === 'naver') {
-      // getNaverProcess(code);
-    } else if (storedPlatform === 'kakao') {
-      // getKakaoProcess(code, 'http://localhost:3000/login');
-      router.push('/myhome');
-    } else if (storedPlatform === 'google') {
-      // getGoogleProcess(code);
-    }
+    setPlatform(storedPlatform as platformType);
   }, []);
+
+  useEffect(() => {
+    const code = new URL(window.location.href).searchParams.get('code');
+    if (!code || !platform) return;
+
+    const redirectMap = {
+      naver: process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI,
+      kakao: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI,
+      google: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
+    };
+
+    const processMap = {
+      naver: getNaverProcess,
+      kakao: getKakaoProcess,
+      google: getGoogleProcess,
+    };
+
+    const selectedRedirect = redirectMap[platform];
+    const selectedProcess = processMap[platform];
+
+    const handleLogin = async () => {
+      if (selectedRedirect && selectedProcess) {
+        const success = await selectedProcess({ code, redirect_url: selectedRedirect });
+        success && router.push('/myhome');
+      }
+    };
+
+    handleLogin();
+  }, [platform]);
 
   return (
     <div className="flex bg-[#ffffff] w-screen h-screen">
