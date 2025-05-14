@@ -7,42 +7,32 @@ import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 import NaverLoginButton from '@/components/auth/NaverLoginButton';
 
-export type platformType = 'naver' | 'kakao' | 'google' | null;
+type platformType = 'naver' | 'kakao' | 'google' | null;
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
   const [platform, setPlatform] = useState<platformType>(null);
 
   useEffect(() => {
-    const storedPlatform = localStorage.getItem('platform') as platformType;
-    storedPlatform && setPlatform(storedPlatform);
-  }, []);
+    // 이전 로그인
+    const storedPlatform = localStorage.getItem('platform');
+    const code = new URL(window.location.href).searchParams.get('code');
 
-  useEffect(() => {
-    const code: string | null = new URL(window.location.href).searchParams.get('code');
-    if (!code || !platform) return;
-
-    const handleNaverLogin = async (): Promise<void> => {
-      const success: boolean | undefined = await getNaverProcess(code);
-      success && router.push('/myhome');
-    };
-    const handleGoogleLogin = async () => {
-      const success: boolean | undefined = await getGoogleProcess(code);
-      success && router.push('/myhome');
-    };
-    const handleKakaoLogin = async (): Promise<void> => {
-      const success: boolean | undefined = await getKakaoProcess(code);
-      success && router.push('/myhome');
-    };
-
-    if (platform === 'naver') {
-      handleNaverLogin();
-    } else if (platform === 'kakao') {
-      handleKakaoLogin();
-    } else if (platform === 'google') {
-      handleGoogleLogin();
+    if (storedPlatform === 'naver' || storedPlatform === 'kakao' || storedPlatform === 'google') {
+      setPlatform(storedPlatform);
+    } else {
+      setPlatform(null);
     }
-  }, [platform]);
+
+    if (storedPlatform === 'naver') {
+      // getNaverProcess(code);
+    } else if (storedPlatform === 'kakao') {
+      // getKakaoProcess(code, 'http://localhost:3000/login');
+      router.push('/myhome');
+    } else if (storedPlatform === 'google') {
+      // getGoogleProcess(code);
+    }
+  }, []);
 
   return (
     <div className="flex bg-[#ffffff] w-screen h-screen">
