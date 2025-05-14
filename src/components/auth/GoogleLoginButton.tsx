@@ -7,12 +7,13 @@ interface NaverLoginButtonProps {
 }
 
 const GoogleLoginButton: React.FC<NaverLoginButtonProps> = ({ platform }) => {
+  // localStorage.setItem('platform', 'google');
   const handleGoogleLogin = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google/page`);
-      const data = res.data;
+      // const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google/page`);
+      // const data = res.data;
+      // window.location.href = data;
       localStorage.setItem('platform', 'google'); // 플랫폼 저장
-      window.location.href = data;
     } catch (err) {
       console.error(err);
     }
