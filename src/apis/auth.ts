@@ -1,5 +1,4 @@
-import { setAccessToken } from './../utils/token';
-/* 로그인 관련 API 요청 */
+import { setAccessToken } from '@/utils/token';
 import axios from 'axios';
 
 interface ISocialLoginParams {
@@ -26,7 +25,7 @@ const getNaverProcess = async ({ code, redirect_url }: ISocialLoginParams) => {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/naver/process?code=${code}&redirect_url=${redirect_url}`,
     );
-    const data = await res.data;
+    const data = await res.data.message;
     setAccessToken(data.accessToken);
     return true;
   } catch (err) {
@@ -40,7 +39,7 @@ const getKakaoProcess = async ({ code, redirect_url }: ISocialLoginParams) => {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/kakao/process?code=${code}&redirect_url=${redirect_url}`,
     );
-    const data = await res.data;
+    const data = await res.data.message;
     setAccessToken(data.accessToken);
     return true;
   } catch (err) {
