@@ -1,45 +1,33 @@
+import ParticipatedCard from './content/ParticipatedCard';
+import ArrowIcon from '@/public/svgs/arrow_icon.svg';
+
 const Content = () => {
+  const isCompleted = false;
+  const roomName = '은학샘과 아이들';
+  const createdAt = '2025.04.27';
+  const time = '3h 30m';
   return (
     <div className="w-[982px] h-[880px] rounded-[20px] bg-[#ffffff] p-8 flex flex-col gap-8">
-      {/* 상단: 참여한 모캠프 */}
       <div>
         <p className="text-2xl font-semibold text-[#4b4b4b] mb-4">참여한 모캠프</p>
-        <div className="flex gap-6">
+        <div className="flex gap-5 items-center">
           {/* 캠프 카드 1 */}
-          <div className="w-[400px] h-[169px] rounded-[10px] bg-white border border-[#e8e8e8] flex items-center p-6 gap-4">
-            <div className="w-[85px] h-[85px] rounded-[10px] bg-[#d9d9d9]" />
-            <div className="flex flex-col justify-between flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <p className="text-xl font-semibold text-[#0096ff]">진행 중</p>
-              </div>
-              <p className="text-xl font-semibold text-[#4b4b4b]">은학샘과 아이들</p>
-              <div className="flex gap-4 text-xl font-medium text-[#c4c4c4]">
-                <p>2025. 04. 27</p>
-                <p>3h 30m</p>
-              </div>
-            </div>
-            <button className="px-5 py-2.5 rounded-[10px] bg-[#f2f2f2] text-base font-semibold text-[#555]">
-              참여하기
-            </button>
-          </div>
-          {/* 캠프 카드 2 */}
-          <div className="w-[400px] h-[169px] rounded-[10px] bg-white border border-[#e8e8e8] flex items-center p-6 gap-4">
-            <div className="w-[85px] h-[85px] rounded-[10px] bg-[#d9d9d9]" />
-            <div className="flex flex-col justify-between flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <p className="text-xl font-semibold text-[#f00]">종료</p>
-              </div>
-              <p className="text-xl font-semibold text-[#4b4b4b]">쭈다닥 작업해요</p>
-              <div className="flex gap-4 text-xl font-medium text-[#c4c4c4]">
-                <p>2025. 04. 27</p>
-                <p>3h 30m</p>
-              </div>
-            </div>
-            {/* 예시: 아이콘 */}
-            <div className="w-[85px] h-[85px] rounded-[10px] bg-[#e8e8e8]" />
-          </div>
-          <div className="flex justify-center items-center cursor-pointer">
-            <div className="w-[60px] h-[60px] rounded-full border border-[#E8E8E8]"></div>
+          <ParticipatedCard
+            size={'l'}
+            isCompleted={isCompleted}
+            roomName={roomName}
+            createdAt={createdAt}
+            time={time}
+          ></ParticipatedCard>
+          <ParticipatedCard
+            size={'l'}
+            isCompleted={true}
+            roomName={roomName}
+            createdAt={createdAt}
+            time={time}
+          ></ParticipatedCard>
+          <div className="flex cursor-pointer w-[60px] h-[60px] rounded-full border border-[#E8E8E8] justify-center items-center ">
+            <ArrowIcon />
           </div>
         </div>
       </div>
