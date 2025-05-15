@@ -12,7 +12,7 @@ const getGoogleProcess = async ({ code, redirect_url }: ISocialLoginParams) => {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google/process?code=${code}&redirect_url=${redirect_url}`,
     );
-    const data = await res.data;
+    const data = await res.data.message;
     setAccessToken(data.accessToken);
     return true;
   } catch (err) {
