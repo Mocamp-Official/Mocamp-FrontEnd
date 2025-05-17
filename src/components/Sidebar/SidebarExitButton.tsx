@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import SidebarExitModal from './modal/SidebarExitModal';
+// 사이드바 나가기 버튼튼
+import { useState } from 'react';
+import SidebarExitModal from '@/components/Sidebar/modal/SidebarExitModal';
 
-const SidebarExit: React.FC = () => {
+const SidebarExit = () => {
   const [isExitModalOpen, setExitModalOpen] = useState(false);
 
   const handleExitClick = () => setExitModalOpen(true);
   const handleConfirmExit = () => {
     setExitModalOpen(false);
   };
-  const handleCancelExit = () => setExitModalOpen(false);
+  const handleCancelExit = () => {
+    setExitModalOpen(false);
+  };
 
   return (
     <>

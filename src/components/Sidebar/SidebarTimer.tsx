@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+// 사이드바 - 시간, 종료, 남는 시간
+import { useEffect, useState } from 'react';
 import {
   formatTime,
   getRemainingTime,
@@ -10,7 +11,7 @@ interface SidebarTimerProps {
   endTime: Date;
 }
 
-const SidebarTimer: React.FC<SidebarTimerProps> = ({ startTime, endTime }) => {
+const SidebarTimer= ({ startTime, endTime }: SidebarTimerProps) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime(endTime));
 
   useEffect(() => {
