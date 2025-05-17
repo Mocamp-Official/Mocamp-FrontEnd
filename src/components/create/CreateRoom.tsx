@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import CloseIcon from '@/public/svgs/closeIcon.svg';
 import ToggleMicButton from './ToggleMicButton';
 import LabeledBox from './LabeledBox';
 import NumberInput from './NumberInput';
@@ -6,10 +7,9 @@ import ImageUploadBox from './ImageUploadBox';
 
 interface CreateRoomProps {
   onClose: () => void;
-  isOpen: boolean;
 }
 
-const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
+const CreateRoom = ({ onClose }: CreateRoomProps) => {
   const [micOn, setMicOn] = useState(true);
   const [roomName, setRoomName] = useState('');
   const [hour, setHour] = useState('');
@@ -30,7 +30,7 @@ const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
     val === '' || (Number(val) >= 0 && Number(val) <= 59);
 
   const isValidHeadcount = (val: string) =>
-    val === '' || (Number(val) >= 1 && Number(val) <= 4);
+    val === '' || (Number(val) >= 1 && Number(val) <= 5);
 
   const handleMicClick = () => {
     setMicOn((prev) => !prev);
@@ -42,16 +42,31 @@ const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
       onClick={onClose}
     >
       <div
-        className="flex flex-col w-[660px] h-[880px] rounded-[20px] bg-white px-[50px] py-11 gap-10"
+        className="flex flex-col w-[660px] h-[880px] rounded-[20px] bg-white px-[50px] py-11 gap-[30px]"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* 방 생성 모달 제목 */}
+        <div className="flex justify-between h-[38px] items-start">
+          <span className="flex items-center text-[32px] leading-[38px] h-full font-semibold text-[#555555]">
+            방 생성하기
+          </span>
+          <CloseIcon
+            className="w-[29px] h-[29px] cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
+
         {/* 방 이름 + 마이크 설정 */}
         <div className="flex mt-3 gap-5">
-          <LabeledBox label="방 이름 *">
+          <LabeledBox label="방 이름 *" description="최대 20자">
             <div className="flex items-center w-[350px] h-[90px] bg-[#f2f2f2] px-10 rounded-[10px]">
               <input
                 value={roomName}
-                onChange={(e) => setRoomName(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 20) {
+                    setRoomName(e.target.value);
+                  }
+                }}
                 placeholder="방 이름을 설정해주세요"
                 className="w-full bg-transparent outline-none placeholder-[#c4c4c4] text-[20px]"
               />
@@ -67,7 +82,7 @@ const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
 
         {/* 진행 시간 + 인원 수 */}
         <div className="flex gap-5">
-          <LabeledBox label="진행 시간 *">
+          <LabeledBox label="진행 시간 *" description="최대 12시간">
             <div className="flex justify-center items-center w-[350px] h-[90px] bg-[#f2f2f2] px-10 rounded-[10px] gap-[10px]">
               <NumberInput
                 placeholder="00"
@@ -92,7 +107,7 @@ const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
             </div>
           </LabeledBox>
 
-          <LabeledBox label="인원 수 *">
+          <LabeledBox label="인원 수 *" description="최대 5명">
             <div className="flex items-center justify-center w-[190px] h-[90px] bg-[#f2f2f2] px-10 py-5 rounded-[10px] gap-[10px]">
               <NumberInput
                 placeholder="0"
@@ -117,7 +132,7 @@ const CreateRoom = ({ onClose, isOpen }: CreateRoomProps) => {
 
         {/* 생성 버튼 */}
         <button
-          className={`w-[560px] h-[84px] text-[20px] font-semibold rounded-[10px] ${
+          className={`w-[560px] h-[84px] shrink-0 text-[20px] font-semibold rounded-[10px] ${
             isFormValid
               ? 'bg-[#27CFA5] text-white cursor-pointer'
               : 'bg-[#f2f2f2] text-[#c4c4c4] cursor-not-allowed'
