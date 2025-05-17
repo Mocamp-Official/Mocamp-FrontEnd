@@ -1,4 +1,3 @@
-//남은 시간 계산 hooks
 import { useState, useEffect } from 'react';
 
 export function useMocampTimer(endTime: Date) {
