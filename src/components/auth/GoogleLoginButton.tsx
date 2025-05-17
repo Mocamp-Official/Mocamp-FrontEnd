@@ -1,11 +1,6 @@
-import { platformType } from '@/types/auth';
 import { useAuthStore } from '@/stores/auth-store';
 
-interface NaverLoginButtonProps {
-  platform: platformType;
-}
-
-const GoogleLoginButton: React.FC<NaverLoginButtonProps> = () => {
+const GoogleLoginButton = () => {
   const { platform, setPlatform } = useAuthStore();
 
   const handleGoogleLogin = () => {
@@ -24,9 +19,7 @@ const GoogleLoginButton: React.FC<NaverLoginButtonProps> = () => {
 
   return (
     <button
-      onClick={() => {
-        handleGoogleLogin();
-      }}
+      onClick={handleGoogleLogin}
       className="flex bg-white w-full h-[6.25rem] justify-center items-center relative border border-gray-300 group"
     >
       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded pointer-events-none transition-opacity duration-200" />

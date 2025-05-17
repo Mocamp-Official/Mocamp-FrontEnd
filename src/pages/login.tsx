@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { getGoogleProcess, getNaverProcess, getKakaoProcess } from '@/apis/auth';
+import { loginByGoogle, loginByKakao, loginByNaver } from '@/apis/auth';
 import MocampIcon from '@/public/svgs/MocampIcon.svg';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
@@ -29,9 +29,9 @@ const LoginPage: NextPage = () => {
     };
 
     const processMap = {
-      naver: getNaverProcess,
-      kakao: getKakaoProcess,
-      google: getGoogleProcess,
+      naver: loginByNaver,
+      kakao: loginByKakao,
+      google: loginByGoogle,
     };
 
     const selectedRedirect = redirectMap[platform];
@@ -39,8 +39,10 @@ const LoginPage: NextPage = () => {
 
     const handleLogin = async () => {
       if (selectedRedirect && selectedProcess) {
-        const success = await selectedProcess({ code, redirect_url: selectedRedirect });
-        success && router.push('/myhome');
+        const success = await selectedProcess({ code, redirectUrl: selectedRedirect });
+        if (success) {
+          router.push('/myhome');
+        }
       }
     };
 
@@ -58,9 +60,9 @@ const LoginPage: NextPage = () => {
           <p>시작할 수 있어요 :D</p>
         </div>
         <div className="flex flex-col gap-5 w-[37.5rem]">
-          <NaverLoginButton platform={platform} />
-          <KakaoLoginButton platform={platform} />
-          <GoogleLoginButton platform={platform} />
+          <NaverLoginButton />
+          <KakaoLoginButton />
+          <GoogleLoginButton />
         </div>
       </div>
     </div>

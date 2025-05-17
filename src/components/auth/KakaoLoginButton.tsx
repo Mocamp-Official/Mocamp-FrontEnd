@@ -1,11 +1,6 @@
 import { useAuthStore } from '@/stores/auth-store';
-import { platformType } from '@/types/auth';
 
-interface KakaoLoginButtonProps {
-  platform: platformType;
-}
-
-const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = () => {
+const KakaoLoginButton = () => {
   const { platform, setPlatform } = useAuthStore();
 
   const handleKakaoLogin = () => {
@@ -19,9 +14,7 @@ const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = () => {
 
   return (
     <button
-      onClick={() => {
-        handleKakaoLogin();
-      }}
+      onClick={handleKakaoLogin}
       className="flex bg-[#FEE500] w-full h-[6.25rem] justify-center items-center relative border border-gray-300 rounded-[0.3125rem] group"
     >
       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 rounded-[0.3125rem] pointer-events-none transition-opacity duration-200" />

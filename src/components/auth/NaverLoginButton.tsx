@@ -1,11 +1,6 @@
 import { useAuthStore } from '@/stores/auth-store';
-import { platformType } from '@/types/auth';
 
-interface NaverLoginButtonProps {
-  platform: platformType;
-}
-
-const NaverLoginButton: React.FC<NaverLoginButtonProps> = () => {
+const NaverLoginButton = () => {
   const { platform, setPlatform } = useAuthStore();
 
   const handleNaverLogin = () => {
