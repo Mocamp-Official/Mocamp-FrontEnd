@@ -22,6 +22,10 @@
   --color-gray7: #a7a7a7;
   --color-gray8: #5f5f5f;
   --color-gray9: #555555;
+
+  /* 브레이크 포인트 */
+  --breakpoint-lg: 1440px;
+  --breakpoint-xl: 1920px;
 }
 
 @layer base {
@@ -33,28 +37,28 @@
 @layer utilities {
   /* font */
   .text-title1 {
-    @apply font-sans text-[32px] font-semibold leading-normal tracking-[-0.035em];
+    @apply font-sans text-[32px] leading-normal font-semibold tracking-[-0.035em];
   }
   .text-title2 {
-    @apply font-sans text-[28px] font-semibold leading-normal tracking-[-0.035em];
+    @apply font-sans text-[28px] leading-normal font-semibold tracking-[-0.035em];
   }
   .text-title3 {
-    @apply font-sans text-[24px] font-semibold leading-normal tracking-[-0.035em];
+    @apply font-sans text-[24px] leading-normal font-semibold tracking-[-0.035em];
   }
 
   /* button 스타일 */
   .text-subhead {
-    @apply font-sans text-[20px] font-semibold leading-normal tracking-[-0.035em];
+    @apply font-sans text-[20px] leading-normal font-semibold tracking-[-0.035em];
   }
 
   .text-body1 {
-    @apply font-sans text-[20px] font-medium leading-normal tracking-[-0.035em];
+    @apply font-sans text-[20px] leading-normal font-medium tracking-[-0.035em];
   }
   .text-body2 {
-    @apply font-sans text-[18px] font-medium leading-normal tracking-[-0.035em];
+    @apply font-sans text-[18px] leading-normal font-medium tracking-[-0.035em];
   }
   .text-body3 {
-    @apply font-sans text-[16px] font-normal leading-normal tracking-[-0.035em];
+    @apply font-sans text-[16px] leading-normal font-normal tracking-[-0.035em];
   }
 
   /* 커스텀 스크롤바 */

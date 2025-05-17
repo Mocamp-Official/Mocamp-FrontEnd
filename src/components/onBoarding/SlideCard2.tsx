@@ -2,7 +2,7 @@ import React from 'react';
 
 const SlideCard2 = () => {
   return (
-    <div className="flex w-[900px] h-[500px] shrink-0 bg-[#fafafa] rounded-[20px] border border-[#e8e8e8] px-[50px] gap-[54px]"></div>
+    <div className="border-gray4 bg-gray2 flex h-[500px] w-[900px] shrink-0 gap-[54px] rounded-[20px] border px-[50px]"></div>
   );
 };
 

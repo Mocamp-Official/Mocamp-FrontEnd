@@ -22,25 +22,25 @@ const OnBoarding = () => {
   const slides = [<SlideCard1 />, <SlideCard1 />, <SlideCard1 />];
 
   return (
-    <div className="flex flex-col bg-gray1 w-screen h-screen relative">
+    <div className="bg-gray1 relative flex h-screen w-screen flex-col">
       <button
         onClick={handleLogin}
-        className="absolute top-[25px] h-[51px] w-[190px] shrink-0 right-[320px] text-gray1 flex items-center text-body2 !font-semibold bg-primary justify-center border border-primary rounded-[10px] px-[30px] py-[15px]"
+        className="text-gray1 text-body2 bg-primary border-primary absolute top-[25px] right-[320px] flex h-[51px] w-[190px] shrink-0 items-center justify-center rounded-[10px] border px-[30px] py-[15px] !font-semibold"
       >
         로그인 후 시작하기
       </button>
 
-      <div className="h-full mx-auto justify-center items-center flex flex-col">
-        <MocampIcon className="w-[250px] h-[100px] mb-[50.05px]" />
-        <p className="text-gray9 text-title2 !font-medium mb-[49px]">
+      <div className="mx-auto flex h-full flex-col items-center justify-center">
+        <MocampIcon className="mb-[50.05px] h-[100px] w-[250px]" />
+        <p className="text-gray9 text-title2 mb-[49px] !font-medium">
           함께 모여 캠키고 성취하는&nbsp;
-          <span className="text-[#27CFA5] font-semibold">우리만의 공간</span>
+          <span className="text-primary font-semibold">우리만의 공간</span>
         </p>
 
         <div className="w-full max-w-[900px]">
           <Swiper
             modules={[Pagination, Autoplay]}
-            autoplay={{ delay: 10000000, disableOnInteraction: false }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
             pagination={{ clickable: true, el: '.swiper-custom-pagination' }}
             loop
             className="w-full"
@@ -50,7 +50,7 @@ const OnBoarding = () => {
             ))}
           </Swiper>
         </div>
-        <div className="swiper-custom-pagination flex justify-center mt-[25px] gap-5" />
+        <div className="swiper-custom-pagination mt-[25px] flex justify-center gap-5" />
       </div>
     </div>
   );
