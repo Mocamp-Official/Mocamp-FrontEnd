@@ -1,35 +1,21 @@
-import React from 'react';
+import Image from 'next/image';
 
 const SideBar = () => {
   return (
-    <div className="w-72 h-[881px] rounded-[20px] bg-white shadow-md flex flex-col items-center pt-0 relative overflow-hidden">
-      {/* 상단 헤더 */}
-      <div className="w-full h-[60px] bg-[#27cfa5] rounded-t-[20px] flex items-center justify-center">
+    <div className="w-72 h-[880px] rounded-[20px] bg-white flex flex-col items-center relative overflow-hidden">
+      {/* 사이드바 헤더 */}
+      <div className="w-full h-[60px] bg-[#27CFA5] rounded-t-[20px] flex items-center justify-center">
         <p className="text-xl font-semibold text-white">마이페이지</p>
       </div>
 
       {/* 유저 프로필 이미지 */}
-      <div className="mt-10 relative w-[200px] h-[197px] flex items-center justify-center">
-        <svg
+      <div className="mt-[50px] relative w-[200px] h-[197px] flex items-center justify-center rounded-full border-2 border-[#27CFA5]">
+        <Image
+          src="/defaultProfile.png"
           width={200}
           height={197}
-          viewBox="0 0 200 197"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-          className="absolute"
-        >
-          <path
-            d="M100 1C154.69 1 199 44.6664 199 98.5C199 152.334 154.69 196 100 196C45.3095 196 1 152.334 1 98.5C1 44.6664 45.3095 1 100 1Z"
-            fill="white"
-            stroke="#27CFA5"
-            strokeWidth={2}
-          />
-        </svg>
-        <img
-          src="ellipse-8438.png"
-          alt="User"
-          className="w-[120px] h-[120px] object-cover rounded-full z-10"
+          alt="프로필 사진"
+          className="rounded-full"
         />
       </div>
 
