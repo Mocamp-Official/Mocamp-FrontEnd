@@ -1,3 +1,4 @@
+import BottomComment from './content/BottomComment';
 import ParticipatedCard from './content/ParticipatedCard';
 import ArrowIcon from '@/public/svgs/arrow_icon.svg';
 
@@ -7,11 +8,10 @@ const Content = () => {
   const createdAt = '2025.04.27';
   const time = '3h 30m';
   return (
-    <div className="w-[982px] h-[880px] rounded-[20px] bg-[#ffffff] p-8 flex flex-col gap-8">
-      <div>
-        <p className="text-2xl font-semibold text-[#4b4b4b] mb-4">참여한 모캠프</p>
+    <div className="w-[982px] h-[880px] rounded-[20px] bg-[#ffffff] p-8 flex flex-col">
+      <div className="mb-[30px]">
+        <p className="text-2xl font-semibold text-[#4b4b4b] mb-[30px]">참여한 모캠프</p>
         <div className="flex gap-5 items-center">
-          {/* 캠프 카드 1 */}
           <ParticipatedCard
             size={'l'}
             isCompleted={isCompleted}
@@ -48,6 +48,7 @@ const Content = () => {
             </svg>
           </div>
         </div>
+
         {/* 목표 달성 요약 */}
         <div className="flex gap-4 items-center">
           <div className="flex flex-col w-[250px]">
@@ -96,20 +97,8 @@ const Content = () => {
             <span>2개</span>
           </div>
         </div>
-        {/* 하단 멘트 */}
-        <div className="flex justify-center mt-2">
-          <svg width={246} height={57} viewBox="0 0 246 57" fill="none">
-            <path
-              d="M128.773 10H241C243.761 10 246 12.2386 246 15V52C246 54.7614 243.761 57 241 57H5C2.23858 57 5.63741e-08 54.7614 0 52V15C0 12.2386 2.23858 10 5 10H117.227L123 0L128.773 10Z"
-              fill="#BEF1E4"
-            />
-            <path
-              d="M128.773 10H241C243.761 10 246 12.2386 246 15V52C246 54.7614 243.761 57 241 57H5C2.23858 57 5.63741e-08 54.7614 0 52V15C0 12.2386 2.23858 10 5 10H117.227L123 0L128.773 10Z"
-              stroke="#27CFA5"
-            />
-          </svg>
-          <p className="absolute text-base font-medium text-[#00af83]">여기 멘트 뭐하지</p>
-        </div>
+
+        <BottomComment>여기 뭐하지</BottomComment>
       </div>
     </div>
   );
