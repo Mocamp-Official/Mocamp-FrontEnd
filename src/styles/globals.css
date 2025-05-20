@@ -1,17 +1,92 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import './fonts.css';
 
-/* 커스텀 스크롤바 */
-.custom-scrollbar::-webkit-scrollbar {
+@theme {
+  /* Pretendard 폰트 */
+  --font-sans: 'Pretendard', sans-serif;
+
+  /* 메인 컬러 */
+  --color-primary: #27cfa5;
+
+  /* 서브 포인트 컬러 */
+  --color-blue: #0096ff;
+  --color-red: #ff0000;
+
+  /* 그레이 스케일 */
+  --color-gray1: #ffffff;
+  --color-gray2: #fafafa;
+  --color-gray3: #f2f2f2;
+  --color-gray4: #e8e8e8;
+  --color-gray5: #d9d9d9;
+  --color-gray6: #c4c4c4;
+  --color-gray7: #a7a7a7;
+  --color-gray8: #5f5f5f;
+  --color-gray9: #555555;
+
+  /* 브레이크 포인트 */
+  --breakpoint-lg: 1440px;
+  --breakpoint-xl: 1920px;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  /* font */
+  .text-title1 {
+    @apply font-sans text-[32px] leading-normal font-semibold tracking-[-0.035em];
+  }
+  .text-title2 {
+    @apply font-sans text-[28px] leading-normal font-semibold tracking-[-0.035em];
+  }
+  .text-title3 {
+    @apply font-sans text-[24px] leading-normal font-semibold tracking-[-0.035em];
+  }
+
+  /* button 스타일 */
+  .text-subhead {
+    @apply font-sans text-[20px] leading-normal font-semibold tracking-[-0.035em];
+  }
+
+  .text-body1 {
+    @apply font-sans text-[20px] leading-normal font-medium tracking-[-0.035em];
+  }
+  .text-body2 {
+    @apply font-sans text-[18px] leading-normal font-medium tracking-[-0.035em];
+  }
+  .text-body3 {
+    @apply font-sans text-[16px] leading-normal font-normal tracking-[-0.035em];
+  }
+
+  /* 커스텀 스크롤바 */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e8e8e8;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f7f7f7;
+  }
+}
+
+/* 온보딩 스와이퍼 */
+.swiper-custom-pagination .swiper-pagination-bullet {
   width: 10px;
+  height: 10px;
+  margin: 0 !important;
+  border-radius: 9999px;
+  background-color: #d9d9d9;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #e8e8e8;
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background-color: #f7f7f7;
+.swiper-custom-pagination .swiper-pagination-bullet-active {
+  background-color: #27cfa5;
 }
