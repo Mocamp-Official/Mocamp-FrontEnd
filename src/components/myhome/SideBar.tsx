@@ -20,7 +20,9 @@ const SideBar = () => {
           className="rounded-full"
         />
       </div>
-      <p className="mt-[1.875rem] text-[1.75rem] font-semibold text-[#555555]">이주은님</p>
+      <p className="mt-[1.875rem] text-[1.75rem] font-semibold text-[#555555] cursor-default">
+        이주은님
+      </p>
 
       <div className="mt-[1.875rem] w-[14.25rem] h-[250px] flex flex-col gap-4 p-[1.25rem] bg-white border border-[#e8e8e8] rounded-[0.625rem]">
         <p
