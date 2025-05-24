@@ -17,14 +17,14 @@ function ParticipatedCard({
 }: ParticipatedCardProps) {
   return (
     <>
-      <div className="w-[410px] h-[10.5625rem] rounded-[0.625rem] bg-white flex items-center px-[1.25rem] py-[2.625rem] border border-[#E8E8E8]">
+      <div className="w-[449px] h-[169px] rounded-[0.625rem] bg-white flex items-center px-[1.25rem] py-[2.625rem] border border-[#E8E8E8]">
         {/* 썸네일 */}
         <div className="w-[5.3125rem] h-[5.3125rem] rounded-[0.625rem] bg-[#d9d9d9] mr-[1rem]">
           <MocampIcon />
         </div>
 
         {/* 텍스트 정보 */}
-        <div className="flex relative flex-col justify-center flex-1 space-y-[0.25rem]">
+        <div className="flex relative flex-col justify-center flex-1 space-y-[0.25rem] cursor-default">
           {isCompleted ? (
             <p className="text-xl font-semibold text-[#f00]">종료</p>
           ) : (
