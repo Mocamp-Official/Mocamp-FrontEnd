@@ -25,14 +25,14 @@ const OnBoarding = () => {
     <div className="bg-gray1 relative flex h-screen w-screen flex-col">
       <button
         onClick={handleLogin}
-        className="text-gray1 text-body2 bg-primary border-primary absolute top-[25px] right-[320px] flex h-[51px] w-[190px] shrink-0 items-center justify-center rounded-[10px] border px-[30px] py-[15px] !font-semibold"
+        className="text-gray1 text-body2 bg-primary border-primary absolute top-[25px] right-[320px] flex h-[51px] w-[190px] shrink-0 items-center justify-center rounded-[10px] border px-[30px] py-[15px] font-semibold"
       >
         로그인 후 시작하기
       </button>
 
       <div className="mx-auto flex h-full flex-col items-center justify-center">
         <MocampIcon className="mb-[50.05px] h-[100px] w-[250px]" />
-        <p className="text-gray9 text-title2 mb-[49px] !font-medium">
+        <p className="text-gray9 text-title2 mb-[49px] font-medium">
           함께 모여 캠키고 성취하는&nbsp;
           <span className="text-primary font-semibold">우리만의 공간</span>
         </p>

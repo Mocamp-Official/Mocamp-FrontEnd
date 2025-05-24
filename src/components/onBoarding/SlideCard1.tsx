@@ -12,7 +12,7 @@ const SlideCard1 = () => {
         </span>
 
         {/* 설명 문구 */}
-        <span className="text-gray9 text-title3 flex h-[76px] items-center !font-medium">
+        <span className="text-gray9 text-title3 flex h-[76px] items-center leading-[160%] font-medium">
           오늘 수행할 목표를 작성하고, <br />
           체크박스를 눌러 게이지 UP!
         </span>
@@ -29,9 +29,7 @@ const SlideCard1 = () => {
             </span>
 
             {/* 진행 설명 */}
-            <span className="text-gray9 text-body1">
-              목표 두 개 꼭 완수하기!
-            </span>
+            <span className="text-gray9 text-body1">목표 두 개 꼭 완수하기!</span>
           </div>
 
           {/* 게이지 바 */}
@@ -45,17 +43,13 @@ const SlideCard1 = () => {
           {/* 투두 항목 1 (완료) */}
           <div className="flex items-center gap-5">
             <div className="border-primary h-10 w-10 rounded-[10px] border bg-[#BEF1E4]" />
-            <span className="text-gray6 text-body1 line-through">
-              디자인 가이드라인 설정하기
-            </span>
+            <span className="text-gray6 text-body1 line-through">디자인 가이드라인 설정하기</span>
           </div>
 
           {/* 투두 항목 2 (미완료) */}
           <div className="flex items-center gap-5">
             <div className="border-gray4 bg-gray1 h-10 w-10 rounded-[10px] border" />
-            <span className="text-body1 text-gray9">
-              중충실도 와이어프레임 설계하기
-            </span>
+            <span className="text-body1 text-gray9">중충실도 와이어프레임 설계하기</span>
           </div>
         </div>
       </div>

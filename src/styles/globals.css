@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import './fonts.css';
+@import './typography.css';
 
 @theme {
   /* Pretendard 폰트 */
@@ -35,32 +35,6 @@
 }
 
 @layer utilities {
-  /* font */
-  .text-title1 {
-    @apply font-sans text-[32px] leading-normal font-semibold tracking-[-0.035em];
-  }
-  .text-title2 {
-    @apply font-sans text-[28px] leading-normal font-semibold tracking-[-0.035em];
-  }
-  .text-title3 {
-    @apply font-sans text-[24px] leading-normal font-semibold tracking-[-0.035em];
-  }
-
-  /* button 스타일 */
-  .text-subhead {
-    @apply font-sans text-[20px] leading-normal font-semibold tracking-[-0.035em];
-  }
-
-  .text-body1 {
-    @apply font-sans text-[20px] leading-normal font-medium tracking-[-0.035em];
-  }
-  .text-body2 {
-    @apply font-sans text-[18px] leading-normal font-medium tracking-[-0.035em];
-  }
-  .text-body3 {
-    @apply font-sans text-[16px] leading-normal font-normal tracking-[-0.035em];
-  }
-
   /* 커스텀 스크롤바 */
   .custom-scrollbar::-webkit-scrollbar {
     width: 10px;
