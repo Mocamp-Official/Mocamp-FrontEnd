@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/router';
 import MocampIcon from '@/public/svgs/MocampIcon.svg';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,23 +12,10 @@ import SlideCard1 from '@/components/onBoarding/SlideCard1';
 // import SlideCard3 from '@/components/onBoarding/SlideCard3';
 
 const OnBoarding = () => {
-  const router = useRouter();
-
-  const handleLogin = () => {
-    router.push('/login');
-  };
-
   const slides = [<SlideCard1 />, <SlideCard1 />, <SlideCard1 />];
 
   return (
     <div className="bg-gray1 relative flex h-screen w-screen flex-col">
-      <button
-        onClick={handleLogin}
-        className="text-gray1 text-body2 bg-primary border-primary absolute top-[25px] right-[320px] flex h-[51px] w-[190px] shrink-0 items-center justify-center rounded-[10px] border px-[30px] py-[15px] font-semibold"
-      >
-        로그인 후 시작하기
-      </button>
-
       <div className="mx-auto flex h-full flex-col items-center justify-center">
         <MocampIcon className="mb-[50.05px] h-[100px] w-[250px]" />
         <p className="text-gray9 text-title2 mb-[49px] font-medium">
