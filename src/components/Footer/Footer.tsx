@@ -1,5 +1,6 @@
 import { INQUIRY_FORM_URL, INSTAGRAM_URL } from '@/constants/link';
 import { useRouter } from 'next/router';
+import MocampWhite from '@/public/svgs/MocampIconWhite.svg';
 
 const Footer = () => {
   const router = useRouter();
@@ -16,9 +17,7 @@ const Footer = () => {
       <div className="max-w-[1200px] mx-auto flex justify-between">
         <div>
           {/* 로고 */}
-          <img
-            src="/svgs/MocampIcon_white.svg"
-            alt="모캠프 로고"
+          <MocampWhite
             className="w-[150px] h-[60.54px] mb-4 flex-shrink-0"
             style={{ aspectRatio: '150/60.54' }}
           />
