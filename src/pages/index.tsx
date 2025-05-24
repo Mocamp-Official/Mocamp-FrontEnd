@@ -36,7 +36,7 @@ const OnBoarding = () => {
             ))}
           </Swiper>
         </div>
-        <div className="swiper-custom-pagination mt-[13.3px] flex justify-center gap-5 lg:mt-[18.75px] xl:mt-[25px]" />
+        <div className="swiper-custom-pagination mt-[13.3px] flex justify-center gap-[10px] lg:mt-[18.75px] lg:gap-[15px] xl:mt-[25px] xl:gap-5" />
       </div>
     </div>
   );
