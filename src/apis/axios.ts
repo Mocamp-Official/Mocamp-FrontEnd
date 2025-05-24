@@ -1,13 +1,17 @@
+// lib/api.ts
 import axios from 'axios';
 import { getAccessToken, setAccessToken } from '../utils/token';
 
-const api = axios.create({
-  baseURL: 'https://mocamp.shop',
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+// 토큰이 필요한 요청용 인스턴스
+const apiWithToken = axios.create({
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 
-// axios 요청 인터셉터
-api.interceptors.request.use(
+// 요청 인터셉터 - 액세스 토큰 첨부
+apiWithToken.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
     if (token) {
@@ -18,7 +22,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// axios 응답 인터셉터
+// 응답 인터셉터 - 토큰 재발급 처리
 let isRefreshing = false;
 let failedQueue: any[] = [];
 
@@ -30,7 +34,7 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-api.interceptors.response.use(
+apiWithToken.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -41,7 +45,7 @@ api.interceptors.response.use(
           failedQueue.push({
             resolve: (token: string) => {
               originalRequest.headers.Authorization = 'Bearer ' + token;
-              resolve(api(originalRequest));
+              resolve(apiWithToken(originalRequest));
             },
             reject: (err: any) => reject(err),
           });
@@ -52,18 +56,14 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(
-          'https://mocamp.shop/auth/refresh', // 아직 리프레시 API 미완성으로 토큰 재발급 기능은 작동하지 않습니다.
-          {},
-          { withCredentials: true },
-        );
+        const res = await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
 
         const newAccessToken = res.data.accessToken;
         setAccessToken(newAccessToken);
-        api.defaults.headers.common.Authorization = 'Bearer ' + newAccessToken;
+        apiWithToken.defaults.headers.common.Authorization = 'Bearer ' + newAccessToken;
         processQueue(null, newAccessToken);
 
-        return api(originalRequest);
+        return apiWithToken(originalRequest);
       } catch (err) {
         processQueue(err, null);
         return Promise.reject(err);
@@ -76,4 +76,10 @@ api.interceptors.response.use(
   },
 );
 
-export default api;
+// 토큰이 필요 없는 요청용 인스턴스
+const apiAuth = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+});
+
+export { apiWithToken, apiAuth };

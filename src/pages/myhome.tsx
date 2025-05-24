@@ -10,9 +10,9 @@ const myhome = () => {
   const { category } = useCategoryStore();
 
   return (
-    <div className="min-w-[1920px] min-h-[1080px] bg-[#e6e6e6]">
+    <div className="min-h-[1080px] min-w-[1920px] bg-[#e6e6e6]">
       <BasicHeader />
-      <div className="flex justify-center mt-[50px] gap-[10px]">
+      <div className="mt-[50px] flex justify-center gap-[10px]">
         <SideBar />
         {category === 'MYHOME_TOTAL' && <Total />}
         {category === 'PROFILE_SETTING' && <ProfileSetting />}

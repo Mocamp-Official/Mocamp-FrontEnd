@@ -1,52 +1,64 @@
-import { setAccessToken } from './../utils/token';
-/* 로그인 관련 API 요청 */
-import axios from 'axios';
+import { setAccessToken } from '@/utils/token';
+import { apiAuth } from '@/apis/axios';
 
-interface ISocialLoginParams {
+interface SocialLoginParams {
   code: string | null;
-  redirect_url: string;
+  redirectUrl: string;
 }
 
-const getGoogleProcess = async ({ code, redirect_url }: ISocialLoginParams) => {
+export const loginByGoogle = async ({ code, redirectUrl }: SocialLoginParams) => {
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google/process?code=${code}&redirect_url=${redirect_url}`,
+    const res = await apiAuth.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google/process`,
+      {
+        params: {
+          code,
+          redirect_url: redirectUrl,
+        },
+      },
     );
-    const data = await res.data.message;
+    const data = res.data.message;
     setAccessToken(data.accessToken);
     return true;
   } catch (err) {
-    alert(`구글 로그인 에러 발생 : ${err}`);
-    return false;
+    throw new Error(`구글 로그인 에러: ${err}`);
   }
 };
 
-const getNaverProcess = async ({ code, redirect_url }: ISocialLoginParams) => {
+export const loginByNaver = async ({ code, redirectUrl }: SocialLoginParams) => {
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/naver/process?code=${code}&redirect_url=${redirect_url}`,
+    const res = await apiAuth.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/naver/process`,
+      {
+        params: {
+          code,
+          redirect_url: redirectUrl,
+        },
+      },
     );
-    const data = await res.data;
+    const data = res.data.message;
     setAccessToken(data.accessToken);
     return true;
   } catch (err) {
-    alert(`네이버 로그인 에러 발생 : ${err}`);
-    return false;
+    throw new Error(`네이버 로그인 에러: ${err}`);
   }
 };
 
-const getKakaoProcess = async ({ code, redirect_url }: ISocialLoginParams) => {
+export const loginByKakao = async ({ code, redirectUrl }: SocialLoginParams) => {
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/kakao/process?code=${code}&redirect_url=${redirect_url}`,
+    const res = await apiAuth.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/kakao/process`,
+      {
+        params: {
+          code,
+          redirect_url: redirectUrl,
+        },
+      },
     );
-    const data = await res.data;
+    const data = res.data.message;
     setAccessToken(data.accessToken);
     return true;
   } catch (err) {
-    console.error('카카오 로그인 실패:', err);
-    return false;
+    throw new Error(`카카오 로그인 에러: ${err}`);
   }
 };
-
-export { getNaverProcess, getKakaoProcess, getGoogleProcess };

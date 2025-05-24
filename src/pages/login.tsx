@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { getGoogleProcess, getNaverProcess, getKakaoProcess } from '@/apis/auth';
+import { loginByGoogle, loginByKakao, loginByNaver } from '@/apis/auth';
 import MocampIcon from '@/public/svgs/MocampIcon.svg';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
@@ -29,9 +29,9 @@ const LoginPage: NextPage = () => {
     };
 
     const processMap = {
-      naver: getNaverProcess,
-      kakao: getKakaoProcess,
-      google: getGoogleProcess,
+      naver: loginByNaver,
+      kakao: loginByKakao,
+      google: loginByGoogle,
     };
 
     const selectedRedirect = redirectMap[platform];
@@ -39,8 +39,10 @@ const LoginPage: NextPage = () => {
 
     const handleLogin = async () => {
       if (selectedRedirect && selectedProcess) {
-        const success = await selectedProcess({ code, redirect_url: selectedRedirect });
-        success && router.push('/myhome');
+        const success = await selectedProcess({ code, redirectUrl: selectedRedirect });
+        if (success) {
+          router.push('/myhome');
+        }
       }
     };
 
@@ -48,19 +50,19 @@ const LoginPage: NextPage = () => {
   }, [platform]);
 
   return (
-    <div className="flex bg-[#ffffff] w-screen h-screen">
-      <div className="h-full mx-auto justify-center items-center flex flex-col bg-[#ffffff]">
+    <div className="flex h-screen w-screen bg-[#ffffff]">
+      <div className="mx-auto flex h-full flex-col items-center justify-center bg-[#ffffff]">
         <MocampIcon />
-        <div className="mt-[1.875rem] mb-[8.4375rem] text-[1.75rem] font-medium leading-[1.6]">
+        <div className="mt-[1.875rem] mb-[8.4375rem] text-[1.75rem] leading-[1.6] font-medium">
           <p>
-            모캠프는 <span className="text-[#27CFA5] font-semibold">로그인</span> 후
+            모캠프는 <span className="font-semibold text-[#27CFA5]">로그인</span> 후
           </p>
           <p>시작할 수 있어요 :D</p>
         </div>
-        <div className="flex flex-col gap-5 w-[37.5rem]">
-          <NaverLoginButton platform={platform} />
-          <KakaoLoginButton platform={platform} />
-          <GoogleLoginButton platform={platform} />
+        <div className="flex w-[37.5rem] flex-col gap-5">
+          <NaverLoginButton />
+          <KakaoLoginButton />
+          <GoogleLoginButton />
         </div>
       </div>
     </div>
