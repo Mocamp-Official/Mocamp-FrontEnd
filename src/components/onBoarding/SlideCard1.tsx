@@ -1,66 +1,88 @@
 import React from 'react';
+import SlideCardLayout from './SlideCardLayout';
 
 const SlideCard1 = () => {
   return (
-    // 전체 카드 컨테이너
-    <div className="bg-gray2 border-gray4 flex h-[267px] w-[480px] shrink-0 gap-[28px] rounded-[20px] border px-[26.67px] pt-[36.27px] pb-[34.75px] lg:h-[375px] lg:w-[675px] lg:gap-10 lg:px-[37.5px] lg:pt-[51px] lg:pb-[48.87px] xl:h-[500px] xl:w-[900px] xl:gap-[54px] xl:px-[50px] xl:pt-[70px] xl:pb-[71.15px]">
-      {/* 왼쪽 텍스트 블럭 (제목 + 설명) */}
-      <div className="flex w-full min-w-[142px] flex-col gap-5 lg:max-w-50 xl:max-w-[266px]">
-        {/* 슬로건 제목 */}
-        <span className="text-primary xl:text-title2 flex h-6 items-center text-[15px] font-semibold tracking-[-0.02em] lg:h-[34px] lg:text-[21px] xl:h-[45px]">
-          누구나 쉬운 목표 관리
-        </span>
-
-        {/* 설명 문구 */}
-        <span className="text-gray9 xl:text-title3 flex h-10 flex-col items-center text-[12.8px] leading-[160%] font-medium tracking-[-0.02em] lg:h-[58px] lg:text-lg xl:h-[76px]">
-          오늘 수행할 목표를 작성하고,
+    <SlideCardLayout
+      title="함께 할 모각작 방 생성"
+      description={
+        <>
+          모각작 방을 만들고 바로 시작!
           <br />
-          체크박스를 눌러 게이지 UP!
-        </span>
-      </div>
-
-      {/* 오른쪽 카드 콘텐츠 (진행도 + 투두리스트) */}
-      <div className="flex h-fit min-w-64 flex-col justify-center gap-[9.8px] lg:gap-[13.25px] xl:gap-[18px]">
-        {/* 진행도 박스 */}
-        <div className="bg-gray1 border-gray4 flex flex-col gap-[10.67px] rounded-[10.67px] border p-4 lg:gap-[15px] lg:rounded-[15px] lg:p-[22.5px] xl:gap-5 xl:rounded-[20px] xl:p-[30px]">
-          <div className="flex items-center gap-[10.37px] lg:gap-[15.06px] xl:gap-[20.38px]">
-            {/* 진행 상태 뱃지 */}
-            <span className="text-blue border-blue rounded-4xl border bg-[#D7F0FF] px-4 py-[5.33px] text-[9.6px] font-medium lg:px-[22.5px] lg:py-[7.5px] lg:text-[13.5px] xl:px-[30px] xl:py-[10px] xl:text-lg">
-              1/2
-            </span>
-
-            {/* 진행 설명 */}
-            <span className="text-gray9 xl:text-body1 text-[10.67px] font-medium lg:text-[15px]">
-              목표 두 개 꼭 완수하기!
-            </span>
+          쉽고 빠르게 설정할 수 있어요
+        </>
+      }
+    >
+      {/* 오른쪽 카드 콘텐츠 */}
+      <div className="flex h-fit w-fit min-w-64 flex-col justify-center gap-[5.33px] lg:gap-[7.5px] xl:gap-[10px]">
+        <div className="bg-gray1 border-gray4 flex gap-[8.28px] rounded-[10.67px] border pt-[15.47px] pr-[11.97px] pb-[17.67px] pl-[12.27px] lg:gap-[11.64px] lg:rounded-[15px] lg:pt-[21.75px] lg:pr-[16.84px] lg:pb-[24.85px] lg:pl-[17.25px] xl:gap-[15.52px] xl:rounded-[20px] xl:pt-[29px] xl:pr-[22.45px] xl:pb-[33.14px] xl:pl-[23px]">
+          <div className="text-gray9 flex flex-col gap-[8.28px] text-[9.9325px] font-semibold tracking-[-0.02em] lg:gap-[11.52px] lg:text-[13.97px] xl:gap-[16.02px] xl:text-[18.6px]">
+            <div className="flex items-center gap-[3.9px] lg:gap-[5.71px] xl:gap-[7.94px]">
+              <span>
+                방 이름 <span className="text-primary">*</span>
+              </span>
+              <span className="text-gray6 text-[6.62px] font-medium lg:text-[9.31px] xl:text-[12.41px]">
+                최대 20자
+              </span>
+            </div>
+            <div className="bg-gray3 text-gray9 h-fit max-h-[69.84px] min-h-[37.25px] min-w-[144.85px] rounded-[4.14px] px-[16.55px] py-[13.62px] text-[8.28px] font-medium lg:min-h-[52.378px] lg:min-w-[203.7px] lg:rounded-[5.82px] lg:px-[23.28px] lg:py-[19.18px] lg:text-[11.64px] xl:min-h-[69.84px] xl:min-w-[271.59px] xl:rounded-[7.76px] xl:px-[31.04px] xl:py-[25.42px] xl:text-[15.51px]">
+              은학샘과 아이들
+            </div>
           </div>
-
-          {/* 게이지 바 */}
-          <div className="bg-gray3 relative h-[14.85px] w-[222.75px] rounded-[10.67px] lg:h-[20.88px] lg:w-[313.25px] lg:rounded-[15px] xl:h-[27.84px] xl:w-[417.7px] xl:rounded-[20px]">
-            <div className="bg-primary absolute top-0 left-0 h-full w-[111px] rounded-[10.67px] lg:w-[156.37px] lg:rounded-[15px] xl:w-[208.5px] xl:rounded-[20px]" />
-          </div>
-        </div>
-
-        {/* 투두 리스트 박스 */}
-        <div className="border-gray4 flex flex-col gap-[10.67px] rounded-[10.67px] border bg-white p-[26.67px] lg:gap-[15px] lg:rounded-[15px] lg:p-[37.5px] xl:gap-5 xl:rounded-[20px] xl:p-[50px]">
-          {/* 투두 항목 1 (완료) */}
-          <div className="l flex items-center gap-[10.67px] lg:gap-[15px] xl:gap-5">
-            <div className="border-primary h-[21.33px] w-[21.33px] rounded-[5.3px] border bg-[#BEF1E4] lg:h-[30px] lg:w-[30px] lg:rounded-[7.5px] xl:h-10 xl:w-10 xl:rounded-[10px]" />
-            <span className="text-gray6 xl:text-body1 text-[10.67px] font-medium line-through lg:text-[15px]">
-              디자인 가이드라인 설정하기
-            </span>
-          </div>
-
-          {/* 투두 항목 2 (미완료) */}
-          <div className="flex items-center gap-[10.67px] lg:gap-[15px] xl:gap-5">
-            <div className="border-gray4 bg-gray1 h-[21.33px] w-[21.33px] rounded-[5.3px] border lg:h-[30px] lg:w-[30px] lg:rounded-[7.5px] xl:h-10 xl:w-10 xl:rounded-[10px]" />
-            <span className="xl:text-body1 text-gray9 text-[10.67px] font-medium lg:text-[15px]">
-              중충실도 와이어프레임 설계하기
-            </span>
+          <div className="text-gray9 flex flex-col gap-[8.28px] text-[9.9325px] font-semibold tracking-[-0.02em] lg:gap-[11.52px] lg:text-[13.97px] xl:gap-[16.02px] xl:text-[18.6px]">
+            <div className="flex items-center gap-[3.9px] lg:gap-[5.71px] xl:gap-[7.94px]">
+              <span>
+                마이크 설정 <span className="text-primary">*</span>
+              </span>
+            </div>
+            <div className="bg-gray3 text-gray9 h-fit max-h-[69.84px] min-w-[78.6px] rounded-[4.14px] px-[25.04px] py-[9.49px] text-[15.51px] font-medium lg:rounded-[5.82px] lg:px-[35.15px] lg:py-[13.37px] xl:rounded-[7.76px] xl:px-[46.7px] xl:py-[17.66px]">
+              <div className="bg-primary w-fit rounded-[413.44px] px-[8.28px] py-[4.14px] text-center text-[8.28px] font-semibold text-white lg:px-[11.64px] lg:py-[5.82px] lg:text-[11.64px] xl:px-[15.52px] xl:py-[7.76px] xl:text-[15.52px]">
+                ON
+              </div>
+            </div>
           </div>
         </div>
+        <div className="bg-gray1 border-gray4 flex gap-[8.28px] rounded-[10.67px] border pt-[15.47px] pr-[11.97px] pb-[17.67px] pl-[12.27px] lg:gap-[11.64px] lg:rounded-[15px] lg:pt-[21.75px] lg:pr-[16.84px] lg:pb-[24.85px] lg:pl-[17.25px] xl:gap-[15.52px] xl:rounded-[20px] xl:pt-[29px] xl:pr-[22.45px] xl:pb-[33.14px] xl:pl-[23px]">
+          <div className="text-gray9 flex flex-col gap-[8.28px] text-[9.9325px] font-semibold tracking-[-0.02em] lg:gap-[11.52px] lg:text-[13.97px] xl:gap-[16.02px] xl:text-[18.6px]">
+            <div className="flex items-center gap-[3.9px] lg:gap-[5.71px] xl:gap-[7.94px]">
+              <span>
+                진행 시간 <span className="text-primary">*</span>
+              </span>
+              <span className="text-gray6 text-[6.62px] font-medium lg:text-[9.31px] xl:text-[12.41px]">
+                최대 12시간
+              </span>
+            </div>
+            <div className="bg-gray3 text-gray9 flex h-fit min-h-[37.25px] min-w-[144.85px] items-center justify-center gap-[4.14px] rounded-[4.14px] px-[27.66px] py-[10.35px] text-[9.9325px] font-medium lg:min-h-[52.37px] lg:min-w-[203.7px] lg:gap-[5.82px] lg:rounded-[5.8198px] lg:px-[39.34px] lg:py-[14.55px] lg:text-[13.967px] xl:min-h-[69.84px] xl:min-w-[271.59px] xl:gap-[7.76px] xl:rounded-[7.76px] xl:px-[52.62px] xl:py-[19.4px] xl:text-[18.623px]">
+              <div className="text-primary border-gray4 w-fit rounded-[4.1385px] border-[0.4139px] bg-white px-[8.28px] py-[2.07px] text-center lg:px-[11.64px] lg:py-[2.91px] xl:px-[15.52px] xl:py-[3.88px]">
+                3
+              </div>
+              <span className="text-gray9">시간</span>
+
+              <div className="text-primary border-gray4 w-fit rounded-[4.1385px] border-[0.4139px] bg-white px-[8.28px] py-[2.07px] text-center lg:px-[11.64px] lg:py-[2.91px] xl:px-[15.52px] xl:py-[3.88px]">
+                15
+              </div>
+              <span>분</span>
+            </div>
+          </div>
+          <div className="text-gray9 flex flex-col gap-[8.28px] text-[9.9325px] font-semibold tracking-[-0.02em] lg:gap-[11.52px] lg:text-[13.97px] xl:gap-[16.02px] xl:text-[18.6px]">
+            <div className="flex items-center gap-[3.9px] lg:gap-[5.71px] xl:gap-[7.94px]">
+              <span>
+                인원 수 <span className="text-primary">*</span>
+              </span>
+              <span className="text-gray6 text-[6.62px] font-medium lg:text-[9.31px] xl:text-[12.41px]">
+                최대 5명
+              </span>
+            </div>
+            <div className="bg-gray3 text-gray9 flex h-fit max-h-[69.84px] min-w-[78.6px] items-center gap-[4.14px] rounded-[4.14px] px-[25.04px] py-[9.49px] text-[9.9325px] font-medium lg:gap-[5.82px] lg:rounded-[5.82px] lg:px-[35.15px] lg:py-[13.37px] lg:text-[13.967px] xl:gap-[7.76px] xl:rounded-[7.76px] xl:px-[46.7px] xl:py-[17.66px] xl:text-[18.623px]">
+              <div className="text-primary border-gray4 w-fit rounded-[4.1385px] border-[0.4139px] bg-white px-[8.28px] py-[2.07px] text-center lg:px-[11.64px] lg:py-[2.91px] xl:px-[15.52px] xl:py-[3.88px]">
+                4
+              </div>
+              <span>명</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </SlideCardLayout>
   );
 };
 

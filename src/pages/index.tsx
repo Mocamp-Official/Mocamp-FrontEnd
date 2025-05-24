@@ -8,11 +8,11 @@ import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import SlideCard1 from '@/components/onBoarding/SlideCard1';
-// import SlideCard2 from '@/components/onBoarding/SlideCard2';
-// import SlideCard3 from '@/components/onBoarding/SlideCard3';
+import SlideCard2 from '@/components/onBoarding/SlideCard2';
+import SlideCard3 from '@/components/onBoarding/SlideCard3';
 
 const OnBoarding = () => {
-  const slides = [<SlideCard1 />, <SlideCard1 />, <SlideCard1 />];
+  const slides = [<SlideCard1 />, <SlideCard2 />, <SlideCard3 />];
 
   return (
     <div className="bg-gray1 relative flex h-screen w-screen flex-col">
