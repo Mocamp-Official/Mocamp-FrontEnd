@@ -20,6 +20,7 @@ const NumberInput = ({
       type="text"
       pattern="[0-9]*"
       value={value}
+      inputMode="numeric"
       placeholder={placeholder}
       onChange={onChange}
       className={`placeholder-[#27cfa5] font-medium text-[#27cfa5] text-2xl outline-none bg-transparent text-center w-full appearance-none ${minWidth}`}

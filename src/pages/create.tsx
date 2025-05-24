@@ -1,14 +1,16 @@
-/* 모캠프(방) 생성 페이지 */
-import { useState } from 'react';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import CreateRoom from '@/components/create/CreateRoom';
+import CardPageLayout from '@/components/common/CardPageLayout';
 
 const Create = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
   return (
-    <>
-      <div onClick={() => setIsOpen(true)}>create</div>
-      {isOpen && <CreateRoom onClose={() => setIsOpen(false)} />}
-    </>
+    <CardPageLayout>
+      <CreateRoom onClose={() => router.back()} />
+    </CardPageLayout>
   );
 };
 
