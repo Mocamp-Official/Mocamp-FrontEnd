@@ -1,3 +1,4 @@
+// 리뷰 요함
 interface ProgressBadgeProps {
   done: number;
   total: number;

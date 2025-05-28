@@ -1,3 +1,4 @@
+// 리뷰 요함
 interface ProgressBarProps {
   value: number;
 }
