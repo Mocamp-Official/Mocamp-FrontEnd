@@ -1,4 +1,3 @@
-import React from 'react';
 import SlideCardLayout from './SlideCardLayout';
 import Graph from '@/public/svgs/OnBoardingGraph.svg';
 import Todo from '@/public/svgs/OnBoardingTodo.svg';

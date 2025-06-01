@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface SlideCardLayoutProps {
   title: string;
   description: React.ReactNode;

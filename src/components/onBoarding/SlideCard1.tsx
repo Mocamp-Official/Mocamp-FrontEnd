@@ -1,4 +1,3 @@
-import React from 'react';
 import SlideCardLayout from './SlideCardLayout';
 
 const SlideCard1 = () => {
