@@ -1,29 +1,30 @@
-interface NumberInputProps {
-  placeholder?: string;
+import { InputHTMLAttributes } from 'react';
+
+interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: string;
   minWidth?: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputClassName?: string;
+  wrapperClassName?: string;
 }
 
 const NumberInput = ({
   placeholder = '',
   width = 'w-full',
   minWidth = 'min-w-[30px]',
-  value,
-  onChange,
+  inputClassName,
+  wrapperClassName,
+  ...rest
 }: NumberInputProps) => (
   <div
-    className={`flex items-center justify-center px-5 py-[5px] bg-white rounded-[10px] border border-[#e6e6e6] ${width}`}
+    className={`flex items-center justify-center rounded-[10px] border border-[#e6e6e6] bg-white px-5 py-[5px] ${width} ${wrapperClassName}`}
   >
     <input
       type="text"
       pattern="[0-9]*"
-      value={value}
       inputMode="numeric"
       placeholder={placeholder}
-      onChange={onChange}
-      className={`placeholder-[#27cfa5] font-medium text-[#27cfa5] text-2xl outline-none bg-transparent text-center w-full appearance-none ${minWidth}`}
+      className={`w-full appearance-none bg-transparent text-center text-2xl font-medium text-[#27cfa5] placeholder-[#27cfa5] outline-none ${minWidth} ${inputClassName}`}
+      {...rest}
     />
   </div>
 );

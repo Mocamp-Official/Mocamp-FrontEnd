@@ -4,9 +4,10 @@ import CameraIcon from '@/public/svgs/cameraIcon.svg';
 interface ImageUploadBoxProps {
   label: string;
   onImageSelect: (file: File | null) => void;
+  errorMessage?: string;
 }
 
-const ImageUploadBox = ({ label, onImageSelect }: ImageUploadBoxProps) => {
+const ImageUploadBox = ({ label, onImageSelect, errorMessage }: ImageUploadBoxProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -59,35 +60,39 @@ const ImageUploadBox = ({ label, onImageSelect }: ImageUploadBoxProps) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <span className="text-2xl font-semibold text-[#555555]">
-        {mainLabel}
-        {isRequired && <span className="text-[#27cfa5]"> *</span>}
-      </span>
+      <div className="flex items-center gap-[10px]">
+        <span className="text-2xl font-semibold text-[#555555]">
+          {mainLabel}
+          {isRequired && <span className="text-[#27cfa5]"> *</span>}
+        </span>
+
+        {errorMessage && <span className="text-red text-base font-medium">{errorMessage}</span>}
+      </div>
 
       <div
-        className={`w-[560px] h-[199px] flex items-center justify-center rounded-[10px] ${
+        className={`flex h-[199px] w-[560px] items-center justify-center rounded-[10px] ${
           previewUrl ? 'bg-transparent' : 'bg-[#f2f2f2]'
-        }`}
+        } ${errorMessage ? 'border-red border' : 'border border-transparent'}`}
       >
         {previewUrl ? (
-          <div className="relative w-[200px] h-[200px]">
+          <div className="relative h-[200px] w-[200px]">
             <img
               src={previewUrl}
               alt="미리보기 이미지"
-              className="w-full h-full object-cover rounded-[10px]"
+              className="h-full w-full rounded-[10px] object-cover"
             />
-            <div className="absolute inset-0 bg-black/85 opacity-0 hover:opacity-100 flex flex-col items-center justify-center gap-[10px] rounded-[10px] transition-opacity">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-[10px] rounded-[10px] bg-black/85 opacity-0 transition-opacity hover:opacity-100">
               <button
                 type="button"
                 onClick={handleResetToDefault}
-                className="text-white text-base font-medium px-5 py-[10px] rounded-[5px] bg-[#555555]/70 hover:bg-[#27cfa5] cursor-pointer"
+                className="cursor-pointer rounded-[5px] bg-[#555555]/70 px-5 py-[10px] text-base font-medium text-white hover:bg-[#27cfa5]"
               >
                 기본 이미지 적용
               </button>
               <button
                 type="button"
                 onClick={handleReSelect}
-                className="text-white text-base font-medium px-5 py-[10px] rounded-[5px] bg-[#555555]/70 hover:bg-[#27cfa5] cursor-pointer"
+                className="cursor-pointer rounded-[5px] bg-[#555555]/70 px-5 py-[10px] text-base font-medium text-white hover:bg-[#27cfa5]"
               >
                 다른 이미지 선택
               </button>
@@ -96,10 +101,10 @@ const ImageUploadBox = ({ label, onImageSelect }: ImageUploadBoxProps) => {
         ) : (
           <label
             htmlFor="image-upload-input"
-            className="flex flex-col items-center justify-center gap-[10px] w-full h-full cursor-pointer"
+            className="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-[10px]"
           >
-            <CameraIcon className="w-[60px] h-[60px]" />
-            <span className="text-center text-[20px] font-medium text-[#c4c4c4] pb-[5px]">
+            <CameraIcon className="h-[60px] w-[60px]" />
+            <span className="pb-[5px] text-center text-[20px] font-medium text-[#c4c4c4]">
               여기를 눌러
               <br />
               이미지를 삽입하세요
