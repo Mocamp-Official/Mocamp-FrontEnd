@@ -49,8 +49,6 @@ export const useRoomForm = () => {
     errors,
     micOn,
     toggleMic,
-    imageFile,
-    setImageFile,
     isValid,
     onImageSelect,
     handleSubmit,

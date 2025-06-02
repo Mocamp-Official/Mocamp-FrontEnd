@@ -61,17 +61,17 @@ const ImageUploadBox = ({ label, onImageSelect, errorMessage }: ImageUploadBoxPr
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-[10px]">
-        <span className="text-2xl font-semibold text-[#555555]">
+        <span className="text-title3 text-gray9">
           {mainLabel}
-          {isRequired && <span className="text-[#27cfa5]"> *</span>}
+          {isRequired && <span className="text-primary"> *</span>}
         </span>
 
-        {errorMessage && <span className="text-red text-base font-medium">{errorMessage}</span>}
+        {errorMessage && <span className="text-red text-body3 font-medium">{errorMessage}</span>}
       </div>
 
       <div
         className={`flex h-[199px] w-[560px] items-center justify-center rounded-[10px] ${
-          previewUrl ? 'bg-transparent' : 'bg-[#f2f2f2]'
+          previewUrl ? 'bg-transparent' : 'bg-gray3'
         } ${errorMessage ? 'border-red border' : 'border border-transparent'}`}
       >
         {previewUrl ? (
@@ -85,14 +85,14 @@ const ImageUploadBox = ({ label, onImageSelect, errorMessage }: ImageUploadBoxPr
               <button
                 type="button"
                 onClick={handleResetToDefault}
-                className="cursor-pointer rounded-[5px] bg-[#555555]/70 px-5 py-[10px] text-base font-medium text-white hover:bg-[#27cfa5]"
+                className="bg-gray9/70 hover:bg-primary text-body3 cursor-pointer rounded-[5px] px-5 py-[10px] font-medium text-white"
               >
                 기본 이미지 적용
               </button>
               <button
                 type="button"
                 onClick={handleReSelect}
-                className="cursor-pointer rounded-[5px] bg-[#555555]/70 px-5 py-[10px] text-base font-medium text-white hover:bg-[#27cfa5]"
+                className="bg-gray9/70 hover:bg-primary text-body3 cursor-pointer rounded-[5px] px-5 py-[10px] font-medium text-white"
               >
                 다른 이미지 선택
               </button>
@@ -104,7 +104,7 @@ const ImageUploadBox = ({ label, onImageSelect, errorMessage }: ImageUploadBoxPr
             className="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-[10px]"
           >
             <CameraIcon className="h-[60px] w-[60px]" />
-            <span className="pb-[5px] text-center text-[20px] font-medium text-[#c4c4c4]">
+            <span className="text-gray6 text-body1 h-15 pb-[5px] text-center leading-[150%]">
               여기를 눌러
               <br />
               이미지를 삽입하세요

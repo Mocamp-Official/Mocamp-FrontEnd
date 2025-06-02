@@ -16,14 +16,14 @@ const NumberInput = ({
   ...rest
 }: NumberInputProps) => (
   <div
-    className={`flex items-center justify-center rounded-[10px] border border-[#e6e6e6] bg-white px-5 py-[5px] ${width} ${wrapperClassName}`}
+    className={`border-gray4 flex items-center justify-center rounded-[10px] border bg-white px-5 py-[5px] ${width} ${wrapperClassName}`}
   >
     <input
       type="text"
       pattern="[0-9]*"
       inputMode="numeric"
       placeholder={placeholder}
-      className={`w-full appearance-none bg-transparent text-center text-2xl font-medium text-[#27cfa5] placeholder-[#27cfa5] outline-none ${minWidth} ${inputClassName}`}
+      className={`text-primary placeholder-primary w-full appearance-none bg-transparent text-center text-2xl font-medium outline-none ${minWidth} ${inputClassName}`}
       {...rest}
     />
   </div>

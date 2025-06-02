@@ -11,11 +11,11 @@ const LabeledBox = ({ label, description, isError = false, children }: LabeledBo
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-[10px]">
-        <span className="text-2xl font-semibold text-[#555555]">
+        <span className="text-title3 text-gray9">
           {parts[0].trim()}
-          {label.includes('*') && <span className="text-[#27cfa5]"> *</span>}
+          {label.includes('*') && <span className="text-primary"> *</span>}
         </span>
-        <span className={`text-base font-medium ${isError ? 'text-red' : 'text-[#c4c4c4]'}`}>
+        <span className={`text-body3 font-medium ${isError ? 'text-red' : 'text-gray6'}`}>
           {description}
         </span>
       </div>

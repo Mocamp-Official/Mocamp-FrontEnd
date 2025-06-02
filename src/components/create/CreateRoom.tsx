@@ -10,18 +10,8 @@ interface CreateRoomProps {
 }
 
 const CreateRoom = ({ onClose }: CreateRoomProps) => {
-  const {
-    register,
-    values,
-    imageFile,
-    micOn,
-    toggleMic,
-    errors,
-    setImageFile,
-    isValid,
-    handleSubmit,
-    onImageSelect,
-  } = useRoomForm();
+  const { register, values, micOn, toggleMic, errors, isValid, handleSubmit, onImageSelect } =
+    useRoomForm();
 
   const onSubmit = (data: RoomFormInput) => {
     console.log('제출 데이터:', data);
@@ -32,9 +22,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
     <>
       {/* 방 생성 모달 제목 */}
       <div className="flex h-[38px] items-start justify-between">
-        <span className="flex h-full items-center text-[32px] leading-[38px] font-semibold text-[#555555]">
-          방 생성하기
-        </span>
+        <span className="text-title1 text-gray9 flex h-full items-center">방 생성하기</span>
         <CloseIcon className="h-[29px] w-[29px] cursor-pointer" onClick={onClose} />
       </div>
 
@@ -46,7 +34,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
           isError={!!errors.roomName}
         >
           <div
-            className={`flex h-[90px] w-[350px] items-center rounded-[10px] bg-[#f2f2f2] px-10 ${
+            className={`bg-gray3 flex h-[90px] w-[350px] items-center rounded-[10px] px-10 ${
               errors.roomName ? 'border-red border' : 'border border-transparent'
             }`}
           >
@@ -54,15 +42,15 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               {...register('roomName')}
               value={values.roomName}
               placeholder="방 이름을 설정해주세요"
-              className={`w-full bg-transparent text-[20px] placeholder-[#c4c4c4] outline-none ${
-                errors.roomName ? 'text-red' : 'text-[#555555]'
+              className={`text-body1 placeholder-gray6 w-full bg-transparent outline-none ${
+                errors.roomName ? 'text-red' : 'text-gray9'
               }`}
             />
           </div>
         </LabeledBox>
 
         <LabeledBox label="마이크 설정">
-          <div className="flex h-[90px] w-[190px] items-center justify-center rounded-[10px] bg-[#f2f2f2] px-10 py-5">
+          <div className="bg-gray3 flex h-[90px] w-[190px] items-center justify-center rounded-[10px] px-10 py-5">
             <ToggleMicButton micOn={micOn} onToggle={toggleMic} />
           </div>
         </LabeledBox>
@@ -76,7 +64,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
           isError={!!errors.minute}
         >
           <div
-            className={`flex h-[90px] w-[350px] items-center justify-center gap-[10px] rounded-[10px] bg-[#f2f2f2] px-10 ${
+            className={`bg-gray3 flex h-[90px] w-[350px] items-center justify-center gap-[10px] rounded-[10px] px-10 ${
               errors.minute ? 'border-red border' : 'border border-transparent'
             }`}
           >
@@ -86,7 +74,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               maxLength={2}
               {...register('hour')}
               width="max-w-[70px]"
-              inputClassName={errors.minute ? 'text-red' : 'text-[#27cfa5]'}
+              inputClassName={errors.minute ? 'text-red' : 'text-primary'}
             />
             시간
             <NumberInput
@@ -95,7 +83,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               maxLength={2}
               {...register('minute')}
               width="max-w-[70px]"
-              inputClassName={errors.minute ? 'text-red' : 'text-[#27cfa5]'}
+              inputClassName={errors.minute ? 'text-red' : 'text-primary'}
             />
             분
           </div>
@@ -107,7 +95,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
           isError={!!errors.headcount}
         >
           <div
-            className={`flex h-[90px] w-[190px] items-center justify-center gap-[10px] rounded-[10px] bg-[#f2f2f2] px-10 py-5 ${
+            className={`bg-gray3 flex h-[90px] w-[190px] items-center justify-center gap-[10px] rounded-[10px] px-10 py-5 ${
               errors.headcount ? 'border-red border' : 'border border-transparent'
             }`}
           >
@@ -118,7 +106,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               {...register('headcount')}
               width="max-w-[55px]"
               minWidth="min-w-[15px]"
-              inputClassName={errors.headcount ? 'text-red' : 'text-[#27cfa5]'}
+              inputClassName={errors.headcount ? 'text-red' : 'text-primary'}
             />
             명
           </div>
@@ -135,10 +123,10 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
       {/* 생성 버튼 */}
       <button
         onClick={handleSubmit(onSubmit)}
-        className={`h-[84px] w-[560px] shrink-0 rounded-[10px] text-[20px] font-semibold ${
+        className={`text-subhead h-[84px] w-[560px] shrink-0 rounded-[10px] ${
           isValid
-            ? 'cursor-pointer bg-[#27CFA5] text-white'
-            : 'cursor-not-allowed bg-[#f2f2f2] text-[#c4c4c4]'
+            ? 'bg-primary cursor-pointer text-white'
+            : 'bg-gray3 text-gray6 cursor-not-allowed'
         }`}
       >
         모캠프 생성하기
