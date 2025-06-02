@@ -1,5 +1,9 @@
-import CloseIcon from '@/public/svgs/closeIcon.svg';
+import clsx from 'clsx';
+
 import { useRoomForm, RoomFormInput } from '@/hooks/useRoomForm';
+
+import CloseIcon from '@/public/svgs/closeIcon.svg';
+
 import ToggleMicButton from './ToggleMicButton';
 import LabeledBox from './LabeledBox';
 import NumberInput from './NumberInput';
@@ -73,7 +77,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               value={values.hour}
               maxLength={2}
               {...register('hour')}
-              width="max-w-[70px]"
+              containerClassName="max-w-[70px]"
               inputClassName={errors.minute ? 'text-red' : 'text-primary'}
             />
             시간
@@ -82,7 +86,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               value={values.minute}
               maxLength={2}
               {...register('minute')}
-              width="max-w-[70px]"
+              containerClassName="max-w-[70px]"
               inputClassName={errors.minute ? 'text-red' : 'text-primary'}
             />
             분
@@ -104,9 +108,8 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
               value={values.headcount}
               maxLength={1}
               {...register('headcount')}
-              width="max-w-[55px]"
-              minWidth="min-w-[15px]"
-              inputClassName={errors.headcount ? 'text-red' : 'text-primary'}
+              containerClassName="max-w-[55px]"
+              inputClassName={clsx(errors.headcount ? 'text-red' : 'text-primary', 'min-w-[15px]')}
             />
             명
           </div>
