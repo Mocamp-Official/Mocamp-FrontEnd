@@ -62,7 +62,7 @@
   background-color: var(--color-primary);
 }
 
-/* 스크롤 바 */
+/* 조항 스크롤 바 */
 .custom-scrollbar {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: #e8e8e8 #fafafa;
@@ -87,22 +87,4 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ededed;
-
 }
-
-@layer utilities {
-  /* 커스텀 스크롤바 */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--color-gray4);
-    border-radius: 10px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: #f8f8f8;
-  }
-}
-
