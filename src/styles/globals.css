@@ -68,7 +68,6 @@
   scrollbar-color: #e8e8e8 #fafafa;
 }
 
-/* Webkit (Chrome, Edge, Safari) */
 .custom-scrollbar::-webkit-scrollbar {
   width: 12px;
   background: transparent;
@@ -88,4 +87,22 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ededed;
+
 }
+
+@layer utilities {
+  /* 커스텀 스크롤바 */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-gray4);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f8f8f8;
+  }
+}
+
