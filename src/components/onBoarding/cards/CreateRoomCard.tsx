@@ -1,6 +1,6 @@
-import SlideCardLayout from './SlideCardLayout';
+import SlideCardLayout from '@/components/onBoarding/SlideCardLayout';
 
-const SlideCard1 = () => {
+const CreateRoomCard = () => {
   return (
     <SlideCardLayout
       title="함께 할 모각작 방 생성"
@@ -85,4 +85,4 @@ const SlideCard1 = () => {
   );
 };
 
-export default SlideCard1;
+export default CreateRoomCard;

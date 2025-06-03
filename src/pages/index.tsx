@@ -4,11 +4,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import SlideCard1 from '@/components/onBoarding/SlideCard1';
-import SlideCard2 from '@/components/onBoarding/SlideCard2';
-import SlideCard3 from '@/components/onBoarding/SlideCard3';
+import CreateRoomCard from '@/components/onBoarding/cards/CreateRoomCard';
+import AchievementCard from '@/components/onBoarding/cards/AchievementCard';
+import GoalManagementCard from '@/components/onBoarding/cards/GoalManagementCard';
 
-const slides = [SlideCard1, SlideCard2, SlideCard3];
+const slides = [CreateRoomCard, AchievementCard, GoalManagementCard];
 
 const OnBoarding = () => {
   return (

@@ -1,8 +1,8 @@
-import SlideCardLayout from './SlideCardLayout';
+import SlideCardLayout from '@/components/onBoarding/SlideCardLayout';
 import Graph from '@/public/svgs/OnBoardingGraph.svg';
 import Todo from '@/public/svgs/OnBoardingTodo.svg';
 
-const SlideCard2 = () => {
+const AchievementCard = () => {
   return (
     <SlideCardLayout
       title="한 눈에 보는 성취도"
@@ -32,4 +32,4 @@ const SlideCard2 = () => {
   );
 };
 
-export default SlideCard2;
+export default AchievementCard;

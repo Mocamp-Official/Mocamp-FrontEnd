@@ -1,6 +1,6 @@
-import SlideCardLayout from './SlideCardLayout';
+import SlideCardLayout from '@/components/onBoarding/SlideCardLayout';
 
-const SlideCard3 = () => {
+const GoalManagementCard = () => {
   return (
     <SlideCardLayout
       title="누구나 쉬운 목표 관리"
@@ -50,4 +50,4 @@ const SlideCard3 = () => {
   );
 };
 
-export default SlideCard3;
+export default GoalManagementCard;
