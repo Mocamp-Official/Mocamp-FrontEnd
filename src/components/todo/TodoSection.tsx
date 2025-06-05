@@ -20,7 +20,7 @@ const TodoSection = ({ todos: initialTodos }: TodoSectionProps) => {
   };
 
   return (
-    <div className="flex h-[630px] w-[480px] items-center justify-center">
+    <div className="flex h-[630px] w-[480px] max-w-[1480px] items-center justify-center overflow-x-auto">
       <div className="relative flex h-full w-full flex-col items-center">
         <div className="absolute top-[149.5px] h-[2px] w-[445px] bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)] bg-[length:20px_2px] bg-repeat-x" />
 
