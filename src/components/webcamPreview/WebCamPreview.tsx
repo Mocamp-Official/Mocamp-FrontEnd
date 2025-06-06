@@ -15,7 +15,6 @@ interface WebCamPreviewModalProps {
   onEnterRoom: () => void;
 }
 
-
 const WebCamPreviewModal = ({
   room,
   user,
