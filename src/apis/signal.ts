@@ -14,7 +14,7 @@ export class SignalingSocket {
     this.client = new StompJs.Client({
       brokerURL: url,
       connectHeaders: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
