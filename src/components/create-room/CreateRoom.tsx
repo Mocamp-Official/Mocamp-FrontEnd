@@ -24,7 +24,6 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
       const payload = {
         roomName: data.roomName,
         capacity: Number(data.headcount),
-        description: '',
         duration: `${data.hour.padStart(2, '0')}:${data.minute.padStart(2, '0')}`,
         micAvailability: micOn,
         micTurnedOn: true,
@@ -37,8 +36,8 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
         router.push('/login');
         return;
       }
-      const res = await createRoom(payload, accessToken);
-      router.push(`/room/${res.roomId}`);
+      const roomId = await createRoom(payload, accessToken);
+      router.push(`/room/${roomId}`);
     } catch (err) {
       alert('방 생성에 실패했습니다. 다시 시도해주세요.');
     }

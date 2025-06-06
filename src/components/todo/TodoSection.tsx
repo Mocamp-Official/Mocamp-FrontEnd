@@ -1,22 +1,26 @@
-import { useState } from 'react';
 import TodoEmptyContent from './TodoEmptyContent';
 import ProgressCard from '@/components/todo/progress/ProgressCard';
 import TodoCard from './TodoCard';
 import { Todo } from '@/types/todo';
+import { useRoomPublisher } from '@/hooks/useRoomPublisher';
 
 interface TodoSectionProps {
+  roomId: string;
   todos: Todo[];
+  setTodos: (newTodos: Todo[]) => void;
 }
 
-const TodoSection = ({ todos: initialTodos }: TodoSectionProps) => {
-  const [todos, setTodos] = useState(initialTodos);
+const TodoSection = ({ roomId, todos, setTodos }: TodoSectionProps) => {
+  const { toggleTodo } = useRoomPublisher(roomId);
 
-  const doneCount = todos.filter((item) => item.done).length;
+  const doneCount = todos.filter((t) => t.done).length;
 
   const handleToggleDone = (targetId: string) => {
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === targetId ? { ...todo, done: !todo.done } : todo)),
-    );
+    const current = todos.find((t) => t.id === targetId);
+    if (!current) return;
+
+    const newDone = !current.done;
+    toggleTodo(targetId, newDone);
   };
 
   return (
@@ -25,6 +29,7 @@ const TodoSection = ({ todos: initialTodos }: TodoSectionProps) => {
         <div className="absolute top-[149.5px] h-[2px] w-[445px] bg-[repeating-linear-gradient(to_right,#F2F2F2_0_10px,transparent_10px_20px)] bg-[length:20px_2px] bg-repeat-x" />
 
         <ProgressCard
+          roomId={roomId}
           todos={todos}
           done={doneCount}
           total={todos.length}
@@ -34,7 +39,7 @@ const TodoSection = ({ todos: initialTodos }: TodoSectionProps) => {
         {todos.length > 0 ? (
           <TodoCard items={todos} onToggle={handleToggleDone} />
         ) : (
-          <TodoEmptyContent onAddTodos={setTodos} />
+          <TodoEmptyContent onAddTodos={setTodos} roomId={roomId} />
         )}
       </div>
     </div>

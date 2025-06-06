@@ -4,9 +4,10 @@ import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 
 interface TodoEmptyContentProps {
   onAddTodos: (newTodos: Todo[]) => void;
+  roomId: string;
 }
 
-const TodoEmptyContent = ({ onAddTodos }: TodoEmptyContentProps) => {
+const TodoEmptyContent = ({ onAddTodos, roomId }: TodoEmptyContentProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpen = () => setShowModal(true);
@@ -26,6 +27,7 @@ const TodoEmptyContent = ({ onAddTodos }: TodoEmptyContentProps) => {
 
       {showModal && (
         <GoalModalWrapper
+          roomId={roomId}
           onClose={handleClose}
           mode="add"
           onSubmit={(newTodos) => {

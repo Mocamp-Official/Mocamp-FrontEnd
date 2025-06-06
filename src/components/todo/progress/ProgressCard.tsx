@@ -5,19 +5,22 @@ import MoreMenu from './MoreMenu';
 import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 import CommonModal from '@/components/common/modal/CommonModal';
 import { Todo } from '@/types/todo';
+import { useRoomPublisher } from '@/hooks/useRoomPublisher';
 
 interface ProgressCardProps {
   done: number;
   total: number;
   todos: Todo[];
+  roomId: string;
   onUpdateTodos: (updatedTodos: Todo[]) => void;
 }
 
-const ProgressCard = ({ done, total, todos, onUpdateTodos }: ProgressCardProps) => {
+const ProgressCard = ({ done, total, todos, onUpdateTodos, roomId }: ProgressCardProps) => {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showCommitmentModal, setShowCommitmentModal] = useState(false);
   const [todayCommitment, setTodayCommitment] = useState('');
   const progress = total === 0 ? 0 : Math.round((done / total) * 100);
+  const { updateNotice } = useRoomPublisher(roomId);
 
   return (
     <div className="flex h-[150px] w-[480px] flex-col justify-between gap-5 rounded-[20px] bg-[#FEFEFE] p-[30px]">
@@ -37,6 +40,7 @@ const ProgressCard = ({ done, total, todos, onUpdateTodos }: ProgressCardProps) 
 
       {showGoalModal && (
         <GoalModalWrapper
+          roomId={roomId}
           onClose={() => setShowGoalModal(false)}
           mode="edit"
           todos={todos}
@@ -51,8 +55,9 @@ const ProgressCard = ({ done, total, todos, onUpdateTodos }: ProgressCardProps) 
           description="오늘의 다짐이나 포부를 한 줄로 작성할 수 있어요"
           placeholder="다짐 쓰기를 통해 꿈을 이루기 위한 첫 걸음을 내딛으세요"
           onSubmit={(value) => {
-            setTodayCommitment(value);
-            setShowCommitmentModal(false);
+            setTodayCommitment(value); // 로컬 상태 저장
+            updateNotice(value); // pub 전송
+            setShowCommitmentModal(false); // 모달 닫기
           }}
         />
       )}
