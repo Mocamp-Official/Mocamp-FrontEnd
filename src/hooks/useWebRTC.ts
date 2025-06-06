@@ -10,6 +10,7 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
   const peerConnection = useRef<RTCPeerConnection | null>(null);
+  const [isOfferSent, setIsOfferSent] = useState(false); 
 
   useEffect(() => {
     let pc: RTCPeerConnection;
@@ -29,8 +30,9 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
         localStream.getTracks().forEach((track) => pc.addTrack(track, localStream));
         peerConnection.current = pc;
 
-        // 1. SDP Answer 수신 구독
+        // 1. 먼저 구독 설정
         signalingSocket.subscribe(`/sub/rtc/offer/${roomId}`, async (payload) => {
+          console.log('[RTC] SDP Answer 수신:', payload);
           if (payload.sdpAnswer && payload.userId !== userId) {
             await pc.setRemoteDescription(
               new RTCSessionDescription({ type: 'answer', sdp: payload.sdpAnswer }),
@@ -38,8 +40,8 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
           }
         });
 
-        // 2. ICE 수신 구독
         signalingSocket.subscribe(`/sub/rtc/ice/${roomId}`, (payload) => {
+          console.log('[RTC] ICE Candidate 수신:', payload);
           if (
             payload.candidate &&
             payload.sdpMid &&
@@ -56,36 +58,41 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
           }
         });
 
-        // 3. 연결
+        // 2. 연결 시작
         signalingSocket.connect();
 
-        // 4. 연결 완료 후 offer 전송
-        const waitForConnection = () => {
-          if (signalingSocket.isConnected()) {
-            pc.createOffer().then(async (offer) => {
-              if (!offer.sdp) {
+        // 3. 연결 완료 후 offer 전송
+        const waitForConnectionAndSendOffer = async () => {
+          if (signalingSocket.isConnected() && !isOfferSent) {
+            try {
+              const offer = await pc.createOffer();
+              await pc.setLocalDescription(offer);
+
+              const sdp = pc.localDescription?.sdp;
+              if (!sdp) {
                 setError('SDP 생성 실패');
                 return;
               }
 
-              await pc.setLocalDescription(offer);
-              signalingSocket.send(`/pub/rtc/offer/${roomId}`, {
-                sdpOffer: offer.sdp,
-              });
-            });
-          } else {
-            setTimeout(waitForConnection, 100);
+              setIsOfferSent(true);
+              signalingSocket.send(`/pub/rtc/offer/${roomId}`, { sdpOffer: sdp });
+              console.log('[RTC] SDP Offer 전송 성공');
+            } catch (e: any) {
+              setError(e.message || 'Offer 생성 실패');
+            }
+          } else if (!signalingSocket.isConnected()) {
+            setTimeout(waitForConnectionAndSendOffer, 100);
           }
         };
-        waitForConnection();
 
-        // 5. ICE 후보 송신 (userId 포함)
+        // 4. ICE 후보 전송
         pc.onicecandidate = (event) => {
           if (
             event.candidate &&
             event.candidate.candidate &&
             event.candidate.sdpMid &&
-            event.candidate.sdpMLineIndex !== undefined
+            event.candidate.sdpMLineIndex !== undefined &&
+            signalingSocket.isConnected()
           ) {
             signalingSocket.send(`/pub/rtc/ice/${roomId}`, {
               candidate: event.candidate.candidate,
@@ -93,8 +100,18 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
               sdpMLineIndex: event.candidate.sdpMLineIndex,
               userId: userId,
             });
+
+            console.log('[RTC] ICE Candidate 전송 성공');
           }
         };
+
+        // 연결 상태 모니터링
+        pc.onconnectionstatechange = () => {
+          console.log('[RTC] Connection state:', pc.connectionState);
+        };
+
+        // 5. 연결 완료 대기 후 offer 전송
+        setTimeout(waitForConnectionAndSendOffer, 1000);
       } catch (err: any) {
         setError(err.message || 'WebRTC 연결 실패');
       }
@@ -104,6 +121,7 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
 
     return () => {
       pc?.close();
+      setIsOfferSent(false);
     };
   }, [roomId, userId]);
 
