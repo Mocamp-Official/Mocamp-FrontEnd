@@ -30,7 +30,7 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
         localStream.getTracks().forEach((track) => pc.addTrack(track, localStream));
         peerConnection.current = pc;
 
-        // 1. 먼저 구독 설정
+        // 먼저 구독 설정
         signalingSocket.subscribe(`/sub/rtc/offer/${roomId}`, async (payload) => {
           console.log('[RTC] SDP Answer 수신:', payload);
           if (payload.sdpAnswer && payload.userId !== userId) {
@@ -58,10 +58,10 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
           }
         });
 
-        // 2. 연결 시작
+        // 연결 시작
         signalingSocket.connect();
 
-        // 3. 연결 완료 후 offer 전송
+        // 연결 완료 후 offer 전송
         const waitForConnectionAndSendOffer = async () => {
           if (signalingSocket.isConnected() && !isOfferSent) {
             try {
@@ -85,7 +85,7 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
           }
         };
 
-        // 4. ICE 후보 전송
+        // ICE 후보 전송
         pc.onicecandidate = (event) => {
           if (
             event.candidate &&
@@ -110,7 +110,7 @@ export function useWebRTC({ roomId, userId }: UseWebRTCProps) {
           console.log('[RTC] Connection state:', pc.connectionState);
         };
 
-        // 5. 연결 완료 대기 후 offer 전송
+        // 연결 완료 대기 후 offer 전송
         setTimeout(waitForConnectionAndSendOffer, 1000);
       } catch (err: any) {
         setError(err.message || 'WebRTC 연결 실패');
