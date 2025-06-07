@@ -1,32 +1,51 @@
 import { useEffect } from 'react';
-import { getStompClient } from '@/libs/socket';
+import { signalingSocket } from '@/libs/socket';
 
-export const useRoomSubscriber = (roomId: string, onMessage: (data: any) => void) => {
+interface RoomSubscriberHandlers {
+  onCompleteUpdate?: (payload: any) => void;
+  onListUpdate?: (payload: any) => void;
+  onNoticeUpdate?: (payload: any) => void;
+  onResolutionUpdate?: (payload: any) => void;
+}
+
+export const useRoomSubscriber = (roomId: string, handlers: RoomSubscriberHandlers) => {
   useEffect(() => {
-    const client = getStompClient();
-    if (!client) return;
+    if (!roomId) return;
 
-    client.onConnect = () => {
-      console.log('✅ 구독 연결 성공');
-      client.subscribe(`/sub/data/${roomId}`, (message) => {
-        const data = JSON.parse(message.body);
-        onMessage(data);
-      });
+    const destination = `/sub/data/${roomId}`;
+
+    // 메시지 핸들링 정의
+    const handleMessage = (data: any) => {
+      console.log('📩 서버로부터 받은 메시지:', data);
+
+      switch (data.type) {
+        case 'GOAL_COMPLETE_UPDATED':
+          handlers.onCompleteUpdate?.(data);
+          break;
+        case 'GOAL_LIST_UPDATED':
+          handlers.onListUpdate?.(data);
+          break;
+        case 'NOTICE_UPDATED':
+          handlers.onNoticeUpdate?.(data);
+        case 'RESOLUTION_UPDATED':
+          handlers.onResolutionUpdate?.(data);
+          break;
+        default:
+          console.warn('알 수 없는 메시지 타입:', data.type);
+      }
     };
 
-    client.onStompError = (frame) => {
-      console.error('❌ STOMP ERROR:', frame);
-    };
+    // 구독 등록
+    signalingSocket.subscribe(destination, handleMessage);
 
-    client.onWebSocketClose = () => {
-      console.warn('🔌 WebSocket 연결 종료');
-    };
-
-    client.activate();
+    // 연결 시도
+    if (!signalingSocket.isConnected()) {
+      signalingSocket.connect();
+    }
 
     return () => {
-      client.deactivate();
-      console.log('🔁 구독 해제');
+      signalingSocket.close(); // 전체 연결 종료
+      console.log('소켓 해제');
     };
-  }, [roomId, onMessage]);
+  }, [roomId]);
 };

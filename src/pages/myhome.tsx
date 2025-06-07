@@ -19,7 +19,7 @@ const enterRoom = async (roomId: string) => {
 };
 
 const MyHome = () => {
-  const roomId = '10';
+  const roomId = '11';
 
   const handleClick = () => {
     enterRoom(roomId);

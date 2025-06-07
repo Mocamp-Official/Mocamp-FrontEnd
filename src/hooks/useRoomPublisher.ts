@@ -1,46 +1,42 @@
-import { useEffect, useRef } from 'react';
-import { getStompClient } from '@/libs/socket';
+import { signalingSocket } from '@/libs/socket';
 
 export const useRoomPublisher = (roomId: string) => {
-  const clientRef = useRef<ReturnType<typeof getStompClient> | null>(null);
+  const safeSend = (destination: string, body: any) => {
+    if (!signalingSocket.isConnected) {
+      console.warn('❗ STOMP 연결이 아직 준비되지 않았습니다.');
+      return;
+    }
 
-  useEffect(() => {
-    const client = getStompClient();
-    if (!client) return;
+    signalingSocket.send(destination, body);
+  };
 
-    clientRef.current = client;
-    client.activate();
-
-    return () => {
-      client.deactivate();
-    };
-  }, [roomId]);
-
-  const toggleTodo = (goalId: string, isCompleted: boolean) => {
-    clientRef.current?.publish({
-      destination: `/pub/data/goal/complete/${roomId}`,
-      body: JSON.stringify({ goalId, isCompleted }),
+  const toggleTodo = (goalId: number, isCompleted: boolean) => {
+    safeSend(`/pub/data/goal/complete/${roomId}`, {
+      goalId: Number(goalId),
+      isCompleted: !!isCompleted,
     });
   };
 
   const updateGoals = (createGoals: { content: string }[], deleteGoals: number[]) => {
-    console.log('목표 업데이트 pub 전송', {
+    console.log('📤 목표 업데이트 pub 전송', {
       destination: `/pub/data/goal/manage/${roomId}`,
       createGoals,
       deleteGoals,
     });
-    clientRef.current?.publish({
-      destination: `/pub/data/goal/manage/${roomId}`,
-      body: JSON.stringify({ createGoals, deleteGoals }),
+
+    safeSend(`/pub/data/goal/manage/${roomId}`, {
+      createGoals,
+      deleteGoals,
     });
   };
 
   const updateNotice = (notice: string) => {
-    clientRef.current?.publish({
-      destination: `/pub/data/notice/${roomId}`,
-      body: JSON.stringify({ notice }),
-    });
+    safeSend(`/pub/data/notice/${roomId}`, { notice });
   };
 
-  return { toggleTodo, updateGoals, updateNotice };
+  const updateResolution = (resolution: string) => {
+    safeSend(`/pub/data/resolution/${roomId}`, { resolution });
+  };
+
+  return { toggleTodo, updateGoals, updateNotice, updateResolution };
 };

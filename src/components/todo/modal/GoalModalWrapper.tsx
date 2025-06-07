@@ -3,7 +3,6 @@ import ModalLayout from '@/components/common/modal/ModalLayout';
 import GoalModalContent from './GoalModalContent';
 import CloseButton from '@/public/svgs/CloseButton.svg';
 import { Todo } from '@/types/todo';
-import { v4 as uuidv4 } from 'uuid';
 import { useRoomPublisher } from '@/hooks/useRoomPublisher';
 
 interface GoalModalWrapperProps {
@@ -27,25 +26,25 @@ const GoalModalWrapper = ({
   const handleAddTodo = () => {
     setCurrentTodos((prev) => [
       {
-        id: uuidv4(), // string 타입
-        text: '',
-        done: false,
+        goalId: Date.now(),
+        content: '',
+        isCompleted: false,
       },
       ...prev,
     ]);
   };
 
   const handleSubmit = () => {
-    const filtered = currentTodos.filter((todo) => todo.text.trim() !== '');
+    const filtered = currentTodos.filter((todo) => todo.content.trim() !== '');
 
     const createGoals = filtered
-      .filter((todo) => !todos.some((t) => t.id === todo.id))
-      .map((todo) => ({ content: todo.text }));
+      .filter((todo) => !todos.some((t) => t.goalId === todo.goalId))
+      .map((todo) => ({ content: todo.content }));
 
     const deleteGoals = todos
-      .filter((t) => !filtered.some((todo) => todo.id === t.id))
+      .filter((t) => !filtered.some((todo) => todo.goalId === t.goalId))
       .map((t) => {
-        const idAsNumber = Number(t.id);
+        const idAsNumber = Number(t.goalId);
         return isNaN(idAsNumber) ? undefined : idAsNumber;
       })
       .filter((id): id is number => id !== undefined);

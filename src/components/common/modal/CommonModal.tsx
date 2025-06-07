@@ -10,10 +10,18 @@ interface CommonModalProps {
   description: string;
   placeholder: string;
   onSubmit?: (value: string) => void;
+  initialValue?: string;
 }
 
-const CommonModal = ({ onClose, title, description, placeholder, onSubmit }: CommonModalProps) => {
-  const [inputValue, setInputValue] = useState('');
+const CommonModal = ({
+  onClose,
+  title,
+  description,
+  placeholder,
+  onSubmit,
+  initialValue,
+}: CommonModalProps) => {
+  const [inputValue, setInputValue] = useState<string>(initialValue ?? '');
   const isActive = inputValue.trim().length > 0;
 
   return (

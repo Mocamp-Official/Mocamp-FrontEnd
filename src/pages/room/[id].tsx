@@ -10,18 +10,56 @@ const RoomPage = () => {
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
-  const [todoGroups, setTodoGroups] = useState<{ id: string; items: Todo[] }[]>([]);
+  const [todoGroups, setTodoGroups] = useState<{ id: number; items: Todo[]; resolution: string }[]>(
+    [],
+  );
 
-  useRoomSubscriber(roomId || '', (data) => {
-    const formatted = data.todosByUser.map((user: any) => ({
-      id: String(user.userId),
-      items: user.goalList.map((goal: any) => ({
-        id: String(goal.goalId),
-        text: goal.content,
-        done: goal.completed,
-      })),
-    }));
-    setTodoGroups(formatted);
+  useRoomSubscriber(String(roomId), {
+    onListUpdate: (data) => {
+      if (!data?.goals || typeof data.userId !== 'number') return;
+
+      const formatted = {
+        id: data.userId,
+        items: data.goals.map((goal: any) => ({
+          goalId: goal.goalId,
+          content: goal.content,
+          isCompleted: goal.isCompleted,
+        })),
+        resolution: data.resolution ?? '',
+      };
+
+      // 해당 유저만 업데이트
+      setTodoGroups((prev) => {
+        const exists = prev.some((group) => group.id === data.userId);
+        if (exists) {
+          return prev.map((group) => (group.id === data.userId ? formatted : group));
+        } else {
+          return [...prev, formatted];
+        }
+      });
+    },
+    onCompleteUpdate: (data) => {
+      const { userId, goalId, isCompleted } = data;
+      setTodoGroups((prev) =>
+        prev.map((group) =>
+          group.id === userId
+            ? {
+                ...group,
+                items: group.items.map((item) =>
+                  item.goalId === goalId ? { ...item, isCompleted } : item,
+                ),
+              }
+            : group,
+        ),
+      );
+    },
+    onResolutionUpdate: (data) => {
+      setTodoGroups((prev) =>
+        prev.map((group) =>
+          group.id === data.userId ? { ...group, resolution: data.resolution } : group,
+        ),
+      );
+    },
   });
 
   useEffect(() => {
@@ -32,14 +70,15 @@ const RoomPage = () => {
       if (!participants) return;
 
       const formatted = participants.map((user) => ({
-        id: String(user.userId),
-        items: Array.isArray(user.goalList)
-          ? user.goalList.map((text, idx) => ({
-              id: `${user.userId}-${idx}`,
-              text,
-              done: false,
+        id: user.userId,
+        items: Array.isArray(user.goals)
+          ? user.goals.map((goal) => ({
+              goalId: goal.goalId,
+              content: goal.content,
+              isCompleted: goal.isCompleted,
             }))
           : [],
+        resolution: user.resolution ?? '',
       }));
 
       setTodoGroups(formatted);
@@ -50,7 +89,7 @@ const RoomPage = () => {
 
   if (!roomId) return null;
 
-  const updateTodosByUser = (userId: string, updatedTodos: Todo[]) => {
+  const updateTodosByUser = (userId: number, updatedTodos: Todo[]) => {
     setTodoGroups((prev) =>
       prev.map((group) => (group.id === userId ? { ...group, items: updatedTodos } : group)),
     );
@@ -61,7 +100,8 @@ const RoomPage = () => {
       {todoGroups.map((group) => (
         <TodoSection
           key={group.id}
-          roomId={roomId}
+          resolution={group.resolution}
+          roomId={String(roomId)}
           todos={group.items}
           setTodos={(updated) => updateTodosByUser(group.id, updated)}
         />
