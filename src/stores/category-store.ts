@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export interface Category {
-  category: 'MYHOME_TOTAL' | 'PROFILE_SETTING' | 'PARTICIPANTED_MOCAMP' | 'MOCAMP_USAGE_TREND';
+  category: 'MYHOME_TOTAL' | 'PARTICIPANTED_MOCAMP' | 'MOCAMP_USAGE_TREND';
 }
 
 interface MyHomeState extends Category {
