@@ -1,10 +1,9 @@
 import ParticipatedCard from './content/ParticipatedCard';
-import GoalAchievement from './content/GoalAchievement';
+import Achievement from './content/Achievement';
 import GoalGraph from './content/GoalGraph';
 import TimeGraph from './content/TimeGraph';
-import TimeAchievement from './content/TimeAchievement';
-import DropDown from './content/DropDown';
 import { useDropDown } from '@/stores/myhome-store';
+import DropDown from './content/DropDown';
 
 const Total = () => {
   const { selectedType, setSelectedType } = useDropDown();
@@ -19,14 +18,14 @@ const Total = () => {
         <p className="mb-[30px] text-2xl font-semibold text-[#4b4b4b]">참여한 모캠프</p>
         <div className="flex items-center gap-5">
           <ParticipatedCard
-            size="l"
+            size="lg"
             isCompleted={isCompleted}
             roomName={roomName}
             createdAt={createdAt}
             time={time}
           />
           <ParticipatedCard
-            size="l"
+            size="lg"
             isCompleted={true}
             roomName={roomName}
             createdAt={createdAt}
@@ -46,12 +45,12 @@ const Total = () => {
         <div className="flex items-start gap-[65px]">
           {selectedType === '목표 달성 수' ? (
             <>
-              <GoalAchievement />
+              <Achievement type="Goal" GoalNumber={123} />
               <GoalGraph />
             </>
           ) : (
             <>
-              <TimeAchievement />
+              <Achievement type="Time" TimeNumber={123} />
               <TimeGraph />
             </>
           )}

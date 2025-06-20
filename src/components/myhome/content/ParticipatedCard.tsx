@@ -1,7 +1,7 @@
 import MocampIcon from '@/public/svgs/mocamp_gray_icon.svg';
 
 interface ParticipatedCardProps {
-  size: 's' | 'm' | 'l'; // 아직 사용되지 않음
+  size: 'sm' | 'md' | 'lg'; // 아직 사용되지 않음
   isCompleted: boolean;
   roomName: string;
   createdAt: string;
@@ -9,7 +9,7 @@ interface ParticipatedCardProps {
 }
 
 function ParticipatedCard({
-  size = 'l',
+  size = 'lg',
   isCompleted,
   roomName,
   createdAt,
@@ -17,14 +17,14 @@ function ParticipatedCard({
 }: ParticipatedCardProps) {
   return (
     <>
-      <div className="w-[449px] h-[169px] rounded-[0.625rem] bg-white flex items-center px-[1.25rem] py-[2.625rem] border border-[#E8E8E8]">
+      <div className="flex h-[169px] w-[449px] items-center rounded-[0.625rem] border border-[#E8E8E8] bg-white px-[1.25rem] py-[2.625rem]">
         {/* 썸네일 */}
-        <div className="w-[5.3125rem] h-[5.3125rem] rounded-[0.625rem] bg-[#d9d9d9] mr-[1rem]">
+        <div className="mr-[1rem] h-[5.3125rem] w-[5.3125rem] rounded-[0.625rem] bg-[#d9d9d9]">
           <MocampIcon />
         </div>
 
         {/* 텍스트 정보 */}
-        <div className="flex relative flex-col justify-center flex-1 space-y-[0.25rem] cursor-default">
+        <div className="relative flex flex-1 cursor-default flex-col justify-center space-y-[0.25rem]">
           {isCompleted ? (
             <p className="text-xl font-semibold text-[#f00]">종료</p>
           ) : (
@@ -35,8 +35,8 @@ function ParticipatedCard({
 
           {/* 참여하기 버튼 */}
           {!isCompleted && (
-            <button className="absolute top-0 right-0 w-[5.9375rem] h-[2.4375rem] bg-[#f2f2f2] text-base font-semibold text-[#555555] rounded-[0.625rem]">
-              참여하기
+            <button className="absolute top-0 right-0 h-[2.4375rem] w-[5.9375rem] rounded-[0.625rem] bg-[#f2f2f2] text-base font-semibold text-[#555555]">
+              입장하기
             </button>
           )}
         </div>

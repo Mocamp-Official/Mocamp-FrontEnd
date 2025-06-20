@@ -34,7 +34,7 @@ const DropDown = () => {
   }, [isDropdownOpen]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative select-none" ref={dropdownRef}>
       <div
         onClick={handleDropdownToggle}
         className="flex cursor-pointer items-center gap-2.5 rounded-[10px] border border-[#e8e8e8] bg-white p-2.5"

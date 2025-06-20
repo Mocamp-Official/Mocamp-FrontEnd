@@ -8,14 +8,18 @@ import { useCategoryStore } from '@/stores/category-store';
 const myhome = () => {
   const { category } = useCategoryStore();
 
+  const categoryMap = {
+    MYHOME_TOTAL: <Total />,
+    PARTICIPANTED_MOCAMP: <ParticipantedMocamp />,
+    MOCAMP_USAGE_TREND: <MocampUsageTrend />,
+  };
+
   return (
     <div className="min-h-[1080px] min-w-[1920px] bg-[#e6e6e6]">
       <BasicHeader />
       <div className="mt-[50px] flex justify-center gap-[10px]">
         <SideBar />
-        {category === 'MYHOME_TOTAL' && <Total />}
-        {category === 'PARTICIPANTED_MOCAMP' && <ParticipantedMocamp />}
-        {category === 'MOCAMP_USAGE_TREND' && <MocampUsageTrend />}
+        {categoryMap[category] ?? null}
       </div>
     </div>
   );
