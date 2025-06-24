@@ -1,4 +1,4 @@
-import { getAccessToken } from '@/utils/token';
+// import { getAccessToken } from '@/utils/token';
 
 const WS_BASE_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL &&
@@ -18,7 +18,14 @@ export class KurentoSignalingSocket {
    * KurentoSignalingSocket 클래스의 생성자
    * 웹소켓 인스턴스는 'connect()' 메서드가 호출될 때 동적으로 생성
    */
-  constructor() {
+  constructor() {}
+
+  waitForConnectionReady(callback: () => void) {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      callback();
+    } else {
+      setTimeout(() => this.waitForConnectionReady(callback), 10);
+    }
   }
 
   private setupWebSocketHandlers() {
@@ -90,7 +97,10 @@ export class KurentoSignalingSocket {
     if (handlers) {
       handlers.forEach((handler) => handler(message));
     } else {
-      console.warn(`[Kurento WebSocket] 메시지 타입 '${messageId}'에 대한 핸들러가 없습니다.`, message);
+      console.warn(
+        `[Kurento WebSocket] 메시지 타입 '${messageId}'에 대한 핸들러가 없습니다.`,
+        message,
+      );
     }
   }
 
@@ -113,27 +123,27 @@ export class KurentoSignalingSocket {
     }
 
     if (typeof window !== 'undefined') {
-      const token = getAccessToken();
+      // const token = getAccessToken();
       let urlWithToken = WS_BASE_URL;
-      if (token) {
-        urlWithToken += `?token=${token}`;
-        console.log('[Kurento WebSocket] 토큰을 QueryParam에 추가하여 연결:', urlWithToken);
-      } else {
-        console.warn('[Kurento WebSocket] 액세스 토큰 없이 연결을 시도합니다.');
-      }
-
+      // if (token) {
+      //   urlWithToken += `?token=${token}`;
+      //   console.log('[Kurento WebSocket] 토큰을 QueryParam에 추가하여 연결:', urlWithToken);
+      // } else {
+      //   console.warn('[Kurento WebSocket] 액세스 토큰 없이 연결을 시도합니다.');
+      // }
+      console.warn('[Kurento WebSocket] 토큰 인증 없이 연결을 시도합니다.');
       this.ws = new WebSocket(urlWithToken);
       this.setupWebSocketHandlers();
     } else {
-      console.warn(
-        '[Kurento WebSocket] 브라우저 환경이 아닙니다. WebSocket 생성을 건너뜝니다.',
-      );
+      console.warn('[Kurento WebSocket] 브라우저 환경이 아닙니다. WebSocket 생성을 건너뜝니다.');
     }
   }
 
   send(method: string, payload: any = {}) {
     if (!this.ws) {
-      console.error('[Kurento WebSocket] WebSocket이 초기화되지 않았습니다. 먼저 connect()를 호출하세요.');
+      console.error(
+        '[Kurento WebSocket] WebSocket이 초기화되지 않았습니다. 먼저 connect()를 호출하세요.',
+      );
       this.sendQueue.push({ method, payload });
       return;
     }
@@ -174,5 +184,3 @@ export class KurentoSignalingSocket {
     this.messageHandlers.clear();
   }
 }
-
-export const kurentoSignalingSocket = new KurentoSignalingSocket();
