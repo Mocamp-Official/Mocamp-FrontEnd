@@ -1,59 +1,75 @@
 // import { getAccessToken } from '@/utils/token';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+let WS_BASE_URL: string | undefined;
 
-const WS_BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL &&
-  process.env.NEXT_PUBLIC_BACKEND_URL.replace(/^http/, 'ws') + '/groupcall';
+if (BACKEND_URL) {
+  if (BACKEND_URL.startsWith('https://')) {
+    WS_BASE_URL = BACKEND_URL.replace(/^https:\/\//, 'wss://') + '/groupcall';
+  }else {
+    console.error('Invalid NEXT_PUBLIC_BACKEND_URL protocol:', BACKEND_URL);
+  }
+}
+console.log('[WebSocket 최종 연결 주소]', WS_BASE_URL);
+
+if (!WS_BASE_URL) {
+  console.error('[Kurento WebSocket] WS_BASE_URL이 정의되지 않았거나 유효하지 않습니다.');
+}
 
 export class KurentoSignalingSocket {
-  // 웹소켓 연결 인스턴스
   private ws: WebSocket | null = null;
-  // 웹소켓 연결 상태를 나타내는 플래그
   private connected = false;
-  // 전송을 시도한 메시지
   private sendQueue: Array<any> = [];
-  // 쿠렌토 메시지 'id' 필드(메시지 타입)에 따라 실행될 핸들러 함수들을 저장하는 맵
   private messageHandlers: Map<string, Array<(data: any) => void>> = new Map();
+  private onOpenCallback: (() => void) | null = null;
+  private heartbeatInterval: NodeJS.Timeout | null = null;
 
-  /**
-   * KurentoSignalingSocket 클래스의 생성자
-   * 웹소켓 인스턴스는 'connect()' 메서드가 호출될 때 동적으로 생성
-   */
   constructor() {}
 
-  waitForConnectionReady(callback: () => void) {
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      callback();
-    } else {
-      setTimeout(() => this.waitForConnectionReady(callback), 10);
-    }
+  private startHeartbeat() {
+    this.heartbeatInterval = setInterval(() => {
+      if (this.isConnected()) {
+        this.send('ping', {});
+      }
+    }, 10000);
+  }
+
+  private stopHeartbeat() {
+    if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
   }
 
   private setupWebSocketHandlers() {
-    if (!this.ws) return; // 웹소켓 인스턴스가 없으면 아무 일 X
+    if (!this.ws) return;
 
-    // 웹소켓 연결 성공
     this.ws.onopen = () => {
       console.log('[Kurento WebSocket] 연결 성공');
-      this.connected = true; // 연결 상태를 true로 설정
+      this.connected = true;
       this.processQueue();
+      this.startHeartbeat();
+      if (this.onOpenCallback) {
+        this.onOpenCallback();
+      }
     };
 
-    // 웹소켓으로부터 메시지를 수신
     this.ws.onmessage = (event) => {
       try {
-        const message = JSON.parse(event.data); // 수신된 데이터 JSON 파싱
+        const message = JSON.parse(event.data);
         console.log('[Kurento WebSocket] 메시지 수신:', message);
-        this.handleIncomingMessage(message); // 수신된 메시지를 적절한 핸들러로 전달
+        this.handleIncomingMessage(message);
       } catch (err) {
         console.error('[Kurento WebSocket] 메시지 파싱 오류:', err);
       }
     };
 
-    // 웹소켓 연결이 끊김
-    this.ws.onclose = () => {
-      console.log('[Kurento WebSocket] 연결 끊김');
+    this.ws.onclose = (event) => {
+      console.log('[Kurento WebSocket] 연결 끊김', event.code, event.reason);
       this.connected = false;
+      this.stopHeartbeat();
       this.clearHandlers();
+
+      if (event.code === 1006) {
+        console.warn('[Kurento WebSocket] 비정상 종료됨. 3초 후 재연결 시도');
+        setTimeout(() => this.connect(), 3000);
+      }
     };
 
     //웹소켓 연결 오류 발생
@@ -63,15 +79,15 @@ export class KurentoSignalingSocket {
     };
   }
 
-  /**
-   * 연결이 설정되기 전에 대기 큐에 쌓인 메시지 처리
-   * 연결 성공 후 자동으로 호출
-   */
   private processQueue() {
     while (this.sendQueue.length > 0 && this.connected) {
       const message = this.sendQueue.shift();
       this.send(message.method, message.payload);
     }
+  }
+
+  public setOnOpenCallback(callback: () => void) {
+    this.onOpenCallback = callback;
   }
 
   on(type: string, handler: (data: any) => void) {
@@ -101,13 +117,12 @@ export class KurentoSignalingSocket {
         `[Kurento WebSocket] 메시지 타입 '${messageId}'에 대한 핸들러가 없습니다.`,
         message,
       );
+      if (messageId === 'error') {
+        this.messageHandlers.get('error')?.forEach((handler) => handler(message));
+      }
     }
   }
 
-  /**
-   * Kurento Media Server와의 WebSocket 연결을 시도합니다.
-   * 이 메서드는 클라이언트(브라우저) 환경에서만 호출되어야 한다.
-   */
   connect() {
     console.log('[Kurento WebSocket] 연결 시도 중...');
     if (!WS_BASE_URL) {
@@ -123,8 +138,8 @@ export class KurentoSignalingSocket {
     }
 
     if (typeof window !== 'undefined') {
-      // const token = getAccessToken();
-      let urlWithToken = WS_BASE_URL;
+      // const token = getAccessToken(); //토큰 임시 주석
+      // let urlWithToken = WS_BASE_URL;
       // if (token) {
       //   urlWithToken += `?token=${token}`;
       //   console.log('[Kurento WebSocket] 토큰을 QueryParam에 추가하여 연결:', urlWithToken);
@@ -132,10 +147,10 @@ export class KurentoSignalingSocket {
       //   console.warn('[Kurento WebSocket] 액세스 토큰 없이 연결을 시도합니다.');
       // }
       console.warn('[Kurento WebSocket] 토큰 인증 없이 연결을 시도합니다.');
-      this.ws = new WebSocket(urlWithToken);
+      this.ws = new WebSocket(WS_BASE_URL);
       this.setupWebSocketHandlers();
     } else {
-      console.warn('[Kurento WebSocket] 브라우저 환경이 아닙니다. WebSocket 생성을 건너뜝니다.');
+      console.warn('[Kurento WebSocket] 브라우저 환경이 아닙니다. WebSocket 생성을 건너뜁니다.');
     }
   }
 
@@ -173,11 +188,12 @@ export class KurentoSignalingSocket {
 
   close() {
     console.log('[Kurento WebSocket] 연결 종료 중...');
-    this.clearHandlers(); // 모든 메시지 핸들러를 지움
-    this.sendQueue = []; // 대기 중인 메시지 큐를 비움
-    this.ws?.close(); // WebSocket 연결을 닫습니다.
-    this.ws = null; // WebSocket 인스턴스를 null로 설정
-    this.connected = false; // 연결 상태를 false로 설정
+    this.clearHandlers();
+    this.stopHeartbeat();
+    this.sendQueue = [];
+    this.ws?.close();
+    this.ws = null;
+    this.connected = false;
   }
 
   private clearHandlers() {
