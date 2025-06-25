@@ -16,13 +16,12 @@ const MockGroupCallPage = () => {
     setMyUniqueUsername(username);
   }, []);
 
-  const { participants, localStream, error, toggleMedia, removeParticipant } = useGroupCall({
+  const { participants, localStream, error, toggleMedia } = useGroupCall({
     roomId: MOCK_ROOM_ID,
     myUserId: myUniqueUserId,
     myUsername: myUniqueUsername,
     initialParticipants: [],
   });
-
 
   if (error) {
     return <div className="bg-white p-4 text-red-500">Error: {error}</div>;
