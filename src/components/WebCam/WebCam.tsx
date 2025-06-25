@@ -6,18 +6,18 @@ import { Participant } from '@/types/webCam';
 interface IconButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
-  opacity: number; // 아이콘 투명도 조절용
+  opacity: number; //투명도 조절용
   disabled?: boolean; // 버튼 비활성화용
 }
 
 const IconButton = ({ onClick, children, opacity, disabled }: IconButtonProps) => (
   <button
     type="button"
-    tabIndex={-1} // 탭 순서에서 제외
+    tabIndex={-1}
     onClick={onClick}
-    disabled={disabled} // disabled prop 적용
+    disabled={disabled} 
     className={`ml-2 flex h-[40px] w-[40px] items-center justify-center rounded-[6.957px] border-none bg-[rgba(95,95,95,0.50)] p-0 backdrop-blur-[1.5px] transition-opacity duration-200 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-700/80'}`}
-    style={{ opacity: disabled ? 0.5 : 1 }} // disabled일 때 전체 버튼 투명도 조절
+    style={{ opacity: disabled ? 0.5 : 1 }} 
   >
     <span className="flex h-full w-full items-center justify-center" style={{ opacity }}>
       {children}
@@ -73,11 +73,11 @@ const WebCamTile = ({ participant, isLocal = false, onToggleMedia }: WebCamTileP
             </span>
           )}
 
-          {/* 카메라 아이콘 버튼 - 항상 비활성화 */}
+
           <IconButton
             // onClick={() => onToggleMedia('video', !participant.cameraOn)} // 클릭 이벤트 제거
             opacity={participant.cameraOn ? 1 : 0.2}
-            disabled={true} // 항상 비활성화
+            disabled={true} 
           >
             <WebcamCamera width={24} height={24} style={{ fill: 'white' }} />
           </IconButton>
@@ -86,7 +86,7 @@ const WebCamTile = ({ participant, isLocal = false, onToggleMedia }: WebCamTileP
           <IconButton
             // onClick={() => onToggleMedia('audio', !participant.micOn)} // 클릭 이벤트 제거
             opacity={participant.micOn ? 1 : 0.2}
-            disabled={true} // 항상 비활성화
+            disabled={true}
           >
             <VoiceIcon
               width={24}
