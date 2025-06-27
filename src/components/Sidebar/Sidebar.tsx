@@ -11,6 +11,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ startTime, endTime, participants, onLeaveRoom }: SidebarProps) => {
+
   return (
     <aside className="w-[200px] h-[1080px] bg-white flex flex-col items-center justify-between border-r border-solid border-[#E6E6E6] relative">
       <Timer startTime={startTime} endTime={endTime} />
@@ -21,3 +22,4 @@ const Sidebar = ({ startTime, endTime, participants, onLeaveRoom }: SidebarProps
 };
 
 export default Sidebar;
+
