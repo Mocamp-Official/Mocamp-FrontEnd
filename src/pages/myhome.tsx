@@ -1,31 +1,28 @@
-import { apiWithToken } from '@/apis/axios';
-import React from 'react';
+import BasicHeader from '@/components/Header/BasicHeader';
+import MocampUsageTrend from '@/components/myhome/MocampUsageTrend';
+import ParticipantedMocamp from '@/components/myhome/ParticipantedMocamp';
+import SideBar from '@/components/myhome/SideBar';
+import Total from '@/components/myhome/Total';
+import { useCategoryStore } from '@/stores/category-store';
 
-const enterRoom = async (roomId: string) => {
-  try {
-    const res = await apiWithToken.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/room/enter/${roomId}`,
-      {
-        micTurnedOn: true,
-        camTurnedOn: true,
-      },
-    );
+const myhome = () => {
+  const { category } = useCategoryStore();
 
-    const data = res.data;
-    console.log('입장 성공:', data);
-  } catch (error) {
-    console.error('입장 오류:', error);
-  }
-};
-
-const MyHome = () => {
-  const roomId = '11';
-
-  const handleClick = () => {
-    enterRoom(roomId);
+  const categoryMap = {
+    MYHOME_TOTAL: <Total />,
+    PARTICIPANTED_MOCAMP: <ParticipantedMocamp />,
+    MOCAMP_USAGE_TREND: <MocampUsageTrend />,
   };
 
-  return <div onClick={handleClick}>myhome</div>;
+  return (
+    <div className="min-h-[1080px] min-w-[1920px] bg-[#e6e6e6]">
+      <BasicHeader />
+      <div className="mt-[50px] flex justify-center gap-[10px]">
+        <SideBar />
+        {categoryMap[category] ?? null}
+      </div>
+    </div>
+  );
 };
 
-export default MyHome;
+export default myhome;
