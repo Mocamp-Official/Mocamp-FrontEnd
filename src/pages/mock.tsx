@@ -3,16 +3,15 @@ import { useRouter } from 'next/router';
 import { useGroupCall } from '@/hooks/useGroupCall';
 import WebCamGrid from '@/components/WebCam/WebCamGrid';
 import Sidebar from '@/components/Sidebar/Sidebar'; 
-import { Participant } from '@/types/webCam';
 import { getOrCreateUserId, getOrCreateUserName } from '@/utils/userIdGenerator';
 
-//전부 테스트
 const MOCK_ROOM_ID = 1; 
 const MockGroupCallPage = () => {
   const router = useRouter();
   const [myUniqueUserId, setMyUniqueUserId] = useState<number>(0);
   const [myUniqueUsername, setMyUniqueUsername] = useState<string>('');
   const [roomActive, setRoomActive] = useState(true); 
+  const [isDelegationOpen, setIsDelegationOpen] = useState(false);
 
   useEffect(() => {
     const userId = getOrCreateUserId();
@@ -21,14 +20,21 @@ const MockGroupCallPage = () => {
     setMyUniqueUsername(username);
   }, []);
 
-  // 방을 나갔을 때 창 아예 닫히기
   const handleRoomLeft = useCallback(() => {
     console.log('[MockPage] Room left callback triggered. Closing the room window.');
     setRoomActive(false); 
     window.close(); 
   }, []);
 
-  const { participants, localStream, error, toggleMedia, leaveRoom } = useGroupCall({
+  const {
+    participants,
+    localStream,
+    error,
+    toggleMedia,
+    leaveRoom,
+    adminUsername,
+    delegateAdmin,
+  } = useGroupCall({
     roomId: MOCK_ROOM_ID,
     myUserId: myUniqueUserId,
     myUsername: myUniqueUsername,
@@ -36,7 +42,12 @@ const MockGroupCallPage = () => {
     onRoomLeft: handleRoomLeft,
   });
 
-  const myParticipant = participants.find((p) => p.userId === myUniqueUserId);
+  const handleOpenDelegationModal = () => setIsDelegationOpen(true);
+  const handleCloseDelegationModal = () => setIsDelegationOpen(false);
+  const handleDelegate = (userId: number) => {
+    delegateAdmin(userId);
+    handleCloseDelegationModal();
+  };
 
   if (myUniqueUserId === 0) {
     return (
@@ -46,14 +57,8 @@ const MockGroupCallPage = () => {
     );
   }
 
-  if (!roomActive) {
-    return null; 
-  }
-
-  if (error) {
-    return <div className="bg-white p-4 text-red-500">Error: {error}</div>;
-  }
-
+  if (!roomActive) return null; 
+  if (error) return <div className="bg-white p-4 text-red-500">Error: {error}</div>;
 
   const startTime = new Date();
   const endTime = new Date(startTime.getTime() + 3 * 60 * 60 * 1000);
@@ -88,10 +93,41 @@ const MockGroupCallPage = () => {
               participants={participants}
               myUserId={myUniqueUserId}
               onToggleMedia={toggleMedia}
+              adminUsername={adminUsername}
+              onOpenDelegationModal={handleOpenDelegationModal}
             />
           </div>
         </main>
       </div>
+
+      {isDelegationOpen && (
+        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-40">
+          <div className="bg-white rounded-lg p-6 w-[300px]">
+            <h3 className="text-lg font-bold mb-4">방장 위임</h3>
+            <ul className="space-y-2">
+              {participants
+                .filter((p) => p.userId !== myUniqueUserId)
+                .map((p) => (
+                  <li key={p.userId} className="flex justify-between items-center">
+                    <span>{p.username}</span>
+                    <button
+                      onClick={() => handleDelegate(p.userId)}
+                      className="text-blue-500 hover:underline"
+                    >
+                      선택
+                    </button>
+                  </li>
+                ))}
+            </ul>
+            <button
+              onClick={handleCloseDelegationModal}
+              className="mt-4 text-sm text-gray-500 hover:underline"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

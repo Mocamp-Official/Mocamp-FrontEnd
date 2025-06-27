@@ -1,39 +1,45 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import WebcamCamera from '@/public/svgs/webcamcamera.svg';
 import VoiceIcon from '@/public/svgs/VoiceIcon.svg';
+import ChiefIcon from '@/public/svgs/chief_fire.svg';
 import { Participant } from '@/types/webCam';
-
-interface IconButtonProps {
-  onClick?: () => void;
-  children: React.ReactNode;
-  opacity: number; //투명도 조절용
-  disabled?: boolean; // 버튼 비활성화용
-}
-
-const IconButton = ({ onClick, children, opacity, disabled }: IconButtonProps) => (
-  <button
-    type="button"
-    tabIndex={-1}
-    onClick={onClick}
-    disabled={disabled} 
-    className={`ml-2 flex h-[40px] w-[40px] items-center justify-center rounded-[6.957px] border-none bg-[rgba(95,95,95,0.50)] p-0 backdrop-blur-[1.5px] transition-opacity duration-200 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-700/80'}`}
-    style={{ opacity: disabled ? 0.5 : 1 }} 
-  >
-    <span className="flex h-full w-full items-center justify-center" style={{ opacity }}>
-      {children}
-    </span>
-  </button>
-);
+import WebCamMedia from '@/components/webcamPreview/WebCamMedia';
 
 interface WebCamTileProps {
   participant: Participant;
   isLocal?: boolean;
-  // onToggleMedia 함수는 여전히 받지만, 여기서는 사용하지 않도록 버튼을 비활성화
   onToggleMedia: (mediaType: 'video' | 'audio', status: boolean) => void;
+  adminUsername: string;
+  onOpenDelegationModal: () => void;
 }
 
-const WebCamTile = ({ participant, isLocal = false, onToggleMedia }: WebCamTileProps) => {
+const IconButton = ({
+  onClick,
+  children,
+}: {
+  onClick?: () => void;
+  children: React.ReactNode;
+}) => (
+  <button
+    type="button"
+    tabIndex={-1}
+    onClick={onClick}
+    className="ml-2 flex h-[40px] w-[40px] items-center justify-center rounded-[6.957px] border-none bg-[rgba(95,95,95,0.50)] p-0 backdrop-blur-[1.5px]"
+  >
+    <span className="flex h-full w-full items-center justify-center">{children}</span>
+  </button>
+);
+
+const WebCamTile = ({
+  participant,
+  isLocal = false,
+  onToggleMedia,
+  adminUsername,
+  onOpenDelegationModal,
+}: WebCamTileProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [cameraOn, setCameraOn] = useState(participant.cameraOn);
+  const [micOn, setMicOn] = useState(participant.micOn);
 
   useEffect(() => {
     if (videoRef.current && participant.stream) {
@@ -41,19 +47,40 @@ const WebCamTile = ({ participant, isLocal = false, onToggleMedia }: WebCamTileP
     }
   }, [participant.stream]);
 
+  useEffect(() => {
+    participant.stream?.getVideoTracks().forEach((track) => {
+      track.enabled = cameraOn;
+    });
+  }, [cameraOn, participant.stream]);
+
+  useEffect(() => {
+    participant.stream?.getAudioTracks().forEach((track) => {
+      track.enabled = micOn;
+    });
+  }, [micOn, participant.stream]);
+
   const displayName = participant.username;
+  const isAdmin = adminUsername === participant.username;
+
+  const toggleCamera = () => {
+    setCameraOn((prev) => {
+      onToggleMedia('video', !prev);
+      return !prev;
+    });
+  };
+
+  const toggleMic = () => {
+    setMicOn((prev) => {
+      onToggleMedia('audio', !prev);
+      return !prev;
+    });
+  };
 
   return (
-    <div className="relative flex h-[270px] w-[320px] flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
-      {participant.cameraOn && participant.stream ? (
+    <div className="relative flex h-[270px] w-[520px] flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
+      {cameraOn && participant.stream ? (
         <div className="absolute inset-0 z-0">
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted={isLocal}
-            className="h-full w-full rounded-[20px] object-cover"
-          />
+          <WebCamMedia stream={participant.stream} />
         </div>
       ) : (
         <span className="font-pre pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-[20px] font-semibold tracking-[-0.4px] text-[rgba(255,255,255,0.20)] select-none">
@@ -61,40 +88,46 @@ const WebCamTile = ({ participant, isLocal = false, onToggleMedia }: WebCamTileP
         </span>
       )}
 
-      <div className="absolute bottom-0 left-0 box-border flex w-full items-center px-[20px] pb-[15px]">
-        <span className="font-pre flex-shrink-0 text-[16px] font-semibold text-white">
+      {isAdmin && (
+        <div className="absolute top-2 left-2">
+          <ChiefIcon width={24} height={24} />
+        </div>
+      )}
+
+      {isLocal && isAdmin && (
+        <button
+          onClick={onOpenDelegationModal}
+          className="absolute top-2 right-2 text-xs bg-white rounded px-2 py-1 shadow text-gray-700 hover:bg-gray-100"
+        >
+          방장 위임
+        </button>
+      )}
+
+      <div className="absolute bottom-0 left-0 box-border flex w-full items-center px-[50px] pb-[33px]">
+        <span className="font-pre flex-shrink-0 text-[20px] font-semibold tracking-[-0.4px] text-white">
           {displayName}
         </span>
 
         <div className="ml-auto flex items-center gap-[8px]">
           {participant.isWorking && (
-            <span className="font-pre flex h-[30px] w-[80px] items-center justify-center rounded-[5px] bg-[var(--color-primary)] text-[12px] font-semibold text-white">
+            <span className="font-pre flex h-[40px] w-[107px] items-center justify-center rounded-[5px] bg-[var(--color-primary)] p-[10px_20px] text-[16px] font-semibold tracking-[-0.32px] text-white">
               작업 중
             </span>
           )}
 
-
-          <IconButton
-            // onClick={() => onToggleMedia('video', !participant.cameraOn)} // 클릭 이벤트 제거
-            opacity={participant.cameraOn ? 1 : 0.2}
-            disabled={true} 
-          >
-            <WebcamCamera width={24} height={24} style={{ fill: 'white' }} />
+          <IconButton onClick={toggleCamera}>
+            <WebcamCamera width={24} height={24} style={{ opacity: cameraOn ? 1 : 0.2 }} />
           </IconButton>
 
-          {/* 마이크 아이콘 버튼 - 항상 비활성화 */}
-          <IconButton
-            // onClick={() => onToggleMedia('audio', !participant.micOn)} // 클릭 이벤트 제거
-            opacity={participant.micOn ? 1 : 0.2}
-            disabled={true}
-          >
+          <IconButton onClick={toggleMic}>
             <VoiceIcon
               width={24}
               height={24}
               style={{
-                fill: 'white',
+                opacity: micOn ? 1 : 0.2,
                 display: 'block',
                 margin: 'auto',
+                transform: 'translate(4px, 2px)',
               }}
             />
           </IconButton>
