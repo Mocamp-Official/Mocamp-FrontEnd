@@ -1,7 +1,5 @@
-//메인 작업 공간 사용 예정
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-//세팅 모달 개발 후 import
 
 interface WorkspaceHeaderProps {
   roomName?: string;
@@ -10,8 +8,7 @@ interface WorkspaceHeaderProps {
 }
 
 const WorkspaceHeader = ({
-  // api 연결 후: roomname & Owner 판단
-  roomName = '은학샘과 아이들',
+  roomName = '',
   initialNotice = '',
   isOwner = true,
 }: WorkspaceHeaderProps) => {

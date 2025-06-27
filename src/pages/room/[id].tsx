@@ -7,7 +7,7 @@ import TodoSection from '@/components/todo/TodoSection';
 import WorkspaceHeader from '@/components/Header/WorkSpaceHeader';
 import Sidebar from '@/components/Sidebar/Sidebar';
 
-import { fetchRoomData, fetchRoomParticipants } from '@/apis/room';
+import { fetchRoomData, fetchRoomParticipants, leaveRoom } from '@/apis/room';
 import { useRoomTodos } from '@/hooks/room/useRoomTodos';
 
 import type { RoomInfo, Participant } from '@/types/room';
@@ -21,6 +21,15 @@ const RoomPage = () => {
 
   const [roomData, setRoomData] = useState<RoomInfo | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
+
+  const handleLeaveRoom = async () => {
+    try {
+      await leaveRoom(roomId as string);
+      router.push('/myhome');
+    } catch (e) {
+      alert('방 퇴장 실패');
+    }
+  };
 
   useEffect(() => {
     if (!roomId) return;
@@ -47,6 +56,7 @@ const RoomPage = () => {
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}
         participants={participants.length}
+        onLeaveRoom={handleLeaveRoom}
       />
       {todoGroups.map((g) => (
         <TodoSection

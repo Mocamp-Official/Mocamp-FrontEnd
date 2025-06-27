@@ -33,7 +33,7 @@ export const fetchRoomData = async (roomId: string) => {
   return res.data.message;
 };
 
-// 생성한 방 참가자 목록 조회
+// 방 참가자 목록 조회
 export const fetchRoomParticipants = async (roomId: string): Promise<Participant[]> => {
   try {
     const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
@@ -42,4 +42,9 @@ export const fetchRoomParticipants = async (roomId: string): Promise<Participant
     console.error(`참가자 목록 조회 실패:`, error.response?.data || error.message);
     return [];
   }
+};
+
+// 방 퇴장 요청
+export const leaveRoom = async (roomId: string) => {
+  await apiWithToken.post(`/api/room/exit/${roomId}`);
 };
