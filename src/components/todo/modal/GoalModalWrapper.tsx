@@ -3,7 +3,7 @@ import ModalLayout from '@/components/common/modal/ModalLayout';
 import GoalModalContent from './GoalModalContent';
 import CloseButton from '@/public/svgs/CloseButton.svg';
 import { Todo } from '@/types/todo';
-import { useRoomPublisher } from '@/hooks/useRoomPublisher';
+import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 
 interface GoalModalWrapperProps {
   onClose: () => void;

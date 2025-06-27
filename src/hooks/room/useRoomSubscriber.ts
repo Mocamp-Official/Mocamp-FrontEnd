@@ -14,7 +14,6 @@ export const useRoomSubscriber = (roomId: string, handlers: RoomSubscriberHandle
 
     const destination = `/sub/data/${roomId}`;
 
-    // 메시지 핸들링 정의
     const handleMessage = (data: any) => {
       console.log('📩 서버로부터 받은 메시지:', data);
 

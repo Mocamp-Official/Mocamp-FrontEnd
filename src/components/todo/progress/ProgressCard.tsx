@@ -5,7 +5,7 @@ import MoreMenu from './MoreMenu';
 import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 import CommonModal from '@/components/common/modal/CommonModal';
 import { Todo } from '@/types/todo';
-import { useRoomPublisher } from '@/hooks/useRoomPublisher';
+import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 
 interface ProgressCardProps {
   done: number;

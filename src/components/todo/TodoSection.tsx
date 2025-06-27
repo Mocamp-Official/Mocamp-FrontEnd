@@ -2,7 +2,7 @@ import TodoEmptyContent from './TodoEmptyContent';
 import ProgressCard from '@/components/todo/progress/ProgressCard';
 import TodoCard from './TodoCard';
 import { Todo } from '@/types/todo';
-import { useRoomPublisher } from '@/hooks/useRoomPublisher';
+import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 
 interface TodoSectionProps {
   roomId: string;

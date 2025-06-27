@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { useRoomForm, RoomFormInput } from '@/hooks/useRoomForm';
+import { useRoomForm, RoomFormInput } from '@/hooks/room/useRoomForm';
 import { createRoom } from '@/apis/room';
 import CloseIcon from '@/public/svgs/closeIcon.svg';
 
