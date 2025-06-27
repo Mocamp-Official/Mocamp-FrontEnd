@@ -14,7 +14,6 @@ export const createRoom = async (payload: CreateRoomFormData, accessToken: strin
 
     const response = await apiWithToken.post('/api/room/create', formData, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
       },
     });
