@@ -26,6 +26,13 @@ export const createRoom = async (payload: CreateRoomFormData, accessToken: strin
   }
 };
 
+// 방 정보 조회
+export const fetchRoomData = async (roomId: string) => {
+  const res = await apiWithToken.get(`/api/room/${roomId}`);
+  console.log(res.data.message);
+  return res.data.message;
+};
+
 // 생성한 방 참가자 목록 조회
 export const fetchRoomParticipants = async (roomId: string): Promise<Participant[]> => {
   try {

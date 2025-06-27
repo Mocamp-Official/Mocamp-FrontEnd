@@ -4,14 +4,14 @@ import Participants from '@/components/Sidebar/SidebarParticipants';
 import Exit from '@/components/Sidebar/SidebarExitButton';
 
 interface SidebarProps {
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   participants: number;
 }
 
 const Sidebar = ({ startTime, endTime, participants }: SidebarProps) => {
   return (
-    <aside className="w-[200px] h-[1080px] bg-white flex flex-col items-center justify-between border-r border-solid border-[#E6E6E6] relative">
+    <aside className="fixed top-0 left-0 flex h-screen w-[200px] flex-col items-center justify-between border-r border-solid border-[#E6E6E6] bg-white">
       <Timer startTime={startTime} endTime={endTime} />
       <Participants participants={participants} />
       <Exit />

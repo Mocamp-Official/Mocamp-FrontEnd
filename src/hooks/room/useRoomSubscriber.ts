@@ -6,6 +6,8 @@ interface RoomSubscriberHandlers {
   onListUpdate?: (payload: any) => void;
   onNoticeUpdate?: (payload: any) => void;
   onResolutionUpdate?: (payload: any) => void;
+  onAdminUpdate?: (payload: any) => void;
+  onAlertUpdate?: (payload: any) => void;
 }
 
 export const useRoomSubscriber = (roomId: string, handlers: RoomSubscriberHandlers) => {
@@ -28,6 +30,12 @@ export const useRoomSubscriber = (roomId: string, handlers: RoomSubscriberHandle
           handlers.onNoticeUpdate?.(data);
         case 'RESOLUTION_UPDATED':
           handlers.onResolutionUpdate?.(data);
+          break;
+        case 'ADMIN_UPDATED':
+          handlers.onAdminUpdate?.(data);
+          break;
+        case 'ROOM_END_ALERT':
+          handlers.onAlertUpdate?.(data);
           break;
         default:
           console.warn('알 수 없는 메시지 타입:', data.type);
