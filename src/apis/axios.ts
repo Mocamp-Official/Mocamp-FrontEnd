@@ -1,6 +1,6 @@
 // lib/api.ts
 import axios from 'axios';
-import { getAccessToken, setAccessToken } from '../utils/token';
+import { getAccessToken, setAccessToken } from '@/utils/token';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -56,7 +56,7 @@ apiWithToken.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        const res = await axios.post(`${BASE_URL}/login/re-issue`, {}, { withCredentials: true });
 
         const newAccessToken = res.data.accessToken;
         setAccessToken(newAccessToken);
