@@ -17,7 +17,7 @@ const TodoEmptyContent = ({ onAddTodos, roomId, isMine }: TodoEmptyContentProps)
   if (!isMine) {
     return (
       <div className="flex h-full w-[480px] flex-col items-center justify-center rounded-[20px] bg-[#FEFEFE]">
-        <span className="text-title3 text-[#C4C4C4]">오늘의 목표를 추가하지 않았어요</span>
+        <span className="text-title3 text-gray6">오늘의 목표를 추가하지 않았어요</span>
       </div>
     );
   }
@@ -25,10 +25,10 @@ const TodoEmptyContent = ({ onAddTodos, roomId, isMine }: TodoEmptyContentProps)
   return (
     <>
       <div className="flex h-full w-[480px] flex-col items-center justify-center gap-5 rounded-[20px] bg-[#FEFEFE]">
-        <span className="text-2xl font-semibold text-[#C4C4C4]">오늘의 목표는 무엇인가요?</span>
+        <span className="text-title3 text-gray6">오늘의 목표는 무엇인가요?</span>
         <button
           onClick={handleOpen}
-          className="h-[60px] w-[160px] rounded-[10px] bg-[#27CFA5] text-2xl font-semibold text-white"
+          className="bg-primary text-body2 h-[60px] w-[160px] rounded-[10px] font-semibold text-white"
         >
           추가하기
         </button>

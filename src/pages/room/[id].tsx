@@ -11,6 +11,9 @@ import { useRoomContext } from '@/hooks/room/useRoomContext';
 
 const RoomPage = () => {
   const router = useRouter();
+
+  if (!router.isReady) return null;
+
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
