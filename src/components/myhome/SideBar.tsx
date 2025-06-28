@@ -5,7 +5,7 @@ const SideBar = () => {
   const { category, setCategory } = useCategoryStore();
 
   return (
-    <div className="relative flex h-[55rem] w-[18rem] flex-col items-center overflow-hidden rounded-[1.25rem] bg-white">
+    <div className="relative flex h-[55rem] min-w-[18rem] flex-col items-center overflow-hidden rounded-[1.25rem] bg-white">
       {/* 사이드바 헤더 */}
       <div className="flex h-[3.75rem] w-full items-center justify-center rounded-t-[1.25rem] bg-[#27CFA5]">
         <p className="text-xl font-semibold text-white">마이페이지</p>
