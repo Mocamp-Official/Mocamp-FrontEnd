@@ -47,6 +47,8 @@ export const fetchRoomData = async (roomId: string) => {
 export const fetchRoomParticipants = async (roomId: string): Promise<Participant[]> => {
   try {
     const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
+    console.log(res.data.message);
+
     return res.data.message;
   } catch (error: any) {
     console.error(`참가자 목록 조회 실패:`, error.response?.data || error.message);

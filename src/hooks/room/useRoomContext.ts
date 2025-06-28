@@ -10,12 +10,18 @@ export interface TodoGroup {
   id: number;
   items: Todo[];
   resolution: string;
+  isMine: boolean;
 }
+
 export const useRoomContext = (roomId?: string) => {
   const [todoGroups, setTodoGroups] = useState<TodoGroup[]>([]);
   const [notice, setNotice] = useState('');
   const [roomData, setRoomData] = useState<RoomInfo | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [alertInfo, setAlertInfo] = useState<{
+    visible: boolean;
+    minutesLeft: number;
+  }>({ visible: false, minutesLeft: 0 });
 
   useEffect(() => {
     if (!roomId) return;
@@ -39,6 +45,7 @@ export const useRoomContext = (roomId?: string) => {
           isCompleted: g.isCompleted,
         })),
         resolution: u.resolution ?? '',
+        isMine: u.is_my_goal,
       }));
       setTodoGroups(formatted);
     };
@@ -59,6 +66,7 @@ export const useRoomContext = (roomId?: string) => {
           isCompleted: g.isCompleted,
         })),
         resolution: d.resolution ?? '',
+        isMine: d.is_my_goal,
       };
 
       setTodoGroups((prev) =>
@@ -77,6 +85,7 @@ export const useRoomContext = (roomId?: string) => {
         username: d.username,
         goals: d.goals ?? [],
         resolution: d.resolution ?? '',
+        is_my_goal: d.is_my_goal,
       };
 
       setParticipants((prev) => {
@@ -96,6 +105,7 @@ export const useRoomContext = (roomId?: string) => {
             content: g.content,
             isCompleted: g.isCompleted,
           })),
+          isMine: newParticipant.is_my_goal,
         };
 
         return [...prev, newGroup];
@@ -139,6 +149,15 @@ export const useRoomContext = (roomId?: string) => {
         setNotice(d.notice);
       }
     },
+
+    // 알람 업데이트
+    onAlertUpdate: (d) => {
+      if (typeof d.minutesLeft !== 'number') return;
+      setAlertInfo({
+        visible: true,
+        minutesLeft: d.minutesLeft,
+      });
+    },
   });
 
   const setTodosByUser = useCallback((userId: number, updated: Todo[]) => {
@@ -151,5 +170,6 @@ export const useRoomContext = (roomId?: string) => {
     notice,
     roomData,
     participants,
+    alertInfo,
   };
 };

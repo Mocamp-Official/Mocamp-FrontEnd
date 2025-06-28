@@ -23,7 +23,8 @@ const RoomPage = () => {
     }
   };
 
-  const { todoGroups, setTodosByUser, notice, roomData, participants } = useRoomContext(roomId);
+  const { todoGroups, setTodosByUser, notice, roomData, participants, alertInfo } =
+    useRoomContext(roomId);
 
   if (!roomId || !roomData) return null;
 
@@ -35,11 +36,13 @@ const RoomPage = () => {
         endTime={roomData.endedAt}
         participants={participants.length}
         onLeaveRoom={handleLeaveRoom}
+        alertInfo={alertInfo}
       />
       {todoGroups.map((g) => (
         <TodoSection
           key={g.id}
           resolution={g.resolution}
+          isMine={g.isMine}
           roomId={String(roomId)}
           todos={g.items}
           setTodos={(updated) => setTodosByUser(g.id, updated)}

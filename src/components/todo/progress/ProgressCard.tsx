@@ -13,6 +13,7 @@ interface ProgressCardProps {
   todos: Todo[];
   roomId: string;
   resolution: string;
+  isMine: boolean;
   onUpdateTodos: (updatedTodos: Todo[]) => void;
 }
 
@@ -23,6 +24,7 @@ const ProgressCard = ({
   onUpdateTodos,
   roomId,
   resolution,
+  isMine,
 }: ProgressCardProps) => {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showCommitmentModal, setShowCommitmentModal] = useState(false);
@@ -39,10 +41,12 @@ const ProgressCard = ({
             {todayCommitment.trim() !== '' ? todayCommitment : '오늘의 다짐을 작성해주세요'}
           </span>
         </div>
-        <MoreMenu
-          onEditCommitment={() => setShowCommitmentModal(true)}
-          onEditGoal={() => setShowGoalModal(true)}
-        />
+        {isMine && (
+          <MoreMenu
+            onEditCommitment={() => setShowCommitmentModal(true)}
+            onEditGoal={() => setShowGoalModal(true)}
+          />
+        )}
       </div>
       <ProgressBar value={progress} />
 

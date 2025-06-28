@@ -8,10 +8,11 @@ interface TodoSectionProps {
   roomId: string;
   todos: Todo[];
   resolution: string;
+  isMine: boolean;
   setTodos: (newTodos: Todo[]) => void;
 }
 
-const TodoSection = ({ roomId, todos, setTodos, resolution }: TodoSectionProps) => {
+const TodoSection = ({ roomId, todos, setTodos, resolution, isMine }: TodoSectionProps) => {
   const { toggleTodo } = useRoomPublisher(roomId);
 
   const handleToggleDone = (targetId: number, newDone: boolean) => {
@@ -35,11 +36,12 @@ const TodoSection = ({ roomId, todos, setTodos, resolution }: TodoSectionProps) 
           total={todos.length}
           onUpdateTodos={setTodos}
           resolution={resolution}
+          isMine={isMine}
         />
         {todos.length > 0 ? (
           <TodoCard items={todos} onToggle={handleToggleDone} />
         ) : (
-          <TodoEmptyContent onAddTodos={setTodos} roomId={roomId} />
+          <TodoEmptyContent onAddTodos={setTodos} roomId={roomId} isMine={isMine} />
         )}
       </div>
     </div>
