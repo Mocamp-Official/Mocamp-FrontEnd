@@ -35,7 +35,7 @@ function ParticipatedCard({
 
           {/* 참여하기 버튼 */}
           {!isCompleted && (
-            <button className="absolute top-0 right-0 h-[2.4375rem] w-[5.9375rem] rounded-[0.625rem] bg-[#f2f2f2] text-base font-semibold text-[#555555]">
+            <button className="hover:bg-gray5 absolute top-0 right-0 h-[2.4375rem] w-[5.9375rem] cursor-pointer rounded-[0.625rem] bg-[#f2f2f2] text-base font-semibold text-[#555555]">
               입장하기
             </button>
           )}

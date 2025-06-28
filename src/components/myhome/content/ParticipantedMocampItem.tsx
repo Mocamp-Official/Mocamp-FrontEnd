@@ -1,4 +1,6 @@
 import MocampGrayIcon from '@/public/svgs/mocamp_gray_icon.svg';
+import { useState } from 'react';
+import ParticipantedMocampModal from './ParticipantedMocampModal';
 
 interface ParticipantedMocampItemProps {
   size?: 'sm' | 'md' | 'lg';
@@ -15,6 +17,8 @@ const ParticipantedMocampItem = ({
   createdAt,
   time,
 }: ParticipantedMocampItemProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="min-h-[169px] w-[852px] rounded-[10px] border border-[#e8e8e8] bg-white p-6">
       <div className="flex items-center justify-between">
@@ -42,14 +46,20 @@ const ParticipantedMocampItem = ({
 
         {/* 오른쪽 버튼 영역 */}
         <div className="flex items-center gap-4">
-          <button className="flex cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-[#f2f2f2] px-[30px] py-[15px]">
+          <button
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            className="hover:bg-gray5 flex cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-[#f2f2f2] px-[30px] py-[15px]"
+          >
             <span className="text-lg font-semibold text-[#555]">세부 목표 확인</span>
           </button>
-          <button className="flex cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-[#27cfa5] px-[30px] py-[15px]">
+          <button className="flex cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-[#27cfa5] px-[30px] py-[15px] hover:bg-teal-500">
             <span className="text-lg font-semibold text-white">입장하기</span>
           </button>
         </div>
       </div>
+      {isOpen && <ParticipantedMocampModal setIsOpen={setIsOpen} />}
     </div>
   );
 };
