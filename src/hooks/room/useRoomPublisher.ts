@@ -1,4 +1,4 @@
-import { signalingSocket } from '@/libs/socket';
+import { signalingSocket } from '@/apis/signal';
 
 export const useRoomPublisher = (roomId: string) => {
   const safeSend = (destination: string, body: any) => {
@@ -8,6 +8,10 @@ export const useRoomPublisher = (roomId: string) => {
     }
 
     signalingSocket.send(destination, body);
+  };
+
+  const delegateAdmin = (newAdminId: number) => {
+    safeSend(`/pub/data/delegation/${roomId}`, { newAdminId });
   };
 
   const toggleTodo = (goalId: number, isCompleted: boolean) => {
@@ -38,5 +42,5 @@ export const useRoomPublisher = (roomId: string) => {
     safeSend(`/pub/data/resolution/${roomId}`, { resolution });
   };
 
-  return { toggleTodo, updateGoals, updateNotice, updateResolution };
+  return { toggleTodo, updateGoals, updateNotice, updateResolution, delegateAdmin };
 };

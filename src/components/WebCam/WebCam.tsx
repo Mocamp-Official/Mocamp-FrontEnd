@@ -83,16 +83,8 @@ const WebCamTile = ({
       )}
 
       {isAdmin && (
-        <div className="absolute top-2 left-2">
+        <button onClick={onOpenDelegationModal} className="absolute top-2 left-2">
           <ChiefIcon width={35} height={35} />
-        </div>
-      )}
-
-      {isLocal && isAdmin && (
-        <button
-          onClick={onOpenDelegationModal}
-          className="absolute top-2 right-2 rounded bg-white px-2 py-1 text-xs text-gray-700 shadow hover:bg-gray-100"
-        >
         </button>
       )}
 

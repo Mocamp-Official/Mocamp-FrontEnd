@@ -20,7 +20,7 @@ const DelegationModal = ({
     >
       <div
         className="w-[400px] rounded-[16px] bg-white px-6 py-8 shadow-lg"
-        onClick={(e) => e.stopPropagation()} // 모달 내부 클릭 시 닫힘 방지
+        onClick={(e) => e.stopPropagation()}
       >
         <h3 className="mb-2 text-center text-xl font-bold">방장 위임하기</h3>
         <p className="mb-5 text-center text-sm text-gray-500">모캠프는 방장이 꼭 필요해요!</p>

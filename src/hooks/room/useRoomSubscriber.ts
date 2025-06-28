@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { signalingSocket } from '@/libs/socket';
+import { signalingSocket } from '@/apis/signal';
 
 interface RoomSubscriberHandlers {
   onCompleteUpdate?: (payload: any) => void;
