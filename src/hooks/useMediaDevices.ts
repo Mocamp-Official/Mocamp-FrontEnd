@@ -1,4 +1,3 @@
-// src/hooks/useMediaDevices.ts
 import { useState, useCallback } from 'react';
 
 export const useMediaDevices = () => {
@@ -7,7 +6,10 @@ export const useMediaDevices = () => {
 
   const getMedia = useCallback(async () => {
     try {
-      const media = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const media = await navigator.mediaDevices.getUserMedia({
+        video: { width: 480, height: 270 },
+        audio: true,
+      });
       setStream(media);
       setError(null);
     } catch (e) {

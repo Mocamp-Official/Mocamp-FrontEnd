@@ -13,13 +13,7 @@ interface WebCamTileProps {
   onOpenDelegationModal: () => void;
 }
 
-const IconButton = ({
-  onClick,
-  children,
-}: {
-  onClick?: () => void;
-  children: React.ReactNode;
-}) => (
+const IconButton = ({ onClick, children }: { onClick?: () => void; children: React.ReactNode }) => (
   <button
     type="button"
     tabIndex={-1}
@@ -77,9 +71,9 @@ const WebCamTile = ({
   };
 
   return (
-    <div className="relative flex h-[270px] w-[520px] flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
+    <div className="relative flex h-[270px] w-[480px] flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
       {cameraOn && participant.stream ? (
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0" style={{ transform: 'rotateY(180deg)' }}>
           <WebCamMedia stream={participant.stream} />
         </div>
       ) : (
@@ -97,7 +91,7 @@ const WebCamTile = ({
       {isLocal && isAdmin && (
         <button
           onClick={onOpenDelegationModal}
-          className="absolute top-2 right-2 text-xs bg-white rounded px-2 py-1 shadow text-gray-700 hover:bg-gray-100"
+          className="absolute top-2 right-2 rounded bg-white px-2 py-1 text-xs text-gray-700 shadow hover:bg-gray-100"
         >
           방장 위임
         </button>

@@ -35,7 +35,10 @@ export function useGroupCall({
 
   const getLocalMediaStream = useCallback(async () => {
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 480, height: 270 },
+        audio: true,
+      });
       setLocalStream(mediaStream);
       setParticipants((prev) => {
         const existing = prev.find((p) => p.userId === myUserId);
@@ -63,6 +66,9 @@ export function useGroupCall({
       throw err;
     }
   }, [myUserId, myUsername]);
+
+
+  
 
   const createPeerConnection = useCallback(
     async (remoteUserId: number, remoteUsername: string, stream: MediaStream) => {
