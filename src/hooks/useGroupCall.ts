@@ -24,6 +24,8 @@ export function useGroupCall({
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [adminUsername, setAdminUsername] = useState<string>(myUsername);
+  const [isDelegationOpen, setIsDelegationOpen] = useState<boolean>(false);
+  const [selectedDelegateId, setSelectedDelegateId] = useState<number | null>(null);
 
   const peerConnections = useRef<{ [userId: number]: RTCPeerConnection }>({});
   const kurentoSignalingRef = useRef<KurentoSignalingSocket | null>(null);
@@ -33,7 +35,7 @@ export function useGroupCall({
     participantsRef.current = participants;
   }, [participants]);
 
-  const getLocalMediaStream = useCallback(async () => {
+ const getLocalMediaStream = useCallback(async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { width: 480, height: 270 },
@@ -52,7 +54,7 @@ export function useGroupCall({
             {
               userId: myUserId,
               username: myUsername,
-              isWorking: false,
+              isWorking: true,
               cameraOn: true,
               micOn: true,
               stream: mediaStream,
@@ -68,7 +70,26 @@ export function useGroupCall({
   }, [myUserId, myUsername]);
 
 
-  
+const delegateAdmin = useCallback((newAdminId: number) => {
+  kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
+    newAdminId,
+  });
+  setIsDelegationOpen(false);
+  setSelectedDelegateId(null);
+}, [roomId]);
+
+
+
+  const openDelegationModal = useCallback(() => {
+    if (adminUsername === myUsername) {
+      setIsDelegationOpen(true);
+    }
+  }, [adminUsername, myUsername]);
+
+  const handleSelectDelegate = useCallback((userId: number) => {
+    setSelectedDelegateId(userId);
+  }, []);
+
 
   const createPeerConnection = useCallback(
     async (remoteUserId: number, remoteUsername: string, stream: MediaStream) => {
@@ -76,6 +97,7 @@ export function useGroupCall({
         iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
       });
       peerConnections.current[remoteUserId] = pc;
+      
 
       stream.getTracks().forEach((track) => pc.addTrack(track, stream));
 
@@ -212,11 +234,6 @@ export function useGroupCall({
     if (onRoomLeft) onRoomLeft();
   }, [localStream, roomId, onRoomLeft]);
 
-  const delegateAdmin = useCallback((newAdminId: number) => {
-    kurentoSignalingRef.current?.send('delegateAdmin', {
-      newAdminId,
-    });
-  }, []);
 
   useEffect(() => {
     const socket = new KurentoSignalingSocket();
@@ -235,6 +252,10 @@ export function useGroupCall({
           setError('장치 접근 실패');
         }
       }
+    });
+
+    socket.on('ADMIN_UPDATED', (msg: DelegationUpdateResponse) => {
+      setAdminUsername(msg.newAdminUsername);
     });
 
     socket.on('receiveVideoFrom', async (msg) => {
@@ -267,10 +288,6 @@ export function useGroupCall({
       if (user) removeParticipant(user.userId);
     });
 
-    socket.on('ADMIN_UPDATED', (msg: DelegationUpdateResponse) => {
-      setAdminUsername(msg.newAdminUsername);
-    });
-
     socket.on('error', (msg) => {
       setError(msg.message || '시그널링 오류');
     });
@@ -278,14 +295,7 @@ export function useGroupCall({
     return () => {
       socket.close();
     };
-  }, [
-    roomId,
-    myUsername,
-    getLocalMediaStream,
-    receiveVideoFrom,
-    addIceCandidate,
-    removeParticipant,
-  ]);
+  }, [roomId, myUsername, getLocalMediaStream]);
 
   const addParticipant = (participant: Participant) => {
     setParticipants((prev) =>
@@ -293,15 +303,18 @@ export function useGroupCall({
     );
   };
 
+
+
   return {
     participants,
     localStream,
     error,
-    addParticipant,
-    removeParticipant,
+    adminUsername,
+    isDelegationOpen,
+    setIsDelegationOpen,
+    openDelegationModal,
+    delegateAdmin,
     toggleMedia,
     leaveRoom,
-    adminUsername,
-    delegateAdmin,
   };
 }

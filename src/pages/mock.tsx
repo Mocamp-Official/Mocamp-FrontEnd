@@ -12,6 +12,7 @@ const MockGroupCallPage = () => {
   const [myUniqueUsername, setMyUniqueUsername] = useState<string>('');
   const [roomActive, setRoomActive] = useState(true); 
   const [isDelegationOpen, setIsDelegationOpen] = useState(false);
+  
 
   useEffect(() => {
     const userId = getOrCreateUserId();

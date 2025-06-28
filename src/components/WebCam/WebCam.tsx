@@ -84,7 +84,7 @@ const WebCamTile = ({
 
       {isAdmin && (
         <div className="absolute top-2 left-2">
-          <ChiefIcon width={24} height={24} />
+          <ChiefIcon width={35} height={35} />
         </div>
       )}
 
@@ -93,12 +93,11 @@ const WebCamTile = ({
           onClick={onOpenDelegationModal}
           className="absolute top-2 right-2 rounded bg-white px-2 py-1 text-xs text-gray-700 shadow hover:bg-gray-100"
         >
-          방장 위임
         </button>
       )}
 
       <div className="absolute bottom-0 left-0 box-border flex w-full items-center px-[50px] pb-[33px]">
-        <span className="font-pre flex-shrink-0 text-[20px] font-semibold tracking-[-0.4px] text-white">
+        <span className="font-pre flex-shrink-0 text-[16px] font-semibold tracking-[-0.4px] text-white">
           {displayName}
         </span>
 
