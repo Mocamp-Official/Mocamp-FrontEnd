@@ -6,7 +6,6 @@ export const useRoomPublisher = (roomId: string) => {
       console.warn('❗ STOMP 연결이 아직 준비되지 않았습니다.');
       return;
     }
-
     signalingSocket.send(destination, body);
   };
 
@@ -18,12 +17,6 @@ export const useRoomPublisher = (roomId: string) => {
   };
 
   const updateGoals = (createGoals: { content: string }[], deleteGoals: number[]) => {
-    console.log('📤 목표 업데이트 pub 전송', {
-      destination: `/pub/data/goal/manage/${roomId}`,
-      createGoals,
-      deleteGoals,
-    });
-
     safeSend(`/pub/data/goal/manage/${roomId}`, {
       createGoals,
       deleteGoals,

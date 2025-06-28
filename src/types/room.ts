@@ -6,7 +6,7 @@ export interface Goal {
 
 export interface Participant {
   userId: number;
-  userSeq: string;
+  userSeq?: string;
   username: string;
   goals: Goal[];
   resolution: string;

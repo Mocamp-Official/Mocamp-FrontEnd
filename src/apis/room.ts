@@ -25,10 +25,21 @@ export const createRoom = async (payload: CreateRoomFormData, accessToken: strin
   }
 };
 
+// 방 입장 요청
+export const enterRoom = async (
+  roomId: string,
+  options: { micTurnedOn: boolean; camTurnedOn: boolean },
+) => {
+  const res = await apiWithToken.post(`/api/room/enter/${roomId}`, {
+    micTurnedOn: options.micTurnedOn,
+    camTurnedOn: options.camTurnedOn,
+  });
+  return res.data.message;
+};
+
 // 방 정보 조회
 export const fetchRoomData = async (roomId: string) => {
   const res = await apiWithToken.get(`/api/room/${roomId}`);
-  console.log(res.data.message);
   return res.data.message;
 };
 

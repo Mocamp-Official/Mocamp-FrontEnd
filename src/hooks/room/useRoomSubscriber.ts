@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { signalingSocket } from '@/libs/socket';
 
 interface RoomSubscriberHandlers {
+  onUserUpdate?: (payload: any) => void;
+  onUserLeave?: (payload: any) => void;
   onCompleteUpdate?: (payload: any) => void;
   onListUpdate?: (payload: any) => void;
   onNoticeUpdate?: (payload: any) => void;
@@ -10,7 +12,7 @@ interface RoomSubscriberHandlers {
   onAlertUpdate?: (payload: any) => void;
 }
 
-export const useRoomSubscriber = (roomId: string, handlers: RoomSubscriberHandlers) => {
+export const useRoomSubscriber = (roomId: string | null, handlers: RoomSubscriberHandlers) => {
   useEffect(() => {
     if (!roomId) return;
 
@@ -20,6 +22,12 @@ export const useRoomSubscriber = (roomId: string, handlers: RoomSubscriberHandle
       console.log('📩 서버로부터 받은 메시지:', data);
 
       switch (data.type) {
+        case 'USER_ENTER_UPDATED':
+          handlers.onUserUpdate?.(data);
+          break;
+        case 'USER_EXIT_UPDATED':
+          handlers.onUserLeave?.(data);
+          break;
         case 'GOAL_COMPLETE_UPDATED':
           handlers.onCompleteUpdate?.(data);
           break;
