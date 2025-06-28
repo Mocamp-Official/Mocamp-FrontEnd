@@ -1,3 +1,4 @@
+// myhome.tsx
 import BasicHeader from '@/components/Header/BasicHeader';
 import MocampUsageTrend from '@/components/myhome/MocampUsageTrend';
 import ParticipantedMocamp from '@/components/myhome/ParticipantedMocamp';
@@ -15,7 +16,7 @@ const myhome = () => {
   };
 
   return (
-    <div className="min-h-[1080px] min-w-[1920px] bg-[#e6e6e6]">
+    <div className="h-full min-w-[1920px] bg-[#e6e6e6]">
       <BasicHeader />
       <div className="mt-[50px] flex justify-center gap-[10px]">
         <SideBar />
