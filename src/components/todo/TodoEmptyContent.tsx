@@ -5,16 +5,17 @@ import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
 interface TodoEmptyContentProps {
   onAddTodos: (newTodos: Todo[]) => void;
   roomId: string;
-  isMine: boolean;
+  isMyGoal: boolean;
+  isSecret: boolean;
 }
 
-const TodoEmptyContent = ({ onAddTodos, roomId, isMine }: TodoEmptyContentProps) => {
+const TodoEmptyContent = ({ onAddTodos, roomId, isMyGoal, isSecret }: TodoEmptyContentProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
-  if (!isMine) {
+  if (!isMyGoal) {
     return (
       <div className="flex h-full w-[480px] flex-col items-center justify-center rounded-[20px] bg-[#FEFEFE]">
         <span className="text-title3 text-gray6">오늘의 목표를 추가하지 않았어요</span>
@@ -43,6 +44,7 @@ const TodoEmptyContent = ({ onAddTodos, roomId, isMine }: TodoEmptyContentProps)
             onAddTodos(newTodos);
             handleClose();
           }}
+          isSecret={isSecret}
         />
       )}
     </>

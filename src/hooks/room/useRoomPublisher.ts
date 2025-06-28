@@ -16,10 +16,15 @@ export const useRoomPublisher = (roomId: string) => {
     });
   };
 
-  const updateGoals = (createGoals: { content: string }[], deleteGoals: number[]) => {
+  const updateGoals = (
+    createGoals: { content: string }[],
+    deleteGoals: number[],
+    isSecret: boolean,
+  ) => {
     safeSend(`/pub/data/goal/manage/${roomId}`, {
       createGoals,
       deleteGoals,
+      isSecret,
     });
   };
 

@@ -10,7 +10,8 @@ export interface Participant {
   username: string;
   goals: Goal[];
   resolution: string;
-  is_my_goal: boolean;
+  isMyGoal: boolean;
+  isSecret: boolean;
 }
 
 export interface RoomInfo {

@@ -1,9 +1,13 @@
 import { useState } from 'react';
+
 import ModalLayout from '@/components/common/modal/ModalLayout';
 import GoalModalContent from './GoalModalContent';
-import CloseButton from '@/public/svgs/CloseButton.svg';
-import { Todo } from '@/types/todo';
+
+import UnlockButton from '@/public/svgs/UnlockIcon.svg';
+import LockButton from '@/public/svgs/LockIcon.svg';
+
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
+import { Todo } from '@/types/todo';
 
 interface GoalModalWrapperProps {
   onClose: () => void;
@@ -11,6 +15,7 @@ interface GoalModalWrapperProps {
   todos?: Todo[];
   onSubmit: (updatedTodos: Todo[]) => void;
   roomId: string;
+  isSecret: boolean;
 }
 
 const GoalModalWrapper = ({
@@ -19,9 +24,11 @@ const GoalModalWrapper = ({
   todos = [],
   onSubmit,
   roomId,
+  isSecret,
 }: GoalModalWrapperProps) => {
   const [currentTodos, setCurrentTodos] = useState<Todo[]>(todos);
   const { updateGoals } = useRoomPublisher(roomId);
+  const [isPrivate, setIsPrivate] = useState(isSecret);
 
   const handleAddTodo = () => {
     setCurrentTodos((prev) => [
@@ -49,7 +56,7 @@ const GoalModalWrapper = ({
       })
       .filter((id): id is number => id !== undefined);
 
-    updateGoals(createGoals, deleteGoals);
+    updateGoals(createGoals, deleteGoals, isPrivate);
     onSubmit(filtered);
     onClose();
   };
@@ -57,10 +64,10 @@ const GoalModalWrapper = ({
   return (
     <ModalLayout onClose={onClose} width="660px" height="880px">
       <button
-        className="absolute top-[50px] right-[50px] h-[25px] w-[25px] text-[#d9d9d9]"
-        onClick={onClose}
+        className="absolute top-[50px] right-[50px] h-[30px] w-[30px] cursor-pointer"
+        onClick={() => setIsPrivate((prev) => !prev)}
       >
-        <CloseButton />
+        {isPrivate ? <LockButton /> : <UnlockButton />}
       </button>
 
       {/* 헤더 */}

@@ -4,9 +4,10 @@ import { Todo } from '@/types/todo';
 interface TodoCardProps {
   items: Todo[];
   onToggle: (id: number, isCompleted: boolean) => void;
+  editable?: boolean;
 }
 
-const TodoCard = ({ items, onToggle }: TodoCardProps) => {
+const TodoCard = ({ items, onToggle, editable }: TodoCardProps) => {
   const handleKeyDown = (e: React.KeyboardEvent, id: number, done: boolean) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -20,13 +21,16 @@ const TodoCard = ({ items, onToggle }: TodoCardProps) => {
         {items.map((item) => (
           <div
             key={item.goalId}
-            role="button"
-            tabIndex={0}
+            role={editable ? 'button' : undefined}
+            tabIndex={editable ? 0 : -1}
             aria-checked={item.isCompleted}
-            aria-disabled={false}
-            onClick={() => onToggle(item.goalId, !item.isCompleted)}
+            aria-disabled={!editable}
+            onClick={editable ? () => onToggle(item.goalId, !item.isCompleted) : undefined}
             onKeyDown={(e) => handleKeyDown(e, item.goalId, !item.isCompleted)}
-            className="flex cursor-pointer items-center gap-5"
+            className={clsx(
+              'flex items-center gap-5',
+              editable ? 'cursor-pointer' : 'cursor-default',
+            )}
           >
             <div
               className={clsx(

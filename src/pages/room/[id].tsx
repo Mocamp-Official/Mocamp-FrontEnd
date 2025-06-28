@@ -45,7 +45,8 @@ const RoomPage = () => {
         <TodoSection
           key={g.id}
           resolution={g.resolution}
-          isMine={g.isMine}
+          isMyGoal={g.isMyGoal}
+          isSecret={g.isSecret}
           roomId={String(roomId)}
           todos={g.items}
           setTodos={(updated) => setTodosByUser(g.id, updated)}

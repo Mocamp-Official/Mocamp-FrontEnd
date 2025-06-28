@@ -10,7 +10,8 @@ export interface TodoGroup {
   id: number;
   items: Todo[];
   resolution: string;
-  isMine: boolean;
+  isMyGoal: boolean;
+  isSecret: boolean;
 }
 
 export const useRoomContext = (roomId?: string) => {
@@ -45,7 +46,8 @@ export const useRoomContext = (roomId?: string) => {
           isCompleted: g.isCompleted,
         })),
         resolution: u.resolution ?? '',
-        isMine: u.is_my_goal,
+        isMyGoal: u.isMyGoal,
+        isSecret: u.isSecret,
       }));
       setTodoGroups(formatted);
     };
@@ -53,27 +55,30 @@ export const useRoomContext = (roomId?: string) => {
     loadData();
   }, [roomId]);
 
-  useRoomSubscriber(roomId ? String(roomId) : null, {
+  useRoomSubscriber(roomId && typeof roomId === 'string' ? roomId : null, {
     // 목표 리스트 업데이트
     onListUpdate: (d) => {
       if (!d?.goals || typeof d.userId !== 'number') return;
 
-      const formatted: TodoGroup = {
-        id: d.userId,
-        items: d.goals.map((g: any) => ({
-          goalId: g.goalId,
-          content: g.content,
-          isCompleted: g.isCompleted,
-        })),
-        resolution: d.resolution ?? '',
-        isMine: d.is_my_goal,
-      };
+      setTodoGroups((prev) => {
+        const prevGroup = prev.find((g) => g.id === d.userId);
 
-      setTodoGroups((prev) =>
-        prev.some((g) => g.id === d.userId)
+        const formatted: TodoGroup = {
+          id: d.userId,
+          items: d.goals.map((g: any) => ({
+            goalId: g.goalId,
+            content: g.content,
+            isCompleted: g.isCompleted,
+          })),
+          resolution: d.resolution ?? '',
+          isMyGoal: d.isMyGoal ?? prevGroup?.isMyGoal ?? false,
+          isSecret: d.isSecret ?? prevGroup?.isSecret ?? false,
+        };
+
+        return prev.some((g) => g.id === d.userId)
           ? prev.map((g) => (g.id === d.userId ? formatted : g))
-          : [...prev, formatted],
-      );
+          : [...prev, formatted];
+      });
     },
 
     // 사용자 입장 시 참가자 목록 업데이트
@@ -85,7 +90,8 @@ export const useRoomContext = (roomId?: string) => {
         username: d.username,
         goals: d.goals ?? [],
         resolution: d.resolution ?? '',
-        is_my_goal: d.is_my_goal,
+        isMyGoal: d.isMyGoal,
+        isSecret: d.isSecret,
       };
 
       setParticipants((prev) => {
@@ -105,7 +111,8 @@ export const useRoomContext = (roomId?: string) => {
             content: g.content,
             isCompleted: g.isCompleted,
           })),
-          isMine: newParticipant.is_my_goal,
+          isMyGoal: newParticipant.isMyGoal,
+          isSecret: newParticipant.isSecret,
         };
 
         return [...prev, newGroup];
