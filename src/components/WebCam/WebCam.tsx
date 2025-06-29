@@ -26,7 +26,7 @@ const WebCamTile = ({
 }: WebCamTileProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [camStatus, setCameraOn] = useState(participant.camStatus);
-  const [micStatus, setMicOn] = useState(participant. micStatus);
+  const [micStatus, setMicOn] = useState(participant.micStatus);
   const [statusOpen, setStatusOpen] = useState(false);
   const [isWorking, setIsWorking] = useState(participant.isWorking);
   const setParticipantStatus = (working: boolean) => {
@@ -84,7 +84,7 @@ const WebCamTile = ({
       )}
 
       {isAdmin && (
-        <div className="absolute top-[30px] left-[30px] flex items-center gap-[5px]">
+        <div className="absolute top-[20px] bottom-[215px] left-[21px] flex flex-col items-center gap-[5px]">
           <button onClick={onOpenDelegationModal}>
             <ChiefIcon width={35} height={35} />
           </button>
@@ -97,7 +97,7 @@ const WebCamTile = ({
           {displayName}
         </span>
 
-        <div className="ml-auto flex items-center gap-[8px]">
+      <div className="ml-auto flex items-center">
           <div className="relative">
             <button
               onClick={() => setStatusOpen(!statusOpen)}
@@ -133,14 +133,15 @@ const WebCamTile = ({
 
           <button
             onClick={toggleCamera}
-            className="flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
+            className="ml-[15px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
             <WebcamCamera width={24} height={24} style={{ opacity: camStatus ? 1 : 0.2 }} />
           </button>
 
+
           <button
             onClick={toggleMic}
-            className="relative flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
+            className="ml-[10px] relative flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
             <VoiceIcon
               width={14}
