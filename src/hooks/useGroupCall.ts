@@ -112,16 +112,11 @@ export function useGroupCall({
     [localStream, myUserId, updateParticipantStatus],
   );
 
-  const delegateAdmin = useCallback(
-    (newAdminId: number) => {
-      kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
-        newAdminId,
-      });
-      setIsDelegationOpen(false);
-      setSelectedDelegateId(null);
-    },
-    [roomId],
-  );
+   const delegateAdmin = useCallback((newAdminId: number) => {
+    kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
+      newAdminId,
+    });
+  }, [roomId]);
 
   const openDelegationModal = useCallback(() => {
     if (adminUsername === myUsername) {
@@ -273,9 +268,17 @@ export function useGroupCall({
       }
     });
 
+
     socket.on('ADMIN_UPDATED', (msg: DelegationUpdateResponse) => {
       setAdminUsername(msg.newAdminUsername);
+      setParticipants((prev) =>
+        prev.map((p) => ({
+          ...p,
+          isAdmin: p.username === msg.newAdminUsername,
+        })),
+      );
     });
+
 
     socket.on('receiveVideoFrom', async (msg) => {
       const remoteUsername = msg.sender;
@@ -358,6 +361,7 @@ export function useGroupCall({
     error,
     adminUsername,
     isDelegationOpen,
+    setAdminUsername,
     setIsDelegationOpen,
     openDelegationModal,
     delegateAdmin,
