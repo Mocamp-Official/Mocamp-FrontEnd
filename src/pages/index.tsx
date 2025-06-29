@@ -10,6 +10,7 @@ import GoalManagementCard from '@/components/onBoarding/cards/GoalManagementCard
 import OnboardingHeader from '@/components/Header/OnboardingHeader';
 import Footer from '@/components/Footer/Footer';
 
+
 const slides = [CreateRoomCard, AchievementCard, GoalManagementCard];
 
 const OnBoarding = () => {

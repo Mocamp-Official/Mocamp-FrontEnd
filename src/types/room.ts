@@ -1,3 +1,4 @@
+
 export interface Goal {
   goalId: number;
   content: string;
@@ -24,4 +25,6 @@ export interface RoomInfo {
   duration: string;
   imagePath: string;
   micAvailability: boolean;
+  goalList: string[];
+
 }

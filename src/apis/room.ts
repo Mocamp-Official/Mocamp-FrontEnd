@@ -14,6 +14,7 @@ export const createRoom = async (payload: CreateRoomFormData, accessToken: strin
 
     const response = await apiWithToken.post('/api/room/create', formData, {
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -33,6 +34,8 @@ export const fetchRoomData = async (roomId: string) => {
 };
 
 // 방 참가자 목록 조회
+// 생성한 방 참가자 목록 조회
+>>>>>>> main
 export const fetchRoomParticipants = async (roomId: string): Promise<Participant[]> => {
   try {
     const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
@@ -47,3 +50,4 @@ export const fetchRoomParticipants = async (roomId: string): Promise<Participant
 export const leaveRoom = async (roomId: string) => {
   await apiWithToken.post(`/api/room/exit/${roomId}`);
 };
+
