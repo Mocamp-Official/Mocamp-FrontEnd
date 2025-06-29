@@ -48,7 +48,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
       {/* 방 생성 모달 제목 */}
       <div className="flex h-[38px] items-start justify-between">
         <span className="text-title1 text-gray9 flex h-full items-center">방 생성하기</span>
-        <CloseIcon className="h-[29px] w-[29px] cursor-pointer" onClick={onClose} />
+        <CloseIcon className="text-gray5 h-[29px] w-[29px] cursor-pointer" onClick={onClose} />
       </div>
 
       {/* 방 이름 + 마이크 설정 */}

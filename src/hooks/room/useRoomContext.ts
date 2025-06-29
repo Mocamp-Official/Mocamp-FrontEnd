@@ -171,6 +171,10 @@ export const useRoomContext = (roomId?: string) => {
     setTodoGroups((prev) => prev.map((g) => (g.id === userId ? { ...g, items: updated } : g)));
   }, []);
 
+  const setAlertVisible = (visible: boolean) => {
+    setAlertInfo((prev) => ({ ...prev, visible }));
+  };
+
   return {
     todoGroups,
     setTodosByUser,
@@ -178,5 +182,6 @@ export const useRoomContext = (roomId?: string) => {
     roomData,
     participants,
     alertInfo,
+    setAlertVisible,
   };
 };

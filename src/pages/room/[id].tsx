@@ -26,7 +26,7 @@ const RoomPage = () => {
     }
   };
 
-  const { todoGroups, setTodosByUser, notice, roomData, participants, alertInfo } =
+  const { todoGroups, setTodosByUser, notice, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(roomId);
 
   if (!roomId || !roomData) return null;
@@ -40,6 +40,7 @@ const RoomPage = () => {
         participants={participants.length}
         onLeaveRoom={handleLeaveRoom}
         alertInfo={alertInfo}
+        onCloseAlert={() => setAlertVisible(false)}
       />
       {todoGroups.map((g) => (
         <TodoSection
