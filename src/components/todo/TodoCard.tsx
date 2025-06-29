@@ -16,8 +16,8 @@ const TodoCard = ({ items, onToggle, editable }: TodoCardProps) => {
   };
 
   return (
-    <div className="flex h-[479.6px] w-full rounded-[20px] bg-[#fefefe] py-[50px] pr-[10px] pl-[50px]">
-      <div className="custom-scrollbar flex w-full flex-col gap-[20.32px] overflow-y-auto">
+    <div className="flex h-64 w-full rounded-[10.67px] bg-[#fefefe] py-[26.67px] pr-[10px] pl-[26.67px] lg:h-90 lg:rounded-[15px] lg:py-[37.5px] lg:pl-[37.5px] xl:h-120 xl:rounded-[20px] xl:py-[50px] xl:pl-[50px]">
+      <div className="custom-scrollbar flex w-full flex-col gap-[10.67px] overflow-y-auto lg:gap-4 xl:gap-[20.32px]">
         {items.map((item) => (
           <div
             key={item.goalId}
@@ -28,13 +28,13 @@ const TodoCard = ({ items, onToggle, editable }: TodoCardProps) => {
             onClick={editable ? () => onToggle(item.goalId, !item.isCompleted) : undefined}
             onKeyDown={(e) => handleKeyDown(e, item.goalId, !item.isCompleted)}
             className={clsx(
-              'flex items-center gap-5',
+              'flex items-center gap-[10.67px] lg:gap-[15px] xl:gap-5',
               editable ? 'cursor-pointer' : 'cursor-default',
             )}
           >
             <div
               className={clsx(
-                'h-[40.645px] w-[40px] shrink-0 self-baseline rounded-[10px] border transition-colors duration-200',
+                'h-[21.333px] w-[21.333px] shrink-0 self-baseline rounded-[10px] border transition-colors duration-200 lg:h-7.5 lg:w-7.5 xl:h-[40.645px] xl:w-[40px]',
                 item.isCompleted
                   ? 'border-[#27cfa5] bg-[#BEF1E4]'
                   : 'border-[#E8E8E8] bg-[#ffffff]',
@@ -42,7 +42,7 @@ const TodoCard = ({ items, onToggle, editable }: TodoCardProps) => {
             />
             <span
               className={clsx(
-                'w-full max-w-[320px] overflow-hidden text-xl font-medium whitespace-pre-line transition-all duration-200',
+                'w-full max-w-[170.67px] overflow-hidden text-[10.67px] font-medium whitespace-pre-line transition-all duration-200 lg:max-w-60 lg:text-[15px] xl:max-w-80 xl:text-xl',
                 item.isCompleted ? 'text-[#a7a7a7] line-through' : 'text-[#555]',
               )}
             >
