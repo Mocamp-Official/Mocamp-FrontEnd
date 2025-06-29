@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SidebarExitModal from '@/components/Sidebar/modal/SidebarExitModal';
 
 interface SidebarExitProps {
-  onLeaveRoom: () => void; // 
+  onLeaveRoom: () => void;
 }
 
 const SidebarExit = ({ onLeaveRoom }: SidebarExitProps) => {
@@ -15,7 +15,7 @@ const SidebarExit = ({ onLeaveRoom }: SidebarExitProps) => {
     setExitModalOpen(false);
 
   };
-  
+
   const handleCancelExit = () => {
     setExitModalOpen(false);
   };

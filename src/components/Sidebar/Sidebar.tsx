@@ -21,3 +21,4 @@ const Sidebar = ({ startTime, endTime, participants, onLeaveRoom }: SidebarProps
 };
 
 export default Sidebar;
+
