@@ -254,6 +254,12 @@ export function useGroupCall({
   }, [localStream, roomId, onRoomLeft]);
 
   useEffect(() => {
+    if (!adminUsername && myUserId === 1) {
+      setAdminUsername(myUsername);
+    }
+  }, [adminUsername, myUserId, myUsername]);
+
+  useEffect(() => {
     const socket = new KurentoSignalingSocket();
     kurentoSignalingRef.current = socket;
     socket.connect();
@@ -343,6 +349,26 @@ export function useGroupCall({
     socket.on('error', (msg) => {
       setError(msg.message || '시그널링 오류');
     });
+
+    socket.on(
+      'roomParticipants',
+      (msg: { participants: Participant[]; adminUsername?: string }) => {
+        setParticipants(
+          msg.participants.map((p) => ({
+            ...p,
+            stream: null,
+          })),
+        );
+        if (msg.adminUsername) {
+          setAdminUsername(msg.adminUsername);
+        } else if (
+          msg.participants.length > 0 &&
+          !msg.participants.some((p) => p.username === adminUsername)
+        ) {
+          setAdminUsername(msg.participants[0].username);
+        }
+      },
+    );
 
     socket.on('STATUS_UPDATED', (msg) => {
       const { userId, workStatus, camStatus, micStatus } = msg;

@@ -8,6 +8,7 @@ interface WebCamGridProps {
   adminUsername: string;
   onToggleMedia: (mediaType: 'video' | 'audio', status: boolean) => void;
   onOpenDelegationModal: () => void;
+  onSetWorkStatus: (status: boolean) => void;
 }
 
 const WebCamGrid = ({
@@ -16,11 +17,12 @@ const WebCamGrid = ({
   adminUsername,
   onToggleMedia,
   onOpenDelegationModal,
+  onSetWorkStatus,
 }: WebCamGridProps) => {
-   const { setParticipantWorkStatus } = useGroupCall({
+  const { setParticipantWorkStatus } = useGroupCall({
     roomId: 1,
     myUserId,
-    myUsername: '', 
+    myUsername: '',
   });
 
   return (
