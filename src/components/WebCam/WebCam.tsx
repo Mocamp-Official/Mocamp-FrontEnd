@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import WebcamCamera from '@/public/svgs/webcamcamera.svg';
 import VoiceIcon from '@/public/svgs/VoiceIcon.svg';
 import ChiefIcon from '@/public/svgs/chief_fire.svg';
+import SelectIcon from '@/public/svgs/select.svg';
+import NoneIcon from '@/public/svgs/none.svg';
 import { Participant } from '@/types/webCam';
 import WebCamMedia from '@/components/webcamPreview/WebCamMedia';
 
@@ -13,17 +15,6 @@ interface WebCamTileProps {
   onOpenDelegationModal: () => void;
 }
 
-const IconButton = ({ onClick, children }: { onClick?: () => void; children: React.ReactNode }) => (
-  <button
-    type="button"
-    tabIndex={-1}
-    onClick={onClick}
-    className="ml-2 flex h-[40px] w-[40px] items-center justify-center rounded-[6.957px] border-none bg-[rgba(95,95,95,0.50)] p-0 backdrop-blur-[1.5px]"
-  >
-    <span className="flex h-full w-full items-center justify-center">{children}</span>
-  </button>
-);
-
 const WebCamTile = ({
   participant,
   isLocal = false,
@@ -34,6 +25,13 @@ const WebCamTile = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [cameraOn, setCameraOn] = useState(participant.cameraOn);
   const [micOn, setMicOn] = useState(participant.micOn);
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [isWorking, setIsWorking] = useState(participant.isWorking);
+  const setParticipantStatus = (working: boolean) => {
+    setIsWorking(working);
+    participant.isWorking = working;
+    setStatusOpen(false);
+  };
 
   useEffect(() => {
     if (videoRef.current && participant.stream) {
@@ -71,51 +69,83 @@ const WebCamTile = ({
   };
 
   return (
-    <div className="relative flex h-[270px] w-[480px] flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
+    <div className="relative flex h-[270px] w-[480px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
       {cameraOn && participant.stream ? (
         <div className="absolute inset-0 z-0" style={{ transform: 'rotateY(180deg)' }}>
           <WebCamMedia stream={participant.stream} />
         </div>
       ) : (
-        <span className="font-pre pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-[20px] font-semibold tracking-[-0.4px] text-[rgba(255,255,255,0.20)] select-none">
+        <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold tracking-[-0.4px] text-[rgba(255,255,255,0.20)] select-none">
           카메라가 꺼져있습니다
         </span>
       )}
 
       {isAdmin && (
-        <button onClick={onOpenDelegationModal} className="absolute top-2 left-2">
-          <ChiefIcon width={35} height={35} />
-        </button>
+        <div className="absolute top-[30px] left-[30px] flex items-center gap-[5px]">
+          <button onClick={onOpenDelegationModal}>
+            <ChiefIcon width={35} height={35} />
+          </button>
+          <span className="text-[10px] text-white">방장</span>
+        </div>
       )}
 
-      <div className="absolute bottom-0 left-0 box-border flex w-full items-center px-[50px] pb-[33px]">
-        <span className="font-pre flex-shrink-0 text-[16px] font-semibold tracking-[-0.4px] text-white">
+      <div className="absolute bottom-[30px] left-[30px] flex w-[calc(100%-60px)] items-center">
+        <span className="max-w-[200px] truncate text-[20px] font-semibold text-white">
           {displayName}
         </span>
 
         <div className="ml-auto flex items-center gap-[8px]">
-          {participant.isWorking && (
-            <span className="font-pre flex h-[40px] w-[107px] items-center justify-center rounded-[5px] bg-[var(--color-primary)] p-[10px_20px] text-[16px] font-semibold tracking-[-0.32px] text-white">
-              작업 중
-            </span>
-          )}
+          <div className="relative">
+            <button
+              onClick={() => setStatusOpen(!statusOpen)}
+              className={`h-[40px] w-[107px] rounded-[5px] px-[20px] text-[16px] font-semibold backdrop-blur-[2px] ${
+                isWorking
+                  ? 'bg-[rgba(39,207,165,0.80)] text-white'
+                  : 'bg-[rgba(95,95,95,0.50)] text-white'
+              }`}
+            >
+              {isWorking ? '작업 중' : '자리 비움'}
+            </button>
+            {statusOpen && (
+              <div className="absolute top-full left-0 inline-flex h-[90px] flex-col items-start justify-between gap-[16px] rounded-[10px] border border-[#E8E8E8] bg-white p-[20px]">
+                <div className="flex items-center gap-[10px]">
+                  <button onClick={() => setParticipantStatus(true)} className="flex items-center">
+                    {isWorking ? <SelectIcon /> : <NoneIcon />}
+                  </button>
+                  <span className="font-pre text-[10px] font-medium  whitespace-nowrap text-[#555]">
+                    작업 중
+                  </span>
+                </div>
+                <div className="flex items-center gap-[10px]">
+                  <button onClick={() => setParticipantStatus(false)} className="flex items-center">
+                    {!isWorking ? <SelectIcon /> : <NoneIcon />}
+                  </button>
+                  <span className="font-pre text-[10px] font-medium = whitespace-nowrap text-[#555]">
+                    자리 비움
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
 
-          <IconButton onClick={toggleCamera}>
+          <button
+            onClick={toggleCamera}
+            className="flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
+          >
             <WebcamCamera width={24} height={24} style={{ opacity: cameraOn ? 1 : 0.2 }} />
-          </IconButton>
+          </button>
 
-          <IconButton onClick={toggleMic}>
+          <button
+            onClick={toggleMic}
+            className="relative flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
+          >
             <VoiceIcon
-              width={24}
-              height={24}
-              style={{
-                opacity: micOn ? 1 : 0.2,
-                display: 'block',
-                margin: 'auto',
-                transform: 'translate(4px, 2px)',
-              }}
+              width={14}
+              height={20}
+              className="absolute top-[10px] right-[13px] bottom-[10px] left-[13px]"
+              style={{ opacity: micOn ? 1 : 0.2 }}
             />
-          </IconButton>
+          </button>
         </div>
       </div>
     </div>
