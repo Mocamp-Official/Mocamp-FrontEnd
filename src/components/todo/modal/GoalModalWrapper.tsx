@@ -62,20 +62,25 @@ const GoalModalWrapper = ({
   };
 
   return (
-    <ModalLayout onClose={onClose} width="660px" height="880px">
+    <ModalLayout
+      onClose={onClose}
+      className="h-[470px] w-[352px] lg:h-[660px] lg:w-[495px] xl:h-[880px] xl:w-[660px]"
+    >
       <button
-        className="absolute top-[50px] right-[50px] h-[30px] w-[30px] cursor-pointer"
+        className="absolute top-[21.67px] right-[21.67px] h-4 w-4 cursor-pointer lg:top-[37.5px] lg:right-[37.5px] lg:h-[22.5px] lg:w-[22.5px] xl:top-[50px] xl:right-[50px] xl:h-[30px] xl:w-[30px]"
         onClick={() => setIsPrivate((prev) => !prev)}
       >
         {isPrivate ? <LockButton /> : <UnlockButton />}
       </button>
 
       {/* 헤더 */}
-      <div className="mb-[50px] flex flex-col gap-[10px]">
+      <div className="mb-[26.87px] flex flex-col gap-[5.6px] lg:mb-[37.25px] lg:gap-[7px] xl:mb-[50px] xl:gap-[10px]">
         <div className="flex w-[530px] justify-between">
-          <span className="text-[32px] font-semibold text-[#555555]">나의 목표 관리</span>
+          <span className="text-gray9 text-[17.067px] font-semibold lg:text-2xl xl:text-[32px]">
+            나의 목표 관리
+          </span>
         </div>
-        <span className="text-lg font-semibold text-[#a7a7a7]">
+        <span className="text-gray7 text-[9.6px] font-semibold lg:text-[13.5px] xl:text-lg">
           나의 목표를 자유롭게 설정할 수 있어요
         </span>
       </div>
@@ -83,16 +88,16 @@ const GoalModalWrapper = ({
       <GoalModalContent todos={currentTodos} setTodos={setCurrentTodos} mode={mode} />
 
       {/* 하단 버튼 */}
-      <div className="absolute bottom-[50px] flex h-[84px] w-full items-center gap-5">
+      <div className="absolute bottom-[26.67px] flex h-[44.8px] w-full items-center gap-[10.67px] lg:bottom-[37.5px] lg:h-16 lg:gap-[15px] xl:bottom-[50px] xl:h-[84px] xl:gap-5">
         <button
           onClick={handleAddTodo}
-          className="w-[187px] rounded-[10px] border border-[#e8e8e8] bg-white px-10 py-[30px] text-[18px] font-semibold tracking-[-0.02em] text-[#27cfa5]"
+          className="h-full w-[99.67px] rounded-[5.333px] border border-[#e8e8e8] bg-white text-[10.67px] font-semibold tracking-[-0.02em] text-[#27cfa5] lg:w-[140px] lg:rounded-[7.5px] lg:text-[15px] xl:w-[187px] xl:rounded-[10px] xl:text-[18px]"
         >
           목표 생성하기
         </button>
         <button
           onClick={handleSubmit}
-          className="w-[353px] rounded-[10px] bg-[#27cfa5] px-10 py-[30px] text-[20px] font-semibold text-white"
+          className="h-full w-[188.267px] rounded-[10px] bg-[#27cfa5] text-[10.67px] font-semibold text-white lg:w-[264.75px] lg:text-[15px] xl:w-[353px] xl:text-[20px]"
         >
           완료하기
         </button>
