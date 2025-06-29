@@ -2,8 +2,8 @@ export interface Participant {
   userId: number;
   username: string;
   isWorking?: boolean;
-  cameraOn: boolean;
-  micOn: boolean;
+  camStatus: boolean;
+  micStatus: boolean;
   stream?: MediaStream | null;
   
 }

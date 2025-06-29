@@ -1,5 +1,6 @@
 import WebCamTile from './WebCam';
 import { Participant } from '@/types/webCam';
+import { useGroupCall } from '@/hooks/useGroupCall';
 
 interface WebCamGridProps {
   participants: Participant[];
@@ -16,6 +17,12 @@ const WebCamGrid = ({
   onToggleMedia,
   onOpenDelegationModal,
 }: WebCamGridProps) => {
+   const { setParticipantWorkStatus } = useGroupCall({
+    roomId: 1,
+    myUserId,
+    myUsername: '', 
+  });
+
   return (
     <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {participants.map((participant) => (
@@ -26,6 +33,7 @@ const WebCamGrid = ({
           onToggleMedia={onToggleMedia}
           adminUsername={adminUsername}
           onOpenDelegationModal={onOpenDelegationModal}
+          onSetWorkStatus={setParticipantWorkStatus}
         />
       ))}
     </div>

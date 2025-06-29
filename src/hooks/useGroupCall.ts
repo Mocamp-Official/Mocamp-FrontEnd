@@ -35,7 +35,7 @@ export function useGroupCall({
     participantsRef.current = participants;
   }, [participants]);
 
- const getLocalMediaStream = useCallback(async () => {
+  const getLocalMediaStream = useCallback(async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { width: 480, height: 270 },
@@ -46,7 +46,9 @@ export function useGroupCall({
         const existing = prev.find((p) => p.userId === myUserId);
         if (existing) {
           return prev.map((p) =>
-            p.userId === myUserId ? { ...p, stream: mediaStream, cameraOn: true, micOn: true } : p,
+            p.userId === myUserId
+              ? { ...p, stream: mediaStream, camStatus: true, micStauts: true }
+              : p,
           );
         } else {
           return [
@@ -55,8 +57,8 @@ export function useGroupCall({
               userId: myUserId,
               username: myUsername,
               isWorking: true,
-              cameraOn: true,
-              micOn: true,
+              camStatus: true,
+              micStatus: true,
               stream: mediaStream,
             },
           ];
@@ -69,16 +71,57 @@ export function useGroupCall({
     }
   }, [myUserId, myUsername]);
 
+  const updateParticipantStatus = useCallback(
+    (payload: { workStatus?: boolean; camStatus?: boolean; micStatus?: boolean }) => {
+      kurentoSignalingRef.current?.send(`/pub/data/work-status/${roomId}`, {
+        userId: myUserId,
+        ...payload,
+      });
+    },
+    [myUserId, roomId],
+  );
 
-const delegateAdmin = useCallback((newAdminId: number) => {
-  kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
-    newAdminId,
-  });
-  setIsDelegationOpen(false);
-  setSelectedDelegateId(null);
-}, [roomId]);
+  const setParticipantWorkStatus = useCallback(
+    (status: boolean) => {
+      setParticipants((prev) =>
+        prev.map((p) => (p.userId === myUserId ? { ...p, isWorking: status } : p)),
+      );
+      updateParticipantStatus({ workStatus: status });
+    },
+    [updateParticipantStatus, myUserId],
+  );
 
+  const toggleMedia = useCallback(
+    (type: 'video' | 'audio', status: boolean) => {
+      if (!localStream) return;
 
+      if (type === 'video') {
+        localStream.getVideoTracks().forEach((track) => (track.enabled = status));
+        setParticipants((prev) =>
+          prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
+        );
+        updateParticipantStatus({ camStatus: status });
+      } else {
+        localStream.getAudioTracks().forEach((track) => (track.enabled = status));
+        setParticipants((prev) =>
+          prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
+        );
+        updateParticipantStatus({ micStatus: status });
+      }
+    },
+    [localStream, myUserId, updateParticipantStatus],
+  );
+
+  const delegateAdmin = useCallback(
+    (newAdminId: number) => {
+      kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
+        newAdminId,
+      });
+      setIsDelegationOpen(false);
+      setSelectedDelegateId(null);
+    },
+    [roomId],
+  );
 
   const openDelegationModal = useCallback(() => {
     if (adminUsername === myUsername) {
@@ -90,14 +133,12 @@ const delegateAdmin = useCallback((newAdminId: number) => {
     setSelectedDelegateId(userId);
   }, []);
 
-
   const createPeerConnection = useCallback(
     async (remoteUserId: number, remoteUsername: string, stream: MediaStream) => {
       const pc = new RTCPeerConnection({
         iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
       });
       peerConnections.current[remoteUserId] = pc;
-      
 
       stream.getTracks().forEach((track) => pc.addTrack(track, stream));
 
@@ -129,8 +170,8 @@ const delegateAdmin = useCallback((newAdminId: number) => {
                   userId: remoteUserId,
                   username: remoteUsername,
                   isWorking: false,
-                  cameraOn: true,
-                  micOn: true,
+                  camStatus: true,
+                  micStatus: true,
                   stream: e.streams[0],
                 },
               ];
@@ -192,27 +233,6 @@ const delegateAdmin = useCallback((newAdminId: number) => {
     }
   }, []);
 
-  const toggleMedia = useCallback(
-    (type: 'video' | 'audio', status: boolean) => {
-      if (!localStream) return;
-
-      if (type === 'video') {
-        localStream.getVideoTracks().forEach((track) => (track.enabled = status));
-      } else {
-        localStream.getAudioTracks().forEach((track) => (track.enabled = status));
-      }
-
-      setParticipants((prev) =>
-        prev.map((p) =>
-          p.userId === myUserId
-            ? { ...p, ...(type === 'video' ? { cameraOn: status } : { micOn: status }) }
-            : p,
-        ),
-      );
-    },
-    [myUserId, localStream],
-  );
-
   const leaveRoom = useCallback(async () => {
     if (kurentoSignalingRef.current) {
       kurentoSignalingRef.current.send('leaveRoom');
@@ -233,7 +253,6 @@ const delegateAdmin = useCallback((newAdminId: number) => {
 
     if (onRoomLeft) onRoomLeft();
   }, [localStream, roomId, onRoomLeft]);
-
 
   useEffect(() => {
     const socket = new KurentoSignalingSocket();
@@ -272,8 +291,8 @@ const delegateAdmin = useCallback((newAdminId: number) => {
           {
             userId: remoteUserId,
             username: remoteUsername,
-            cameraOn: true,
-            micOn: true,
+            camStatus: true,
+            micStatus: true,
             stream: null,
           },
         ]);
@@ -292,6 +311,36 @@ const delegateAdmin = useCallback((newAdminId: number) => {
       setError(msg.message || '시그널링 오류');
     });
 
+    socket.on('STATUS_UPDATED', (msg) => {
+      const { userId, workStatus, camStatus, micStatus } = msg;
+      setParticipants((prev) =>
+        prev.map((p) =>
+          p.userId === userId ? { ...p, isWorking: workStatus, camStatus, micStatus } : p,
+        ),
+      );
+    });
+
+    socket.on('WORK_STATUS_UPDATED', (msg) => {
+      const { userId, workStatus } = msg;
+      setParticipants((prev) =>
+        prev.map((p) => (p.userId === userId ? { ...p, isWorking: workStatus } : p)),
+      );
+    });
+
+    socket.on('CAM_STATUS_UPDATED', (msg) => {
+      const { userId, camStatus } = msg;
+      setParticipants((prev) =>
+        prev.map((p) => (p.userId === userId ? { ...p, camStatus: camStatus } : p)),
+      );
+    });
+
+    socket.on('MIC_STATUS_UPDATED', (msg) => {
+      const { userId, micStatus } = msg;
+      setParticipants((prev) =>
+        prev.map((p) => (p.userId === userId ? { ...p, micStatus: micStatus } : p)),
+      );
+    });
+
     return () => {
       socket.close();
     };
@@ -302,8 +351,6 @@ const delegateAdmin = useCallback((newAdminId: number) => {
       prev.some((p) => p.userId === participant.userId) ? prev : [...prev, participant],
     );
   };
-
-
 
   return {
     participants,
@@ -316,5 +363,6 @@ const delegateAdmin = useCallback((newAdminId: number) => {
     delegateAdmin,
     toggleMedia,
     leaveRoom,
+    setParticipantWorkStatus,
   };
 }

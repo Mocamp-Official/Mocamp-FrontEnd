@@ -13,6 +13,7 @@ interface WebCamTileProps {
   onToggleMedia: (mediaType: 'video' | 'audio', status: boolean) => void;
   adminUsername: string;
   onOpenDelegationModal: () => void;
+  onSetWorkStatus: (status: boolean) => void;
 }
 
 const WebCamTile = ({
@@ -21,16 +22,18 @@ const WebCamTile = ({
   onToggleMedia,
   adminUsername,
   onOpenDelegationModal,
+  onSetWorkStatus,
 }: WebCamTileProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [cameraOn, setCameraOn] = useState(participant.cameraOn);
-  const [micOn, setMicOn] = useState(participant.micOn);
+  const [camStatus, setCameraOn] = useState(participant.camStatus);
+  const [micStatus, setMicOn] = useState(participant. micStatus);
   const [statusOpen, setStatusOpen] = useState(false);
   const [isWorking, setIsWorking] = useState(participant.isWorking);
   const setParticipantStatus = (working: boolean) => {
     setIsWorking(working);
     participant.isWorking = working;
     setStatusOpen(false);
+    onSetWorkStatus(working);
   };
 
   useEffect(() => {
@@ -41,15 +44,15 @@ const WebCamTile = ({
 
   useEffect(() => {
     participant.stream?.getVideoTracks().forEach((track) => {
-      track.enabled = cameraOn;
+      track.enabled = camStatus;
     });
-  }, [cameraOn, participant.stream]);
+  }, [camStatus, participant.stream]);
 
   useEffect(() => {
     participant.stream?.getAudioTracks().forEach((track) => {
-      track.enabled = micOn;
+      track.enabled = micStatus;
     });
-  }, [micOn, participant.stream]);
+  }, [micStatus, participant.stream]);
 
   const displayName = participant.username;
   const isAdmin = adminUsername === participant.username;
@@ -70,7 +73,7 @@ const WebCamTile = ({
 
   return (
     <div className="relative flex h-[270px] w-[480px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
-      {cameraOn && participant.stream ? (
+      {camStatus && participant.stream ? (
         <div className="absolute inset-0 z-0" style={{ transform: 'rotateY(180deg)' }}>
           <WebCamMedia stream={participant.stream} />
         </div>
@@ -112,7 +115,7 @@ const WebCamTile = ({
                   <button onClick={() => setParticipantStatus(true)} className="flex items-center">
                     {isWorking ? <SelectIcon /> : <NoneIcon />}
                   </button>
-                  <span className="font-pre text-[10px] font-medium  whitespace-nowrap text-[#555]">
+                  <span className="font-pre text-[10px] font-medium whitespace-nowrap text-[#555]">
                     작업 중
                   </span>
                 </div>
@@ -120,7 +123,7 @@ const WebCamTile = ({
                   <button onClick={() => setParticipantStatus(false)} className="flex items-center">
                     {!isWorking ? <SelectIcon /> : <NoneIcon />}
                   </button>
-                  <span className="font-pre text-[10px] font-medium = whitespace-nowrap text-[#555]">
+                  <span className="font-pre = text-[10px] font-medium whitespace-nowrap text-[#555]">
                     자리 비움
                   </span>
                 </div>
@@ -132,7 +135,7 @@ const WebCamTile = ({
             onClick={toggleCamera}
             className="flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
-            <WebcamCamera width={24} height={24} style={{ opacity: cameraOn ? 1 : 0.2 }} />
+            <WebcamCamera width={24} height={24} style={{ opacity: camStatus ? 1 : 0.2 }} />
           </button>
 
           <button
@@ -143,7 +146,7 @@ const WebCamTile = ({
               width={14}
               height={20}
               className="absolute top-[10px] right-[13px] bottom-[10px] left-[13px]"
-              style={{ opacity: micOn ? 1 : 0.2 }}
+              style={{ opacity: micStatus ? 1 : 0.2 }}
             />
           </button>
         </div>
