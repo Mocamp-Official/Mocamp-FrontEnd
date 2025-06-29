@@ -11,11 +11,13 @@ import { useRoomContext } from '@/hooks/room/useRoomContext';
 
 const RoomPage = () => {
   const router = useRouter();
-
-  if (!router.isReady) return null;
-
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
+
+  const { todoGroups, setTodosByUser, notice, roomData, participants, alertInfo, setAlertVisible } =
+    useRoomContext(roomId);
+
+  if (!router.isReady || !roomId || !roomData) return null;
 
   const handleLeaveRoom = async () => {
     try {
@@ -25,11 +27,6 @@ const RoomPage = () => {
       alert('방 퇴장 실패');
     }
   };
-
-  const { todoGroups, setTodosByUser, notice, roomData, participants, alertInfo, setAlertVisible } =
-    useRoomContext(roomId);
-
-  if (!roomId || !roomData) return null;
 
   return (
     <div className="bg-gray3 flex h-screen w-screen items-center gap-5 pl-[320px]">

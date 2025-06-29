@@ -179,6 +179,9 @@ export class SignalingSocket {
     if (this.client.connectHeaders) {
       this.client.connectHeaders.Authorization = `Bearer ${newToken}`;
     }
+    if (!this.connected) {
+      this.connect();
+    }
   }
 
   close() {
