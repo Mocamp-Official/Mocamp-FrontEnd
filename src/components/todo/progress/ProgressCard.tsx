@@ -35,11 +35,11 @@ const ProgressCard = ({
   const { updateResolution } = useRoomPublisher(roomId);
 
   return (
-    <div className="flex h-[150px] w-[480px] flex-col justify-between gap-5 rounded-[20px] bg-[#FEFEFE] p-[30px]">
+    <div className="flex h-20 w-64 flex-col justify-between gap-[10.67px] rounded-[10.667px] bg-[#FEFEFE] p-4 lg:h-[112.5px] lg:w-90 lg:gap-[15px] lg:rounded-[15px] lg:p-[22.5px] xl:h-[150px] xl:w-120 xl:gap-5 xl:rounded-[20px] xl:p-[30px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <ProgressBadge done={done} total={total} />
-          <span className="ml-5 text-xl font-medium text-[#555555]">
+          <span className="text-gray9 ml-[10.71px] text-[10.67px] font-medium lg:ml-[15.06px] lg:text-[15px] xl:ml-5 xl:text-xl">
             {todayCommitment.trim() !== '' ? todayCommitment : '오늘의 다짐을 작성해주세요'}
           </span>
         </div>

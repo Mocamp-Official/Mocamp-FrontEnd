@@ -29,7 +29,7 @@ const RoomPage = () => {
   };
 
   return (
-    <div className="bg-gray3 flex h-screen w-screen items-center gap-5 pl-[320px]">
+    <div className="bg-gray3 flex h-screen w-screen items-center gap-5 pl-[170.67px] lg:pl-60 xl:pl-[320px]">
       <WorkspaceHeader roomName={roomData.roomName} initialNotice={notice} />
       <Sidebar
         startTime={roomData.startedAt}
