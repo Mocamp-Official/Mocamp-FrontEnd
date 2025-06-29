@@ -16,6 +16,7 @@ interface WebCamTileProps {
   onSetWorkStatus: (status: boolean) => void;
 }
 
+
 const WebCamTile = ({
   participant,
   isLocal = false,
@@ -36,6 +37,8 @@ const WebCamTile = ({
     onSetWorkStatus(working);
   };
 
+
+
   useEffect(() => {
     if (videoRef.current && participant.stream) {
       videoRef.current.srcObject = participant.stream;
@@ -55,8 +58,7 @@ const WebCamTile = ({
   }, [micStatus, participant.stream]);
 
   const displayName = participant.username;
-  const isAdmin = adminUsername === participant.username;
-
+  const isAdmin = participant.isAdmin;
   const toggleCamera = () => {
     setCameraOn((prev) => {
       onToggleMedia('video', !prev);
@@ -84,13 +86,14 @@ const WebCamTile = ({
       )}
 
       {isAdmin && (
-        <div className="absolute top-[20px] bottom-[215px] left-[21px] flex flex-col items-center gap-[5px]">
-          <button onClick={onOpenDelegationModal}>
-            <ChiefIcon width={35} height={35} />
-          </button>
-          <span className="text-[10px] text-white">방장</span>
-        </div>
-      )}
+  <div className="absolute top-[20px] bottom-[215px] left-[21px] flex flex-col items-center gap-[5px]">
+    <button onClick={onOpenDelegationModal}>
+      <ChiefIcon width={35} height={35} />
+    </button>
+    <span className="text-[10px] text-white">방장</span>
+  </div>
+) }
+
 
       <div className="absolute bottom-[30px] left-[30px] flex w-[calc(100%-60px)] items-center">
         <span className="max-w-[200px] truncate text-[20px] font-semibold text-white">

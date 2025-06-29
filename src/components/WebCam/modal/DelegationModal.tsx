@@ -71,18 +71,16 @@ const DelegationModal = ({
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute top-[calc(100%+10px)] left-0 z-10 flex max-h-[250px] w-full flex-col items-start justify-start gap-[50px] overflow-y-auto rounded-[10px] border border-[#e8e8e8] bg-white p-[20px] shadow-lg">
-              {' '}
+            <div className="absolute top-full right-0 z-10 inline-flex max-h-[568px] w-[182px] flex-col items-start gap-[50px] overflow-y-auto rounded-[10px] border border-[#e8e8e8] bg-white p-[50px]">
               {delegatableParticipants.length > 0 ? (
-                delegatableParticipants.map((p: Participant) => (
+                delegatableParticipants.map((p) => (
                   <button
                     key={p.userId}
                     type="button"
                     onClick={() => handleSelectAndClose(p.userId)}
-                    className="flex w-full items-center text-left" 
+                    className="flex w-full items-center text-left"
                   >
-                    <div className="mr-4 flex-shrink-0">
-                      {' '}
+                    <div className="mr-4 h-[20px] w-[20px] flex-shrink-0">
                       {p.userId === selectedUserId ? (
                         <SelectIcon width={20} height={20} />
                       ) : (

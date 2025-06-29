@@ -5,7 +5,7 @@ export interface Participant {
   camStatus: boolean;
   micStatus: boolean;
   stream?: MediaStream | null;
-  
+    isAdmin?: boolean;
 }
 
 export interface GroupCallState {

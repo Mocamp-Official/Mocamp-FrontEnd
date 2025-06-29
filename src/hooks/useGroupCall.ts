@@ -42,6 +42,7 @@ export function useGroupCall({
         audio: true,
       });
       setLocalStream(mediaStream);
+
       setParticipants((prev) => {
         const existing = prev.find((p) => p.userId === myUserId);
         if (existing) {
@@ -112,11 +113,14 @@ export function useGroupCall({
     [localStream, myUserId, updateParticipantStatus],
   );
 
-   const delegateAdmin = useCallback((newAdminId: number) => {
-    kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
-      newAdminId,
-    });
-  }, [roomId]);
+  const delegateAdmin = useCallback(
+    (newAdminId: number) => {
+      kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
+        newAdminId,
+      });
+    },
+    [roomId],
+  );
 
   const openDelegationModal = useCallback(() => {
     if (adminUsername === myUsername) {
@@ -268,17 +272,18 @@ export function useGroupCall({
       }
     });
 
-
-    socket.on('ADMIN_UPDATED', (msg: DelegationUpdateResponse) => {
-      setAdminUsername(msg.newAdminUsername);
-      setParticipants((prev) =>
-        prev.map((p) => ({
-          ...p,
-          isAdmin: p.username === msg.newAdminUsername,
-        })),
-      );
-    });
-
+    socket.on(
+      'ADMIN_UPDATED',
+      (msg: DelegationUpdateResponse & { type: string; previousAdminUsername: string }) => {
+        setAdminUsername(msg.newAdminUsername);
+        setParticipants((prev) =>
+          prev.map((p) => ({
+            ...p,
+            isAdmin: p.username === msg.newAdminUsername,
+          })),
+        );
+      },
+    );
 
     socket.on('receiveVideoFrom', async (msg) => {
       const remoteUsername = msg.sender;
@@ -310,6 +315,31 @@ export function useGroupCall({
       if (user) removeParticipant(user.userId);
     });
 
+    socket.on('newParticipantArrived', (msg) => {
+      const { name } = msg;
+      if (!name) return;
+
+      setParticipants((prev) => {
+        const exists = prev.find((p) => p.username === name);
+        if (exists) return prev;
+
+        const userId =
+          name.split('').reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0) % 10000;
+
+        return [
+          ...prev,
+          {
+            userId,
+            username: name,
+            camStatus: true,
+            micStatus: true,
+            isWorking: true,
+            stream: null,
+          },
+        ];
+      });
+    });
+
     socket.on('error', (msg) => {
       setError(msg.message || '시그널링 오류');
     });
@@ -323,24 +353,24 @@ export function useGroupCall({
       );
     });
 
-    socket.on('WORK_STATUS_UPDATED', (msg) => {
-      const { userId, workStatus } = msg;
+    socket.on(
+      'WORK_STATUS_UPDATED',
+      (msg: { type: string; userId: number; workStatus: boolean }) => {
+        setParticipants((prev) =>
+          prev.map((p) => (p.userId === msg.userId ? { ...p, isWorking: msg.workStatus } : p)),
+        );
+      },
+    );
+
+    socket.on('CAM_STATUS_UPDATED', (msg: { type: string; userId: number; camStatus: boolean }) => {
       setParticipants((prev) =>
-        prev.map((p) => (p.userId === userId ? { ...p, isWorking: workStatus } : p)),
+        prev.map((p) => (p.userId === msg.userId ? { ...p, camStatus: msg.camStatus } : p)),
       );
     });
 
-    socket.on('CAM_STATUS_UPDATED', (msg) => {
-      const { userId, camStatus } = msg;
+    socket.on('MIC_STATUS_UPDATED', (msg: { type: string; userId: number; micStatus: boolean }) => {
       setParticipants((prev) =>
-        prev.map((p) => (p.userId === userId ? { ...p, camStatus: camStatus } : p)),
-      );
-    });
-
-    socket.on('MIC_STATUS_UPDATED', (msg) => {
-      const { userId, micStatus } = msg;
-      setParticipants((prev) =>
-        prev.map((p) => (p.userId === userId ? { ...p, micStatus: micStatus } : p)),
+        prev.map((p) => (p.userId === msg.userId ? { ...p, micStatus: msg.micStatus } : p)),
       );
     });
 
@@ -367,6 +397,7 @@ export function useGroupCall({
     delegateAdmin,
     toggleMedia,
     leaveRoom,
+    addParticipant,
     setParticipantWorkStatus,
   };
 }
