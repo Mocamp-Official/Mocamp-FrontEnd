@@ -12,6 +12,10 @@ export interface Participant {
   resolution: string;
   isMyGoal: boolean;
   isSecret: boolean;
+   isAdmin: boolean;     
+  camStatus: boolean;   
+  micStatus: boolean;   
+  isWorking: boolean;   
 }
 
 export interface RoomInfo {
@@ -26,4 +30,5 @@ export interface RoomInfo {
   duration: string;
   imagePath: string;
   micAvailability: boolean;
+  adminUsername: string;
 }

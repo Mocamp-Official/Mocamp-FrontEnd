@@ -1,12 +1,13 @@
 export interface Participant {
   userId: number;
   username: string;
-  isWorking?: boolean;
+  stream?: MediaStream | null;
+  isAdmin: boolean;
   camStatus: boolean;
   micStatus: boolean;
-  stream?: MediaStream | null;
-    isAdmin?: boolean;
+  isWorking: boolean;
 }
+
 
 export interface GroupCallState {
   participants: Participant[];
