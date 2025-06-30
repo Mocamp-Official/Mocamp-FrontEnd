@@ -1,4 +1,4 @@
-import { signalingSocket } from '@/apis/signal';
+import { signalingSocket } from '@/libs/socket';
 
 export const useRoomPublisher = (roomId: string) => {
   const safeSend = (destination: string, body: any) => {
@@ -6,12 +6,7 @@ export const useRoomPublisher = (roomId: string) => {
       console.warn('❗ STOMP 연결이 아직 준비되지 않았습니다.');
       return;
     }
-
     signalingSocket.send(destination, body);
-  };
-
-  const delegateAdmin = (newAdminId: number) => {
-    safeSend(`/pub/data/delegation/${roomId}`, { newAdminId });
   };
 
   const toggleTodo = (goalId: number, isCompleted: boolean) => {
@@ -21,16 +16,15 @@ export const useRoomPublisher = (roomId: string) => {
     });
   };
 
-  const updateGoals = (createGoals: { content: string }[], deleteGoals: number[]) => {
-    console.log('📤 목표 업데이트 pub 전송', {
-      destination: `/pub/data/goal/manage/${roomId}`,
-      createGoals,
-      deleteGoals,
-    });
-
+  const updateGoals = (
+    createGoals: { content: string }[],
+    deleteGoals: number[],
+    isSecret: boolean,
+  ) => {
     safeSend(`/pub/data/goal/manage/${roomId}`, {
       createGoals,
       deleteGoals,
+      isSecret,
     });
   };
 
@@ -42,5 +36,5 @@ export const useRoomPublisher = (roomId: string) => {
     safeSend(`/pub/data/resolution/${roomId}`, { resolution });
   };
 
-  return { toggleTodo, updateGoals, updateNotice, updateResolution, delegateAdmin };
+  return { toggleTodo, updateGoals, updateNotice, updateResolution };
 };

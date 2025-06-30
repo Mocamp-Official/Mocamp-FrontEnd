@@ -1,4 +1,3 @@
-
 export interface Goal {
   goalId: number;
   content: string;
@@ -7,10 +6,12 @@ export interface Goal {
 
 export interface Participant {
   userId: number;
-  userSeq: string;
+  userSeq?: string;
   username: string;
   goals: Goal[];
   resolution: string;
+  isMyGoal: boolean;
+  isSecret: boolean;
 }
 
 export interface RoomInfo {
@@ -25,6 +26,4 @@ export interface RoomInfo {
   duration: string;
   imagePath: string;
   micAvailability: boolean;
-  goalList: string[];
-
 }

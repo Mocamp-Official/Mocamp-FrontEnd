@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { useRoomForm, RoomFormInput } from '@/hooks/useRoomForm';
+import { useRoomForm, RoomFormInput } from '@/hooks/room/useRoomForm';
 import { createRoom } from '@/apis/room';
 import CloseIcon from '@/public/svgs/closeIcon.svg';
 
@@ -24,7 +24,6 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
       const payload = {
         roomName: data.roomName,
         capacity: Number(data.headcount),
-        description: '',
         duration: `${data.hour.padStart(2, '0')}:${data.minute.padStart(2, '0')}`,
         micAvailability: micOn,
         micTurnedOn: true,
@@ -37,8 +36,8 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
         router.push('/login');
         return;
       }
-      const res = await createRoom(payload, accessToken);
-      router.push(`/room/${res.roomId}`);
+      const roomId = await createRoom(payload, accessToken);
+      router.push(`/room/${roomId}`);
     } catch (err) {
       alert('방 생성에 실패했습니다. 다시 시도해주세요.');
     }
@@ -49,7 +48,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
       {/* 방 생성 모달 제목 */}
       <div className="flex h-[38px] items-start justify-between">
         <span className="text-title1 text-gray9 flex h-full items-center">방 생성하기</span>
-        <CloseIcon className="h-[29px] w-[29px] cursor-pointer" onClick={onClose} />
+        <CloseIcon className="text-gray5 h-[29px] w-[29px] cursor-pointer" onClick={onClose} />
       </div>
 
       {/* 방 이름 + 마이크 설정 */}

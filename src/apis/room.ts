@@ -14,7 +14,6 @@ export const createRoom = async (payload: CreateRoomFormData, accessToken: strin
 
     const response = await apiWithToken.post('/api/room/create', formData, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -26,19 +25,30 @@ export const createRoom = async (payload: CreateRoomFormData, accessToken: strin
   }
 };
 
+// 방 입장 요청
+export const enterRoom = async (
+  roomId: string,
+  options: { micTurnedOn: boolean; camTurnedOn: boolean },
+) => {
+  const res = await apiWithToken.post(`/api/room/enter/${roomId}`, {
+    micTurnedOn: options.micTurnedOn,
+    camTurnedOn: options.camTurnedOn,
+  });
+  return res.data.message;
+};
+
 // 방 정보 조회
 export const fetchRoomData = async (roomId: string) => {
   const res = await apiWithToken.get(`/api/room/${roomId}`);
-  console.log(res.data.message);
   return res.data.message;
 };
 
 // 방 참가자 목록 조회
-// 생성한 방 참가자 목록 조회
->>>>>>> main
 export const fetchRoomParticipants = async (roomId: string): Promise<Participant[]> => {
   try {
     const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
+    console.log(res.data.message);
+
     return res.data.message;
   } catch (error: any) {
     console.error(`참가자 목록 조회 실패:`, error.response?.data || error.message);
@@ -50,4 +60,3 @@ export const fetchRoomParticipants = async (roomId: string): Promise<Participant
 export const leaveRoom = async (roomId: string) => {
   await apiWithToken.post(`/api/room/exit/${roomId}`);
 };
-

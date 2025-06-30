@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
+import Arrow from '@/public/svgs/LeftArrowButton.svg';
 import TodoSection from '@/components/todo/TodoSection';
 import WorkspaceHeader from '@/components/Header/WorkSpaceHeader';
 import Sidebar from '@/components/Sidebar/Sidebar';
@@ -9,10 +11,26 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 
+const MAX_VISIBLE = 2;
+
 const RoomPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
+
+  const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
+    useRoomContext(roomId);
+
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  if (!router.isReady || !roomId || !roomData || todoGroups.length === 0) return null;
+
+  const slidingItems = todoGroups.slice(1);
+  const visibleSlide = slidingItems.slice(slideIndex, slideIndex + MAX_VISIBLE);
+  const visibleGroups = [todoGroups[0], ...visibleSlide];
+
+  const canSlideLeft = slideIndex > 0;
+  const canSlideRight = slideIndex + MAX_VISIBLE < slidingItems.length;
 
   const handleLeaveRoom = async () => {
     try {
@@ -23,70 +41,51 @@ const RoomPage = () => {
     }
   };
 
-  const { todoGroups, setTodosByUser, notice, roomData, participants } = useRoomContext(roomId);
-
-  if (!roomId || !roomData) return null;
-
   return (
-    <div className="bg-gray3 flex h-screen w-screen items-center gap-5 pl-[320px]">
-      <WorkspaceHeader roomName={roomData.roomName} initialNotice={notice} />
+    <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
+      <WorkspaceHeader roomName={roomData.roomName} />
       <Sidebar
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}
         participants={participants.length}
         onLeaveRoom={handleLeaveRoom}
+        alertInfo={alertInfo}
+        onCloseAlert={() => setAlertVisible(false)}
       />
-      {todoGroups.map((g) => (
-        <TodoSection
-          key={g.id}
-          resolution={g.resolution}
-          roomId={String(roomId)}
-          todos={g.items}
-          setTodos={(updated) => setTodosByUser(g.id, updated)}
-        />
-=======
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { Todo } from '@/types/todo';
-import TodoSection from '@/components/todo/TodoSection';
-import { fetchRoomParticipants } from '@/apis/room';
+      <div className="flex w-full justify-center">
+        <div className="relative flex items-center">
+          {/* 왼쪽 화살표 */}
+          {canSlideLeft && todoGroups.length > 3 && (
+            <Arrow
+              onClick={() => setSlideIndex((prev) => prev - 1)}
+              className="absolute left-[-48px] h-8 w-8 cursor-pointer lg:left-[-67.5px] lg:h-[45px] lg:w-[45px] xl:left-[-90px] xl:h-[60px] xl:w-[60px]"
+            />
+          )}
 
-const RoomPage = () => {
-  const router = useRouter();
-  const { id: roomId } = router.query;
+          {/* TodoSection 리스트 */}
+          <div className="flex gap-4">
+            {visibleGroups.map((g) => (
+              <TodoSection
+                key={g.id}
+                resolution={g.resolution}
+                isMyGoal={g.isMyGoal}
+                isSecret={g.isSecret}
+                roomId={String(roomId)}
+                todos={g.items}
+                setTodos={(updated) => setTodosByUser(g.id, updated)}
+              />
+            ))}
+          </div>
 
-  const [todoGroups, setTodoGroups] = useState<{ id: string; items: Todo[] }[]>([]);
-
-  useEffect(() => {
-    if (!roomId) return;
-
-    const loadData = async () => {
-      const participants = await fetchRoomParticipants(roomId as string);
-      if (!participants) return;
-
-      const formatted = participants.map((user) => ({
-        id: String(user.userId),
-        items: Array.isArray(user.goalList)
-          ? user.goalList.map((text, idx) => ({
-              id: `${user.userId}-${idx}`,
-              text,
-              done: false,
-            }))
-          : [],
-      }));
-
-      setTodoGroups(formatted);
-      console.log(todoGroups);
-    };
-
-    loadData();
-  }, [roomId]);
-
-  return (
-    <div className="bg-gray3 flex h-screen w-screen items-center gap-5 pl-[320px]">
-      {todoGroups.map((group) => (
-        <TodoSection key={group.id} todos={group.items} />
-      ))}
+          {/* 오른쪽 화살표 */}
+          {canSlideRight && todoGroups.length > 3 && (
+            <Arrow
+              onClick={() => setSlideIndex((prev) => prev + 1)}
+              className="absolute right-[-48px] h-8 w-8 rotate-180 cursor-pointer lg:right-[-67.5px] lg:h-[45px] lg:w-[45px] xl:right-[-90px] xl:h-[60px] xl:w-[60px]"
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
