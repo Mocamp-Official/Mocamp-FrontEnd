@@ -97,49 +97,49 @@ export function useGroupCall({
     }
   }, [myUserId, myUsername]);
 
-  // 참가자 상태 서버 전송 (작업/캠/마이크)
-  const updateParticipantStatus = useCallback(
-    (payload: { workStatus?: boolean; camStatus?: boolean; micStatus?: boolean }) => {
-      kurentoSignalingRef.current?.send(`/pub/data/work-status/${roomId}`, {
-        userId: myUserId,
-        ...payload,
-      });
-    },
-    [myUserId, roomId],
-  );
+ 
   // 작업 상태 변경 &  서버 전송
   const setParticipantWorkStatus = useCallback(
     (status: boolean) => {
-      setParticipants((prev) =>
-        prev.map((p) => (p.userId === myUserId ? { ...p, isWorking: status } : p)),
-      );
-      updateParticipantStatus({ workStatus: status });
+        setParticipants((prev) =>
+            prev.map((p) => (p.userId === myUserId ? { ...p, isWorking: status } : p)),
+        );
+        kurentoSignalingRef.current?.send(`/pub/data/work-status/${roomId}`, {
+            userId: myUserId,
+            workStatus: status, 
+        });
     },
-    [updateParticipantStatus, myUserId],
-  );
-
+    [myUserId, roomId], 
+);
   // 캠/마이크 토글 (켜기/끄기) 처리
   const toggleMedia = useCallback(
     (type: 'video' | 'audio', status: boolean) => {
-      if (!localStream) return;
+        if (!localStream) return;
 
-      if (type === 'video') {
-        localStream.getVideoTracks().forEach((track) => (track.enabled = status));
-        setParticipants((prev) =>
-          prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
-        );
-        updateParticipantStatus({ camStatus: status });
-      } else {
-        localStream.getAudioTracks().forEach((track) => (track.enabled = status));
-        setParticipants((prev) =>
-          prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
-        );
-        updateParticipantStatus({ micStatus: status });
-      }
+        if (type === 'video') {
+            localStream.getVideoTracks().forEach((track) => (track.enabled = status));
+            setParticipants((prev) =>
+                prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
+            );
+            
+            kurentoSignalingRef.current?.send(`/pub/data/cam-status/${roomId}`, {
+                userId: myUserId,
+                camStatus: status,
+            });
+        } else { 
+            localStream.getAudioTracks().forEach((track) => (track.enabled = status));
+            setParticipants((prev) =>
+                prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
+            );
+        
+            kurentoSignalingRef.current?.send(`/pub/data/mic-status/${roomId}`, {
+                userId: myUserId,
+                micStatus: status,
+            });
+        }
     },
-    [localStream, myUserId, updateParticipantStatus],
-  );
-
+    [localStream, myUserId, roomId], 
+);
   // 방장 위임 요청 전송
   const delegateAdmin = useCallback(
     (newAdminId: number) => {
@@ -314,6 +314,7 @@ export function useGroupCall({
         try {
           const stream = await getLocalMediaStream();
           if (stream) {
+            console.log('[Kurento] onOpenCallback 호출됨');
             socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
             hasJoinedRoom.current = true;
           }
