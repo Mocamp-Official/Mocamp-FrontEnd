@@ -32,3 +32,12 @@ export interface RoomInfo {
   micAvailability: boolean;
   adminUsername: string;
 }
+
+export interface GroupCallState {
+  participants: Participant[];
+  streams: { [userId: number]: MediaStream | null };
+  localStream: MediaStream | null;
+  roomId: number;
+  myUserId: number;
+}
+
