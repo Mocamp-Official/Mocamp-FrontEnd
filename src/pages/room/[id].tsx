@@ -7,9 +7,11 @@ import Arrow from '@/public/svgs/LeftArrowButton.svg';
 import TodoSection from '@/components/todo/TodoSection';
 import WorkspaceHeader from '@/components/Header/WorkSpaceHeader';
 import Sidebar from '@/components/Sidebar/Sidebar';
+import WebCamTile from '@/components/WebCam/WebCam';
 
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
+
 
 const MAX_VISIBLE = 2;
 
@@ -52,7 +54,20 @@ const RoomPage = () => {
         alertInfo={alertInfo}
         onCloseAlert={() => setAlertVisible(false)}
       />
-      <div className="flex w-full justify-center">
+      <div className="flex w-full justify-center flex-col items-center">
+        {/* 웹캠 영역 */}
+        <div className="mb-5 flex gap-4">
+          {participants.map((participant) => (
+            <WebCamTile
+              key={participant.userId}
+              participant={participant}
+              adminUsername={roomData.adminUsername}
+              onToggleMedia={() => {}}
+              onOpenDelegationModal={() => {}}
+              onSetWorkStatus={() => {}}
+            />
+          ))}
+        </div>
         <div className="relative flex items-center">
           {/* 왼쪽 화살표 */}
           {canSlideLeft && todoGroups.length > 3 && (
