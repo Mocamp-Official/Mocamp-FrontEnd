@@ -145,12 +145,12 @@ export class KurentoSignalingSocket {
       console.log('[KurentoSignalingSocket] 토큰:', token);
       let urlWithToken = WS_BASE_URL;
       if (token) {
-        urlWithToken += `?token=${token}`; // 명세서대로 쿼리 파라미터로 추가
+        urlWithToken += `?token=${token}`;
         console.log('[KurentoSignalingSocket] 연결 URL:', urlWithToken);
       } else {
         console.warn('[Kurento WebSocket] 액세스 토큰 없이 연결을 시도합니다.');
       }
-      this.ws = new WebSocket(urlWithToken); // 이 방식이 명세서에 부합합니다.
+      this.ws = new WebSocket(urlWithToken);
       this.setupWebSocketHandlers();
     } else {
       console.warn('[Kurento WebSocket] 브라우저 환경이 아닙니다. WebSocket 생성을 건너뜁니다.');
