@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { KurentoSignalingSocket } from '@/apis/groupcallsignal';
-import { Participant } from '@/types/webCam';
+import { KurentoSignalingSocket } from '@/libs/groupcallsignal';
+import { Participant } from '@/types/room';
 import { apiWithToken } from '@/apis/axios';
 import { DelegationUpdateResponse } from '@/types/delegation';
 
@@ -86,6 +86,10 @@ export function useGroupCall({
               micStatus: true,
               isAdmin: false,
               stream: mediaStream,
+               goals: [],          
+  resolution: '',  
+  isMyGoal: false,  
+  isSecret: false  
             },
           ];
         }
@@ -203,6 +207,10 @@ export function useGroupCall({
                   micStatus: true,
                   isAdmin: false,
                   stream: e.streams[0],
+                   goals: [],       
+  resolution: '',  
+  isMyGoal: false,   
+  isSecret: false  
                 },
               ];
             }
@@ -356,6 +364,10 @@ export function useGroupCall({
             isAdmin: false, 
             isWorking: true,
             stream: null,
+             goals: [],       
+  resolution: '',  
+  isMyGoal: false, 
+  isSecret: false  
           },
         ]);
       }
@@ -390,6 +402,10 @@ export function useGroupCall({
             isWorking: true,
             isAdmin: false, 
             stream: null,
+             goals: [],       
+  resolution: '',    
+  isMyGoal: false, 
+  isSecret: false  
           },
         ];
       });
