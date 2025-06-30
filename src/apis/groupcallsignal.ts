@@ -1,11 +1,11 @@
-// import { getAccessToken } from '@/utils/token';
+import { getAccessToken } from '@/utils/token';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 let WS_BASE_URL: string | undefined;
 
 if (BACKEND_URL) {
   if (BACKEND_URL.startsWith('https://')) {
     WS_BASE_URL = BACKEND_URL.replace(/^https:\/\//, 'wss://') + '/groupcall';
-  }else {
+  } else {
     console.error('Invalid NEXT_PUBLIC_BACKEND_URL protocol:', BACKEND_URL);
   }
 }
@@ -48,6 +48,7 @@ export class KurentoSignalingSocket {
       if (this.onOpenCallback) {
         this.onOpenCallback();
       }
+      console.log('[Kurento WebSocket] onopen 이후 작업 시작');
     };
 
     this.ws.onmessage = (event) => {
@@ -129,6 +130,7 @@ export class KurentoSignalingSocket {
       console.error('[Kurento WebSocket] WS_BASE_URL이 정의되지 않았습니다.');
       return;
     }
+
     if (
       this.ws &&
       (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)
@@ -138,16 +140,17 @@ export class KurentoSignalingSocket {
     }
 
     if (typeof window !== 'undefined') {
-      // const token = getAccessToken(); //토큰 임시 주석
-      // let urlWithToken = WS_BASE_URL;
-      // if (token) {
-      //   urlWithToken += `?token=${token}`;
-      //   console.log('[Kurento WebSocket] 토큰을 QueryParam에 추가하여 연결:', urlWithToken);
-      // } else {
-      //   console.warn('[Kurento WebSocket] 액세스 토큰 없이 연결을 시도합니다.');
-      // }
-      console.warn('[Kurento WebSocket] 토큰 인증 없이 연결을 시도합니다.');
-      this.ws = new WebSocket(WS_BASE_URL);
+      console.log('[KurentoSignalingSocket] connect() 호출됨');
+      const token = getAccessToken();
+      console.log('[KurentoSignalingSocket] 토큰:', token);
+      let urlWithToken = WS_BASE_URL;
+      if (token) {
+        urlWithToken += `?token=${token}`; // 명세서대로 쿼리 파라미터로 추가
+        console.log('[KurentoSignalingSocket] 연결 URL:', urlWithToken);
+      } else {
+        console.warn('[Kurento WebSocket] 액세스 토큰 없이 연결을 시도합니다.');
+      }
+      this.ws = new WebSocket(urlWithToken); // 이 방식이 명세서에 부합합니다.
       this.setupWebSocketHandlers();
     } else {
       console.warn('[Kurento WebSocket] 브라우저 환경이 아닙니다. WebSocket 생성을 건너뜁니다.');
