@@ -42,7 +42,7 @@ const RoomPage = () => {
   };
 
   return (
-    <div className="bg-gray3 relative flex h-screen w-screen items-center gap-5 pl-[170.67px] lg:pl-60 xl:pl-[320px]">
+    <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
       <WorkspaceHeader roomName={roomData.roomName} />
       <Sidebar
         startTime={roomData.startedAt}
@@ -52,32 +52,40 @@ const RoomPage = () => {
         alertInfo={alertInfo}
         onCloseAlert={() => setAlertVisible(false)}
       />
-      {/* 왼쪽 화살표 */}
-      {canSlideLeft && todoGroups.length > 3 && (
-        <Arrow
-          onClick={() => setSlideIndex((prev) => prev - 1)}
-          className="absolute left-[122.67px] h-8 w-8 cursor-pointer lg:left-[172.5px] lg:h-[45px] lg:w-[45px] xl:left-[230px] xl:h-15 xl:w-15"
-        />
-      )}
-      {/* 투두 그룹 렌더 */}
-      {visibleGroups.map((g) => (
-        <TodoSection
-          key={g.id}
-          resolution={g.resolution}
-          isMyGoal={g.isMyGoal}
-          isSecret={g.isSecret}
-          roomId={String(roomId)}
-          todos={g.items}
-          setTodos={(updated) => setTodosByUser(g.id, updated)}
-        />
-      ))}
-      {/* 오른쪽 화살표 */}
-      {canSlideRight && todoGroups.length > 3 && (
-        <Arrow
-          onClick={() => setSlideIndex((prev) => prev + 1)}
-          className="absolute left-[976px] h-8 w-8 rotate-180 cursor-pointer lg:left-[1372.5px] lg:h-[45px] lg:w-[45px] xl:left-[1830px] xl:h-15 xl:w-15"
-        />
-      )}
+      <div className="flex w-full justify-center">
+        <div className="relative flex items-center">
+          {/* 왼쪽 화살표 */}
+          {canSlideLeft && todoGroups.length > 3 && (
+            <Arrow
+              onClick={() => setSlideIndex((prev) => prev - 1)}
+              className="absolute left-[-48px] h-8 w-8 cursor-pointer lg:left-[-67.5px] lg:h-[45px] lg:w-[45px] xl:left-[-90px] xl:h-[60px] xl:w-[60px]"
+            />
+          )}
+
+          {/* TodoSection 리스트 */}
+          <div className="flex gap-4">
+            {visibleGroups.map((g) => (
+              <TodoSection
+                key={g.id}
+                resolution={g.resolution}
+                isMyGoal={g.isMyGoal}
+                isSecret={g.isSecret}
+                roomId={String(roomId)}
+                todos={g.items}
+                setTodos={(updated) => setTodosByUser(g.id, updated)}
+              />
+            ))}
+          </div>
+
+          {/* 오른쪽 화살표 */}
+          {canSlideRight && todoGroups.length > 3 && (
+            <Arrow
+              onClick={() => setSlideIndex((prev) => prev + 1)}
+              className="absolute right-[-48px] h-8 w-8 rotate-180 cursor-pointer lg:right-[-67.5px] lg:h-[45px] lg:w-[45px] xl:right-[-90px] xl:h-[60px] xl:w-[60px]"
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
