@@ -1,6 +1,7 @@
 // 사이드바 나가기 버튼튼
 import { useState } from 'react';
 import SidebarExitModal from '@/components/Sidebar/modal/SidebarExitModal';
+import Portal from '../common/modal/Portal';
 
 interface SidebarExitProps {
   onLeaveRoom: () => void; //
@@ -31,7 +32,9 @@ const SidebarExit = ({ onLeaveRoom }: SidebarExitProps) => {
       </div>
 
       {isExitModalOpen && (
-        <SidebarExitModal onConfirm={handleConfirmExit} onCancel={handleCancelExit} />
+        <Portal>
+          <SidebarExitModal onConfirm={handleConfirmExit} onCancel={handleCancelExit} />
+        </Portal>
       )}
     </>
   );
