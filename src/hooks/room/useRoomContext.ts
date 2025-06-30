@@ -179,6 +179,7 @@ export const useRoomContext = (roomId?: string) => {
     todoGroups,
     setTodosByUser,
     notice,
+    setNotice,
     roomData,
     participants,
     alertInfo,

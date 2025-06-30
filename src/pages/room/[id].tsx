@@ -11,16 +11,17 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 
+const MAX_VISIBLE = 2;
+
 const RoomPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
-  const { todoGroups, setTodosByUser, notice, roomData, participants, alertInfo, setAlertVisible } =
+  const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(roomId);
 
   const [slideIndex, setSlideIndex] = useState(0);
-  const MAX_VISIBLE = 2;
 
   if (!router.isReady || !roomId || !roomData || todoGroups.length === 0) return null;
 
@@ -42,7 +43,7 @@ const RoomPage = () => {
 
   return (
     <div className="bg-gray3 relative flex h-screen w-screen items-center gap-5 pl-[170.67px] lg:pl-60 xl:pl-[320px]">
-      <WorkspaceHeader roomName={roomData.roomName} initialNotice={notice} />
+      <WorkspaceHeader roomName={roomData.roomName} />
       <Sidebar
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}
@@ -51,7 +52,6 @@ const RoomPage = () => {
         alertInfo={alertInfo}
         onCloseAlert={() => setAlertVisible(false)}
       />
-
       {/* 왼쪽 화살표 */}
       {canSlideLeft && todoGroups.length > 3 && (
         <Arrow
@@ -59,7 +59,6 @@ const RoomPage = () => {
           className="absolute left-[122.67px] h-8 w-8 cursor-pointer lg:left-[172.5px] lg:h-[45px] lg:w-[45px] xl:left-[230px] xl:h-15 xl:w-15"
         />
       )}
-
       {/* 투두 그룹 렌더 */}
       {visibleGroups.map((g) => (
         <TodoSection
@@ -72,7 +71,6 @@ const RoomPage = () => {
           setTodos={(updated) => setTodosByUser(g.id, updated)}
         />
       ))}
-
       {/* 오른쪽 화살표 */}
       {canSlideRight && todoGroups.length > 3 && (
         <Arrow
