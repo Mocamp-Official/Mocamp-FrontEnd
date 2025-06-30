@@ -41,6 +41,23 @@ export function useGroupCall({
     participantsRef.current = participants;
   }, [participants]);
 
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const { data: roomData } = await apiWithToken.get(`/api/room/${roomId}`);
+      const { data: participantsData } = await apiWithToken.get(`/api/room/participant/${roomId}`);
+      setParticipants(participantsData);
+      setAdminUsername(roomData.adminUsername);
+    } catch (err: any) {
+      setError(err.message || '데이터 불러오기 실패');
+    }
+  };
+
+  fetchData();
+}, [roomId]);
+
+
   // 로컬 미디어(캠/마이크) 스트림 가져오기
   const getLocalMediaStream = useCallback(async () => {
     try {
@@ -55,7 +72,7 @@ export function useGroupCall({
         if (existing) {
           return prev.map((p) =>
             p.userId === myUserId
-              ? { ...p, stream: mediaStream, camStatus: true, micStauts: true }
+              ? { ...p, stream: mediaStream, camStatus: true, micStatus: true }
               : p,
           );
         } else {
@@ -67,6 +84,7 @@ export function useGroupCall({
               isWorking: true,
               camStatus: true,
               micStatus: true,
+              isAdmin: false,
               stream: mediaStream,
             },
           ];
@@ -183,6 +201,7 @@ export function useGroupCall({
                   isWorking: false,
                   camStatus: true,
                   micStatus: true,
+                  isAdmin: false,
                   stream: e.streams[0],
                 },
               ];
@@ -333,6 +352,8 @@ export function useGroupCall({
             username: remoteUsername,
             camStatus: true,
             micStatus: true,
+            isAdmin: false, 
+            isWorking: true,
             stream: null,
           },
         ]);
@@ -366,6 +387,7 @@ export function useGroupCall({
             camStatus: true,
             micStatus: true,
             isWorking: true,
+            isAdmin: false, 
             stream: null,
           },
         ];
