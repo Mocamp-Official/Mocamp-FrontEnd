@@ -92,6 +92,11 @@ export const useRoomContext = (roomId?: string) => {
         resolution: d.resolution ?? '',
         isMyGoal: d.isMyGoal,
         isSecret: d.isSecret,
+         isAdmin: false, 
+          camStatus: false, 
+          micStatus: false,
+          isWorking: false,
+
       };
 
       setParticipants((prev) => {
