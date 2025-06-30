@@ -12,10 +12,11 @@ export interface Participant {
   resolution: string;
   isMyGoal: boolean;
   isSecret: boolean;
-   isAdmin: boolean;     
+  isAdmin: boolean;     
   camStatus: boolean;   
   micStatus: boolean;   
-  isWorking: boolean;   
+  isWorking: boolean;
+  stream?: MediaStream | null;  
 }
 
 export interface RoomInfo {

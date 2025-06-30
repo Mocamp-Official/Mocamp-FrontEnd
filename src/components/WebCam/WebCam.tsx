@@ -4,7 +4,7 @@ import VoiceIcon from '@/public/svgs/VoiceIcon.svg';
 import ChiefIcon from '@/public/svgs/chief_fire.svg';
 import SelectIcon from '@/public/svgs/select.svg';
 import NoneIcon from '@/public/svgs/none.svg';
-import { Participant } from '@/types/webCam';
+import { Participant } from '@/types/room';
 import WebCamMedia from '@/components/webcamPreview/WebCamMedia';
 
 interface WebCamTileProps {
