@@ -9,24 +9,33 @@ import WorkspaceHeader from '@/components/Header/WorkSpaceHeader';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import WebCamTile from '@/components/WebCam/WebCam';
 
+import DelegationModal from '@/components/WebCam/modal/DelegationModal';
+import NotDelegationModal from '@/components/WebCam/modal/NotDelegationModal';
+
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import { useGroupCall } from '@/hooks/useGroupCall';
 import type { Participant } from '@/types/room';
 
 const MAX_VISIBLE = 2;
-
 const RoomPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
-  const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
-    useRoomContext(roomId);
+  const {
+    todoGroups,
+    setTodosByUser,
+    roomData,
+    participants,
+    alertInfo,
+    setAlertVisible,
+  } = useRoomContext(roomId);
 
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
+
 
   const {
     participants: callParticipants,
@@ -36,15 +45,23 @@ const RoomPage = () => {
     leaveRoom: leaveGroupCall,
     openDelegationModal,
     setParticipantWorkStatus,
+    isDelegationOpen,
+    setIsDelegationOpen,
+    selectedDelegateId,
+    setSelectedDelegateId,
   } = useGroupCall({
-    roomId: Number(roomId),
+    roomId: Number(roomId ?? 0),
     myUserId,
     myUsername,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);
+  const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
 
-  if (!router.isReady || !roomId || !roomData || todoGroups.length === 0) return null;
+
+  if (!router.isReady || !roomId || !roomData || participants.length === 0) {
+    return null;
+  }
 
   const slidingItems = todoGroups.slice(1);
   const visibleSlide = slidingItems.slice(slideIndex, slideIndex + MAX_VISIBLE);
@@ -52,6 +69,7 @@ const RoomPage = () => {
 
   const canSlideLeft = slideIndex > 0;
   const canSlideRight = slideIndex + MAX_VISIBLE < slidingItems.length;
+
 
   const handleLeaveRoom = async () => {
     try {
@@ -82,13 +100,16 @@ const RoomPage = () => {
               <WebCamTile
                 key={participant.userId}
                 participant={participant}
+                isLocal={participant.userId === myUserId}
                 adminUsername={adminUsername}
                 onToggleMedia={toggleMedia}
                 onOpenDelegationModal={openDelegationModal}
+                onShowNotDelegationModal={() => setIsNotDelegationModalOpen(true)}
                 onSetWorkStatus={setParticipantWorkStatus}
               />
             ))}
         </div>
+
         <div className="relative flex items-center">
           {/* 왼쪽 화살표 */}
           {canSlideLeft && todoGroups.length > 3 && (
@@ -96,6 +117,26 @@ const RoomPage = () => {
               onClick={() => setSlideIndex((prev) => prev - 1)}
               className="absolute left-[-48px] h-8 w-8 cursor-pointer lg:left-[-67.5px] lg:h-[45px] lg:w-[45px] xl:left-[-90px] xl:h-[60px] xl:w-[60px]"
             />
+          )}
+
+          {isDelegationOpen && (
+            <DelegationModal
+              participants={callParticipants}
+              currentUserId={myUserId}
+              selectedUserId={selectedDelegateId}
+              onSelect={setSelectedDelegateId}
+              onClose={() => setIsDelegationOpen(false)}
+              onConfirm={() => {
+                if (selectedDelegateId) {
+                  delegateAdmin(selectedDelegateId);
+                  setIsDelegationOpen(false);
+                }
+              }}
+            />
+          )}
+
+          {isNotDelegationModalOpen && (
+            <NotDelegationModal onClose={() => setIsNotDelegationModalOpen(false)} />
           )}
 
           {/* TodoSection 리스트 */}
