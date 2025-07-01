@@ -11,8 +11,8 @@ export interface UserInfo {
   userId: number;
   nickname: string;
   isWorking: boolean;
-  cameraOn: boolean;
-  micOn: boolean;
+  camStatus: boolean;
+  micStatus: boolean;
   stream?: MediaStream | null;
   error?: string | null;
 }
