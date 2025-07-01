@@ -1,5 +1,5 @@
-import ModalLayout from './ModalLayout';
-import CloseButton from '@/public/svgs/CloseButton.svg';
+import CloseIcon from '@/public/svgs/closeIcon.svg';
+
 import RoomInfoSection from './RoomInfo';
 import ActionButtons from './Buttons';
 import { useWebRTC } from '@/hooks/useWebRTC';
@@ -29,43 +29,39 @@ const WebCamPreviewModal = ({
   });
 
   return (
-    <div className="flex min-h-screen w-screen items-center justify-center bg-[#F8F8F8]">
-      <ModalLayout onClose={onClose} width="660px" height="880px">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-[50px] right-[50px] h-[25px] w-[25px] cursor-pointer text-[#d9d9d9]"
-        >
-          <CloseButton />
+    <div className="relative flex h-full w-full flex-col items-center">
+      <div className="relative flex w-full items-center justify-center">
+        <span className="font-pre bg-gray1 text-primary border-primary rounded-full border px-[10.67px] py-[5.333px] text-[8.533px] font-semibold tracking-[-0.32px] lg:px-[15px] lg:py-[7.5px] lg:text-xs xl:px-[20px] xl:py-[10px] xl:text-base">
+          Web Cam Preview
+        </span>
+
+        <button type="button" onClick={onClose} className="absolute right-0">
+          <CloseIcon className="h-[13.333px] w-[13.333px] cursor-pointer lg:h-[22.5px] lg:w-[22.5px] xl:h-[29px] xl:w-[29px]" />
         </button>
-        <div className="absolute top-[50px] left-1/2 -translate-x-1/2">
-          <span className="font-pre inline-flex flex-row items-center justify-center gap-[10px] rounded-full border border-[var(--color-primary)] bg-[var(--color-gray1)] px-[20px] py-[10px] text-[16px] font-semibold tracking-[-0.32px] text-[var(--color-primary)]">
-            Web Cam Preview
-          </span>
-        </div>
-        <div className="font-pre absolute top-[119px] left-1/2 w-[336px] -translate-x-1/2 text-center text-[24px] leading-[160%] font-semibold tracking-[-0.48px] text-[var(--color-gray9)]">
-          입장할 방의 정보와 카메라 환경이
-          <br />
-          올바르게 세팅되었는지 확인해주세요
-        </div>
-        <div className="absolute top-[225px] left-[50px] flex h-[481px] w-[560px] flex-col items-center rounded-[10px] border border-[var(--color-gray4)] bg-[var(--color-gray1)] p-0">
-          <RoomInfoSection room={room} />
-          <div className="absolute top-[170px] left-0 h-[1px] w-full bg-[var(--color-gray4)]" />
-          <div className="absolute top-[190px] left-1/2 -translate-x-1/2">
-            <WebCamSection user={user} stream={stream} error={error} roomId={room.roomId} />
-          </div>
-        </div>
-        <div
-          className={`absolute right-[50px] bottom-[50px] left-[50px] flex w-[560px] ${isHost ? 'justify-start gap-[16px]' : 'justify-center gap-0'} `}
-        >
-          <ActionButtons
-            isHost={isHost}
-            roomName={room.name}
-            onEditRoom={onEditRoom}
-            onEnterRoom={onEnterRoom}
-          />
-        </div>
-      </ModalLayout>
+      </div>
+
+      <div className="font-pre text-gray9 mt-[16.13px] w-[336px] text-center text-[12.8px] leading-[160%] font-semibold tracking-[-0.48px] lg:mt-[22.5px] lg:text-lg xl:mt-[30px] xl:text-[24px]">
+        입장할 방의 정보와 카메라 환경이
+        <br />
+        올바르게 세팅되었는지 확인해주세요
+      </div>
+
+      <div className="border-gray4 bg-gray1 mt-[16.53px] flex h-[256.53px] w-[298.67px] flex-col items-center rounded-[5.333px] border p-0 lg:mt-[21.5px] lg:h-[360.75px] lg:w-[420px] lg:rounded-[7.5px] xl:mt-[30px] xl:h-[481px] xl:w-[560px] xl:rounded-[10px]">
+        <RoomInfoSection room={room} />
+        <div className="bg-gray4 h-[1px] w-full" />
+
+        <WebCamSection user={user} stream={stream} error={error} roomId={room.roomId} />
+      </div>
+      <div
+        className={`absolute bottom-0 left-0 flex w-[560px] ${isHost ? 'justify-start gap-[16px]' : 'justify-center gap-0'} `}
+      >
+        <ActionButtons
+          isHost={isHost}
+          roomName={room.name}
+          onEditRoom={onEditRoom}
+          onEnterRoom={onEnterRoom}
+        />
+      </div>
     </div>
   );
 };

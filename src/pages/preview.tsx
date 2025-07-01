@@ -2,6 +2,8 @@ import WebCamPreviewModal from '@/components/webcamPreview/WebCamPreview';
 import { RoomInfo, UserInfo } from '@/types/preview';
 import { useEffect } from 'react';
 import { useMediaDevices } from '@/hooks/useMediaDevices';
+import CreateJoinHeader from '@/components/Header/CreateJoinHeader';
+import CardPageLayout from '@/components/common/CardPageLayout';
 
 const roomData: RoomInfo = {
   roomId: 1,
@@ -34,15 +36,20 @@ const WebCamPreviewPage = () => {
   const isHost = true;
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#FAFAFA]">
-      <WebCamPreviewModal
-        room={roomData}
-        user={{ ...userData, stream, error }}
-        isHost={isHost}
-        onClose={handleClose}
-        onEditRoom={handleEditRoom}
-        onEnterRoom={handleEnterRoom}
-      />
+    <div className="flex h-screen flex-col items-center justify-center bg-[#FAFAFA]">
+      <CreateJoinHeader />
+      <main className="flex flex-1">
+        <CardPageLayout>
+          <WebCamPreviewModal
+            room={roomData}
+            user={{ ...userData, stream, error }}
+            isHost={isHost}
+            onClose={handleClose}
+            onEditRoom={handleEditRoom}
+            onEnterRoom={handleEnterRoom}
+          />
+        </CardPageLayout>
+      </main>
     </div>
   );
 };
