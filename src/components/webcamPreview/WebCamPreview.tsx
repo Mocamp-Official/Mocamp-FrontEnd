@@ -49,8 +49,9 @@ const WebCamPreviewModal = ({
       <div className="border-gray4 bg-gray1 mt-[16.53px] flex h-[256.53px] w-[298.67px] flex-col items-center rounded-[5.333px] border p-0 lg:mt-[21.5px] lg:h-[360.75px] lg:w-[420px] lg:rounded-[7.5px] xl:mt-[30px] xl:h-[481px] xl:w-[560px] xl:rounded-[10px]">
         <RoomInfoSection room={room} />
         <div className="bg-gray4 h-[1px] w-full" />
-
-        <WebCamSection user={user} stream={stream} error={error} roomId={room.roomId} />
+        <div className="flex h-full w-full flex-1 items-center justify-center">
+          <WebCamSection user={user} stream={stream} error={error} roomId={room.roomId} />
+        </div>
       </div>
       <div
         className={`absolute bottom-0 left-0 flex w-[560px] ${isHost ? 'justify-start gap-[16px]' : 'justify-center gap-0'} `}
