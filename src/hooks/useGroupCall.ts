@@ -68,39 +68,42 @@ export function useGroupCall({
       setLocalStream(mediaStream);
 
       setParticipants((prev) => {
-        if (!Array.isArray(prev)) return [];
-        const existing = prev.find((p) => p.userId === myUserId);
-        if (existing) {
-          return prev.map((p) =>
-            p.userId === myUserId
-              ? { ...p, stream: mediaStream, camStatus: true, micStatus: true }
-              : p,
-          );
-        } else {
-          return [
-            ...prev,
-            {
-              userId: myUserId,
-              username: myUsername,
-              isWorking: true,
-              camStatus: true,
-              micStatus: true,
-              isAdmin: false,
-              stream: mediaStream,
-              goals: [],
-              resolution: '',
-              isMyGoal: false,
-              isSecret: false,
-            },
-          ];
-        }
-      });
+  if (!Array.isArray(prev)) return [];
+
+  const existing = prev.find((p) => p.userId === myUserId);
+  if (existing) {
+    return prev.map((p) =>
+      p.userId === myUserId
+        ? { ...p, stream: mediaStream, camStatus: true, micStatus: true }
+        : p,
+    );
+  } else {
+    return [
+      ...prev,
+      {
+        userId: myUserId,
+        username: myUsername,
+        isWorking: true,
+        camStatus: true,
+        micStatus: true,
+        isAdmin: myUsername === adminUsername, 
+        stream: mediaStream,
+        goals: [],
+        resolution: '',
+        isMyGoal: false,
+        isSecret: false,
+      },
+    ];
+  }
+});
+
       return mediaStream;
     } catch (err: any) {
       setError(err.message || '카메라/마이크 접근 실패');
       throw err;
     }
-  }, [myUserId, myUsername]);
+  }, [myUserId, myUsername, adminUsername]);
+
 
   // 작업 상태 변경 &  서버 전송
   const setParticipantWorkStatus = useCallback(
@@ -304,11 +307,12 @@ export function useGroupCall({
   }, [localStream, roomId, onRoomLeft]);
 
   // 소켓 연결 후 초기 참가 및 각 시그널링 메시지 처리
-  useEffect(() => {
-    if (!adminUsername && myUserId === 1) {
-      setAdminUsername(myUsername);
-    }
-  }, [adminUsername, myUserId, myUsername]);
+useEffect(() => {
+  if (!adminUsername && myUserId === 1) {
+    setAdminUsername(myUsername);
+  }
+}, [adminUsername, myUserId, myUsername]);
+
 
   useEffect(() => {
     const socket = new KurentoSignalingSocket();
@@ -380,59 +384,53 @@ export function useGroupCall({
     });
 
     socket.on('newParticipantArrived', (msg) => {
-      const { name } = msg;
-      if (!name) return;
+  const { name } = msg;
+  if (!name) return;
 
-      setParticipants((prev) => {
-        const exists = prev.find((p) => p.username === name);
-        if (exists) return prev;
+  if (participantsRef.current.some((p) => p.username === name)) return; 
+  const userId =
+    name.split('').reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0) % 10000;
 
-        const userId =
-          name.split('').reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0) % 10000;
+  setParticipants((prev) => [
+    ...prev,
+    {
+      userId,
+      username: name,
+      camStatus: true,
+      micStatus: true,
+      isWorking: true,
+      isAdmin: name === adminUsername,
+      stream: null,
+      goals: [],
+      resolution: '',
+      isMyGoal: false,
+      isSecret: false,
+    },
+  ]);
+});
 
-        return [
-          ...prev,
-          {
-            userId,
-            username: name,
-            camStatus: true,
-            micStatus: true,
-            isWorking: true,
-            isAdmin: false,
-            stream: null,
-            goals: [],
-            resolution: '',
-            isMyGoal: false,
-            isSecret: false,
-          },
-        ];
-      });
-    });
 
     socket.on('error', (msg) => {
       setError(msg.message || '시그널링 오류');
     });
 
     socket.on(
-      'roomParticipants',
-      (msg: { participants: Participant[]; adminUsername?: string }) => {
-        setParticipants(
-          msg.participants.map((p) => ({
-            ...p,
-            stream: null,
-            isAdmin: p.username === msg.adminUsername,
-          })),
-        );
-        if (msg.adminUsername) {
-          setAdminUsername(msg.adminUsername);
-        } else if (
-          msg.participants.length > 0 &&
-          !msg.participants.some((p) => p.username === adminUsername)
-        ) {
-          setAdminUsername(msg.participants[0].username);
-        }
-      },
+  'roomParticipants',
+  (msg: { participants: Participant[]; adminUsername?: string }) => {
+    const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
+
+    setAdminUsername(effectiveAdmin);
+
+    setParticipants(
+      msg.participants.map((p) => ({
+        ...p,
+        stream: null,
+        isAdmin: p.username === effectiveAdmin, 
+      })),
     );
+  },
+);
+
 
     socket.on('STATUS_UPDATED', (msg) => {
       const { userId, workStatus, camStatus, micStatus } = msg;
