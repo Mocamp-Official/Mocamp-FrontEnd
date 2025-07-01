@@ -9,11 +9,13 @@ interface CamProps {
   stream: MediaStream | null;
   error?: string | null;
   roomId: number;
+  onStatusChange: (status: { camStatus: boolean; micStatus: boolean }) => void;
 }
 
-const WebCamSection = ({ user, stream, roomId }: CamProps) => {
-  const [camStatus, setCameraOn] = useState(user.camStatus ?? true);
-  const [micStatus, setMicOn] = useState(user.micStatus ?? true);
+const WebCamSection = ({ user, stream, error, roomId, onStatusChange }: CamProps) => {
+  const [camStatus, setCameraOn] = useState(true);
+const [micStatus, setMicOn] = useState(true);
+
 
   useEffect(() => {
     stream?.getVideoTracks().forEach((track) => {
@@ -26,6 +28,10 @@ const WebCamSection = ({ user, stream, roomId }: CamProps) => {
       track.enabled = micStatus;
     });
   }, [stream, micStatus]);
+
+  useEffect(() => {
+    onStatusChange({ camStatus, micStatus });
+  }, [camStatus, micStatus]);
 
   const toggleCamera = () => {
     setCameraOn((prev) => !prev);

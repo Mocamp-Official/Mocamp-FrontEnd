@@ -15,7 +15,7 @@ interface WebCamPreviewModalProps {
   isHost: boolean;
   onClose: () => void;
   onEditRoom: () => void;
-  onEnterRoom: () => void;
+  onEnterRoom: (options: { camStatus: boolean; micStatus: boolean }) => void; 
 }
 
 const WebCamPreviewModal = ({
@@ -29,6 +29,8 @@ const WebCamPreviewModal = ({
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
 
   const { stream, error } = useMediaDevices(); 
+const [camStatus, setCamStatus] = useState(true);
+const [micStatus, setMicStatus] = useState(true);
 
   useEffect(() => {
     const loadRoom = async () => {
@@ -80,7 +82,14 @@ const WebCamPreviewModal = ({
         <RoomInfoSection  room={roomInfo} />
         <div className="bg-gray4 h-[1px] w-full" />
         <div className="flex h-full w-full flex-1 items-center justify-center">
-          <WebCamSection user={user} stream={stream} error={error} roomId={roomInfo.roomId} />
+          <WebCamSection   user={user}
+  stream={stream}
+  error={error}
+  roomId={roomInfo.roomId}
+   onStatusChange={({ camStatus, micStatus }) => {
+    setCamStatus(camStatus);
+    setMicStatus(micStatus);
+  }} />
         </div>
       </div>
       <div
@@ -90,7 +99,7 @@ const WebCamPreviewModal = ({
            isHost={isHost}
           roomName={roomInfo.name}
           onEditRoom={onEditRoom}
-          onEnterRoom={onEnterRoom}
+          onEnterRoom={() => onEnterRoom({ camStatus, micStatus })}
         />
       </div>
     </div>

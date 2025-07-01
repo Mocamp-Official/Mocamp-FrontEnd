@@ -4,6 +4,7 @@ import WebCamPreviewModal from '@/components/webcamPreview/WebCamPreview';
 import { UserInfo, RoomInfo } from '@/types/preview';
 import CreateJoinHeader from '@/components/Header/CreateJoinHeader';
 import CardPageLayout from '@/components/common/CardPageLayout';
+import { enterRoom } from '@/apis/room';
 
 import { getUserFromToken } from '@/utils/decode';
 
@@ -15,7 +16,7 @@ const WebCamPreviewPage = () => {
 
   const [user, setUser] = useState<UserInfo | null>(null);
 
-  // 유저 정보 가져오기
+  // 유저 정보 가져오기 - 추후 마이홈 api로 바꿀 예정
   useEffect(() => {
     const user = getUserFromToken();
     if (user) {
@@ -24,6 +25,20 @@ const WebCamPreviewPage = () => {
       console.error('토큰에서 유저 정보 가져오기 실패');
     }
   }, []);
+
+
+  const handleEnterRoom = async ({ camStatus, micStatus }: { camStatus: boolean; micStatus: boolean }) => {
+      try {
+        await enterRoom(String(roomId), {
+      micTurnedOn: micStatus,
+      camTurnedOn: camStatus,
+    });
+
+        router.push(`/room/${roomId}`);
+      } catch (err) {
+        alert('방 입장 실패! 다시 시도해주세요.');
+      }
+    };
 
   if (!roomId || !user) {
     return (
@@ -44,7 +59,7 @@ const WebCamPreviewPage = () => {
             isHost={true}
             onClose={() => router.back()}
             onEditRoom={() => {}}
-            onEnterRoom={() => router.push(`/room/${roomId}`)}
+            onEnterRoom={handleEnterRoom}
           />
         </CardPageLayout>
       </main>
