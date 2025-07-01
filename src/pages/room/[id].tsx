@@ -11,7 +11,8 @@ import WebCamTile from '@/components/WebCam/WebCam';
 
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
-
+import { useGroupCall } from '@/hooks/useGroupCall';
+import type { Participant } from '@/types/room';
 
 const MAX_VISIBLE = 2;
 
@@ -22,6 +23,24 @@ const RoomPage = () => {
 
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(roomId);
+
+  const me = participants.find((p) => p.isMyGoal);
+  const myUserId = me?.userId ?? 0;
+  const myUsername = me?.username ?? '';
+
+  const {
+    participants: callParticipants,
+    toggleMedia,
+    delegateAdmin,
+    adminUsername,
+    leaveRoom: leaveGroupCall,
+    openDelegationModal,
+    setParticipantWorkStatus,
+  } = useGroupCall({
+    roomId: Number(roomId),
+    myUserId,
+    myUsername,
+  });
 
   const [slideIndex, setSlideIndex] = useState(0);
 
@@ -37,6 +56,7 @@ const RoomPage = () => {
   const handleLeaveRoom = async () => {
     try {
       await leaveRoom(roomId as string);
+      leaveGroupCall();
       router.push('/myhome');
     } catch (e) {
       alert('방 퇴장 실패');
@@ -54,19 +74,20 @@ const RoomPage = () => {
         alertInfo={alertInfo}
         onCloseAlert={() => setAlertVisible(false)}
       />
-      <div className="flex w-full justify-center flex-col items-center">
+      <div className="flex w-full flex-col items-center justify-center">
         {/* 웹캠 영역 */}
         <div className="mb-5 flex gap-4">
-          {participants.map((participant) => (
-            <WebCamTile
-              key={participant.userId}
-              participant={participant}
-              adminUsername={roomData.adminUsername}
-              onToggleMedia={() => {}}
-              onOpenDelegationModal={() => {}}
-              onSetWorkStatus={() => {}}
-            />
-          ))}
+          {Array.isArray(callParticipants) &&
+            callParticipants.map((participant: Participant) => (
+              <WebCamTile
+                key={participant.userId}
+                participant={participant}
+                adminUsername={adminUsername}
+                onToggleMedia={toggleMedia}
+                onOpenDelegationModal={openDelegationModal}
+                onSetWorkStatus={setParticipantWorkStatus}
+              />
+            ))}
         </div>
         <div className="relative flex items-center">
           {/* 왼쪽 화살표 */}

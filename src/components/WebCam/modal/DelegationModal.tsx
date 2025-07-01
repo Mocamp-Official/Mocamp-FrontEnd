@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Participant } from '@/types/webCam';
+import { Participant } from '@/types/room';
 import CloseButton from '@/public/svgs/CloseButton.svg';
 import SelectIcon from '@/public/svgs/select.svg';
 import NoneIcon from '@/public/svgs/none.svg';

@@ -41,22 +41,22 @@ export function useGroupCall({
     participantsRef.current = participants;
   }, [participants]);
 
-
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const { data: roomData } = await apiWithToken.get(`/api/room/${roomId}`);
-      const { data: participantsData } = await apiWithToken.get(`/api/room/participant/${roomId}`);
-      setParticipants(participantsData);
-      setAdminUsername(roomData.adminUsername);
-    } catch (err: any) {
-      setError(err.message || '데이터 불러오기 실패');
-    }
-  };
+    const fetchData = async () => {
+      try {
+        const { data: roomData } = await apiWithToken.get(`/api/room/${roomId}`);
+        const { data: participantsData } = await apiWithToken.get(
+          `/api/room/participant/${roomId}`,
+        );
+        setParticipants(participantsData);
+        setAdminUsername(roomData.adminUsername);
+      } catch (err: any) {
+        setError(err.message || '데이터 불러오기 실패');
+      }
+    };
 
-  fetchData();
-}, [roomId]);
-
+    fetchData();
+  }, [roomId]);
 
   // 로컬 미디어(캠/마이크) 스트림 가져오기
   const getLocalMediaStream = useCallback(async () => {
@@ -68,6 +68,7 @@ export function useGroupCall({
       setLocalStream(mediaStream);
 
       setParticipants((prev) => {
+        if (!Array.isArray(prev)) return [];
         const existing = prev.find((p) => p.userId === myUserId);
         if (existing) {
           return prev.map((p) =>
@@ -86,10 +87,10 @@ export function useGroupCall({
               micStatus: true,
               isAdmin: false,
               stream: mediaStream,
-               goals: [],          
-  resolution: '',  
-  isMyGoal: false,  
-  isSecret: false  
+              goals: [],
+              resolution: '',
+              isMyGoal: false,
+              isSecret: false,
             },
           ];
         }
@@ -101,49 +102,48 @@ export function useGroupCall({
     }
   }, [myUserId, myUsername]);
 
- 
   // 작업 상태 변경 &  서버 전송
   const setParticipantWorkStatus = useCallback(
     (status: boolean) => {
-        setParticipants((prev) =>
-            prev.map((p) => (p.userId === myUserId ? { ...p, isWorking: status } : p)),
-        );
-        kurentoSignalingRef.current?.send(`/pub/data/work-status/${roomId}`, {
-            userId: myUserId,
-            workStatus: status, 
-        });
+      setParticipants((prev) =>
+        prev.map((p) => (p.userId === myUserId ? { ...p, isWorking: status } : p)),
+      );
+      kurentoSignalingRef.current?.send(`/pub/data/work-status/${roomId}`, {
+        userId: myUserId,
+        workStatus: status,
+      });
     },
-    [myUserId, roomId], 
-);
+    [myUserId, roomId],
+  );
   // 캠/마이크 토글 (켜기/끄기) 처리
   const toggleMedia = useCallback(
     (type: 'video' | 'audio', status: boolean) => {
-        if (!localStream) return;
+      if (!localStream) return;
 
-        if (type === 'video') {
-            localStream.getVideoTracks().forEach((track) => (track.enabled = status));
-            setParticipants((prev) =>
-                prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
-            );
-            
-            kurentoSignalingRef.current?.send(`/pub/data/cam-status/${roomId}`, {
-                userId: myUserId,
-                camStatus: status,
-            });
-        } else { 
-            localStream.getAudioTracks().forEach((track) => (track.enabled = status));
-            setParticipants((prev) =>
-                prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
-            );
-        
-            kurentoSignalingRef.current?.send(`/pub/data/mic-status/${roomId}`, {
-                userId: myUserId,
-                micStatus: status,
-            });
-        }
+      if (type === 'video') {
+        localStream.getVideoTracks().forEach((track) => (track.enabled = status));
+        setParticipants((prev) =>
+          prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
+        );
+
+        kurentoSignalingRef.current?.send(`/pub/data/cam-status/${roomId}`, {
+          userId: myUserId,
+          camStatus: status,
+        });
+      } else {
+        localStream.getAudioTracks().forEach((track) => (track.enabled = status));
+        setParticipants((prev) =>
+          prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
+        );
+
+        kurentoSignalingRef.current?.send(`/pub/data/mic-status/${roomId}`, {
+          userId: myUserId,
+          micStatus: status,
+        });
+      }
     },
-    [localStream, myUserId, roomId], 
-);
+    [localStream, myUserId, roomId],
+  );
   // 방장 위임 요청 전송
   const delegateAdmin = useCallback(
     (newAdminId: number) => {
@@ -207,10 +207,10 @@ export function useGroupCall({
                   micStatus: true,
                   isAdmin: false,
                   stream: e.streams[0],
-                   goals: [],       
-  resolution: '',  
-  isMyGoal: false,   
-  isSecret: false  
+                  goals: [],
+                  resolution: '',
+                  isMyGoal: false,
+                  isSecret: false,
                 },
               ];
             }
@@ -222,7 +222,6 @@ export function useGroupCall({
     },
     [myUsername],
   );
-
 
   //원격 유저의 sdpOffer 수신 시 SDP & answer 전송
   const receiveVideoFrom = useCallback(
@@ -265,14 +264,13 @@ export function useGroupCall({
     }
   }, []);
 
-  
- // 참가자 상태 업데이트
+  // 참가자 상태 업데이트
   const addParticipant = (participant: Participant) => {
     setParticipants((prev) =>
       prev.some((p) => p.userId === participant.userId) ? prev : [...prev, participant],
     );
   };
- 
+
   //유저 퇴장 처리 + 피어 연결 해제
   const removeParticipant = useCallback((userId: number) => {
     setParticipants((prev) => prev.filter((p) => p.userId !== userId));
@@ -361,13 +359,13 @@ export function useGroupCall({
             username: remoteUsername,
             camStatus: true,
             micStatus: true,
-            isAdmin: false, 
+            isAdmin: remoteUsername === adminUsername,
             isWorking: true,
             stream: null,
-             goals: [],       
-  resolution: '',  
-  isMyGoal: false, 
-  isSecret: false  
+            goals: [],
+            resolution: '',
+            isMyGoal: false,
+            isSecret: false,
           },
         ]);
       }
@@ -400,12 +398,12 @@ export function useGroupCall({
             camStatus: true,
             micStatus: true,
             isWorking: true,
-            isAdmin: false, 
+            isAdmin: false,
             stream: null,
-             goals: [],       
-  resolution: '',    
-  isMyGoal: false, 
-  isSecret: false  
+            goals: [],
+            resolution: '',
+            isMyGoal: false,
+            isSecret: false,
           },
         ];
       });
@@ -422,6 +420,7 @@ export function useGroupCall({
           msg.participants.map((p) => ({
             ...p,
             stream: null,
+            isAdmin: p.username === msg.adminUsername,
           })),
         );
         if (msg.adminUsername) {
@@ -469,8 +468,6 @@ export function useGroupCall({
       socket.close();
     };
   }, [roomId, myUsername, getLocalMediaStream]);
-
-
 
   return {
     participants,
