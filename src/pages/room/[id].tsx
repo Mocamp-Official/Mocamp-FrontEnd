@@ -23,19 +23,12 @@ const RoomPage = () => {
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
-  const {
-    todoGroups,
-    setTodosByUser,
-    roomData,
-    participants,
-    alertInfo,
-    setAlertVisible,
-  } = useRoomContext(roomId);
+  const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
+    useRoomContext(roomId);
 
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
-
 
   const {
     participants: callParticipants,
@@ -58,7 +51,6 @@ const RoomPage = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
 
-
   if (!router.isReady || !roomId || !roomData || participants.length === 0) {
     return null;
   }
@@ -69,7 +61,6 @@ const RoomPage = () => {
 
   const canSlideLeft = slideIndex > 0;
   const canSlideRight = slideIndex + MAX_VISIBLE < slidingItems.length;
-
 
   const handleLeaveRoom = async () => {
     try {
@@ -92,9 +83,9 @@ const RoomPage = () => {
         alertInfo={alertInfo}
         onCloseAlert={() => setAlertVisible(false)}
       />
-      <div className="flex w-full flex-col items-center justify-center">
+      <div className="flex w-[789.33px] flex-col justify-center lg:w-[1110px] xl:w-[1480px]">
         {/* 웹캠 영역 */}
-        <div className="mb-5 flex gap-4">
+        <div className="mb-5 flex w-full gap-[10.67px] lg:gap-[15px] xl:gap-5">
           {Array.isArray(callParticipants) &&
             callParticipants.map((participant: Participant) => (
               <WebCamTile
@@ -110,7 +101,7 @@ const RoomPage = () => {
             ))}
         </div>
 
-        <div className="relative flex items-center">
+        <div className="relative flex">
           {/* 왼쪽 화살표 */}
           {canSlideLeft && todoGroups.length > 3 && (
             <Arrow
@@ -140,7 +131,7 @@ const RoomPage = () => {
           )}
 
           {/* TodoSection 리스트 */}
-          <div className="flex gap-4">
+          <div className="flex w-[789.33px] gap-[10.67px] lg:w-[1110px] lg:gap-[15px] xl:w-[1480px] xl:gap-5">
             {visibleGroups.map((g) => (
               <TodoSection
                 key={g.id}
