@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { fetchRoomData } from '@/apis/room';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 
 import CloseIcon from '@/public/svgs/closeIcon.svg';
 import RoomInfoSection from './RoomInfo';
 import ActionButtons from './Buttons';
-import { useWebRTC } from '@/hooks/useWebRTC';
 import WebCamSection from './Cam';
 import { RoomInfo, UserInfo } from '../../types/preview';
 
@@ -28,6 +28,7 @@ const WebCamPreviewModal = ({
 }: WebCamPreviewModalProps) => {
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
 
+  const { stream, error } = useMediaDevices(); 
 
   useEffect(() => {
     const loadRoom = async () => {
@@ -49,19 +50,13 @@ const WebCamPreviewModal = ({
     loadRoom();
   }, [roomId]);
 
-  if (!roomInfo) {
+  if (!roomInfo || !user || !roomId) {
     return (
       <div className="flex items-center justify-center w-full h-full">
-        <span className="text-gray7 text-sm font-pre">방 정보를 불러오는 중입니다...</span>
+        <span className="text-gray7 text-sm font-pre">정보를 불러오는 중입니다...</span>
       </div>
     );
   }
-
-  const { stream, error } = useWebRTC({
-    roomId: roomInfo.roomId,
-    userId: user.userId,
-  });
-
 
   return (
     <div className="relative flex h-full w-full flex-col items-center">
