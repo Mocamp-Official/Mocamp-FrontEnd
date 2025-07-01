@@ -50,7 +50,9 @@ const toggleMic = () => {
 
 
   return (
-    <div className="relative flex h-[270px] w-[520px] flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
+    <div
+  className="
+    relative flex flex-col justify-end rounded-[20px] bg-[#3D3D3D] w-[277.333px] h-[144px] lg:w-[390px] lg:h-[202.5px] xl:w-[520px] xl:h-[270px]">
       {cameraOn && stream && (
         <div className="absolute inset-0 z-0">
           <WebCamMedia stream={stream} />

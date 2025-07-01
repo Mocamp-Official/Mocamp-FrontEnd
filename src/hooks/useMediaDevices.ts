@@ -1,4 +1,3 @@
-// src/hooks/useMediaDevices.ts
 import { useState, useCallback } from 'react';
 
 export const useMediaDevices = () => {
@@ -10,7 +9,7 @@ export const useMediaDevices = () => {
       const media = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       setStream(media);
       setError(null);
-    } catch (e) {
+    } catch {
       setError('카메라/마이크 권한이 필요합니다.');
     }
   }, []);
