@@ -18,8 +18,8 @@ const userData: UserInfo = {
   userId: 1,
   nickname: '이수민',
   isWorking: true,
-  cameraOn: true,
-  micOn: true,
+  camStatus: true,
+  micStatus: true,
 };
 
 const WebCamPreviewPage = () => {
