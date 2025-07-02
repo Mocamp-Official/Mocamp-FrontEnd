@@ -8,6 +8,33 @@ import { useCategoryStore } from '@/stores/category-store';
 import { useMyhomeStore } from '@/stores/myhome-store';
 import { useEffect } from 'react';
 
+// const roomList = [
+//   {
+//     isCompleted: true,
+//     roomName: 'test',
+//     createdAt: '202020',
+//     time: '101010',
+//   },
+//   {
+//     isCompleted: true,
+//     roomName: 'test',
+//     createdAt: '202020',
+//     time: '101010',
+//   },
+//   {
+//     isCompleted: true,
+//     roomName: 'test',
+//     createdAt: '202020',
+//     time: '101010',
+//   },
+//   {
+//     isCompleted: true,
+//     roomName: 'test',
+//     createdAt: '202020',
+//     time: '101010',
+//   },
+// ];
+
 const MyHome = () => {
   const { category } = useCategoryStore();
   const {

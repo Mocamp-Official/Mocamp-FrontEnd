@@ -34,8 +34,8 @@ const SideBar = ({ profileImage, username }: SideBarProps) => {
           onClick={() => {
             setCategory('PARTICIPANTED_MOCAMP');
           }}
-          className={`cursor-pointer text-xl font-medium ${
-            category === 'PARTICIPANTED_MOCAMP' ? 'text-[#27cfa5]' : 'text-[#555555]'
+          className={`hover:text-subhead text-body1 cursor-pointer font-medium hover:text-[#27cfa5] ${
+            category === 'PARTICIPANTED_MOCAMP' ? 'text-subhead text-[#27cfa5]' : 'text-[#555555]'
           }`}
         >
           참여한 모캠프
@@ -45,8 +45,8 @@ const SideBar = ({ profileImage, username }: SideBarProps) => {
           onClick={() => {
             setCategory('MOCAMP_USAGE_TREND');
           }}
-          className={`cursor-pointer text-xl font-medium ${
-            category === 'MOCAMP_USAGE_TREND' ? 'text-[#27cfa5]' : 'text-[#555555]'
+          className={`hover:text-subhead text-body1 cursor-pointer font-medium hover:text-[#27cfa5] ${
+            category === 'MOCAMP_USAGE_TREND' ? 'text-subhead text-[#27cfa5]' : 'text-[#555555]'
           }`}
         >
           모캠프 사용 추이

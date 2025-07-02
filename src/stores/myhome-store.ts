@@ -5,7 +5,7 @@ import { create } from 'zustand';
 export interface Myhome {
   profileImage: string;
   username: string;
-  roomList: Room[] | [];
+  roomList: Room[];
   timeList: [];
   totalDurationMinute: number;
   totalNumberOfGoals: number;
@@ -18,10 +18,10 @@ export interface DropDown {
 }
 
 export interface Room {
-  status: boolean; // isComplete : true or false
-  room_name: string;
-  started_at: string;
-  duration: string;
+  isCompleted: boolean;
+  roomName: string;
+  createdAt: string;
+  time: string;
 }
 
 export const useMyhomeStore = create<Myhome>((set) => ({
