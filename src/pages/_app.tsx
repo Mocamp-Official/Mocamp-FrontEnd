@@ -1,4 +1,3 @@
-// pages/_app.tsx
 import localFont from 'next/font/local';
 import Script from 'next/script';
 
