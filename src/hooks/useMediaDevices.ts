@@ -1,21 +1,42 @@
-import { useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useMediaDevices = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const getResponsiveResolution = () => {
+    const width = window.innerWidth;
 
-  const getMedia = useCallback(async () => {
+    if (width >= 1920) {
+      return { width: 520, height: 270 };
+    } else if (width >= 1440) {
+      return { width: 390, height: 202 };
+    } else {
+      return { width: 277, height: 144 };
+    }
+  };
+
+  const getMedia = async () => {
     try {
-      const media = await navigator.mediaDevices.getUserMedia({
-        video: { width: 480, height: 270 },
+      const { width, height } = getResponsiveResolution();
+
+      const localStream = await navigator.mediaDevices.getUserMedia({
+        video: { width, height },
         audio: true,
       });
-      setStream(media);
-      setError(null);
-    } catch (e) {
-      setError('카메라/마이크 권한이 필요합니다.');
+
+      setStream(localStream);
+    } catch (err: any) {
+      setError(err.message || '카메라 접근 실패');
     }
+  };
+
+  useEffect(() => {
+    getMedia();
+
+    return () => {
+      stream?.getTracks().forEach((track) => track.stop());
+    };
   }, []);
 
-  return { stream, error, getMedia };
+  return { stream, error };
 };

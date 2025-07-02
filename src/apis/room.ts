@@ -59,4 +59,9 @@ export const fetchRoomParticipants = async (roomId: string): Promise<Participant
 // 방 퇴장 요청
 export const leaveRoom = async (roomId: string) => {
   await apiWithToken.post(`/api/room/exit/${roomId}`);
+  
+// 방 정보 조회
+export const fetchRoomData = async (roomId: number) => {
+  const res = await apiWithToken.get(`/api/room/${roomId}`);
+  return res.data.message;
 };
