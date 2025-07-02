@@ -44,12 +44,44 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
-      setIsKakaoInitialized(true);
-    } else if (typeof window !== 'undefined' && window.Kakao && window.Kakao.isInitialized()) {
-      setIsKakaoInitialized(true);
-    }
+    const waitForKakaoReady = () => {
+      const checkLinkReady = setInterval(() => {
+        if (window.Kakao?.Link) {
+          setIsKakaoInitialized(true);
+          console.log('Kakao SDK 완전 초기화 완료');
+          clearInterval(checkLinkReady);
+        } else {
+          console.log('Kakao.Link 아직 준비되지 않음');
+        }
+      }, 100);
+    };
+
+    const tryInitKakao = () => {
+      if (
+        typeof window !== 'undefined' &&
+        window.kakaoSdkLoaded &&
+        window.Kakao &&
+        !window.Kakao.isInitialized()
+      ) {
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+        console.log('Kakao SDK 초기화 시작');
+        waitForKakaoReady(); // 기다림
+      } else if (window.Kakao?.isInitialized() && window.Kakao?.Link) {
+        setIsKakaoInitialized(true);
+        console.log('Kakao SDK 이미 초기화됨 + Link 준비됨');
+      } else {
+        console.log('Kakao SDK 아직 로드되지 않음');
+      }
+    };
+
+    const loader = setInterval(() => {
+      if (window.kakaoSdkLoaded) {
+        tryInitKakao();
+        clearInterval(loader);
+      }
+    }, 200);
+
+    return () => clearInterval(loader);
   }, []);
 
   const handleKakaoShare = () => {
@@ -58,8 +90,8 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       return;
     }
 
-    if (!isKakaoInitialized) {
-      console.error('카카오 SDK가 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.');
+    if (!isKakaoInitialized || !window.Kakao?.Link?.sendDefault) {
+      console.error('Kakao SDK가 완전히 초기화되지 않았습니다.');
       return;
     }
 
