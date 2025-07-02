@@ -14,14 +14,6 @@ const goalDataList = [
   '나의 목표7',
 ];
 
-const GoalItem = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="border-gray4 mb-4 flex h-[59px] w-[198px] items-center justify-start rounded-[6px] border pl-5 last:mb-0">
-      <p className="text-gray9 text-base">{children}</p>
-    </div>
-  );
-};
-
 const GoalList = () => {
   return (
     <div className="border-gray4 h-[468px] w-[248px] rounded-[10px] border p-5">
@@ -32,6 +24,14 @@ const GoalList = () => {
           return <GoalItem key={index}>{goal}</GoalItem>;
         })}
       </div>
+    </div>
+  );
+};
+
+const GoalItem = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="border-gray4 mb-4 flex h-[59px] w-[198px] items-center justify-start rounded-[6px] border pl-5 last:mb-0">
+      <p className="text-gray9 text-base">{children}</p>
     </div>
   );
 };

@@ -8,38 +8,39 @@ import { useCategoryStore } from '@/stores/category-store';
 import { useMyhomeStore } from '@/stores/myhome-store';
 import { useEffect } from 'react';
 
-// const roomList = [
-//   {
-//     isCompleted: true,
-//     roomName: 'test',
-//     createdAt: '202020',
-//     time: '101010',
-//   },
-//   {
-//     isCompleted: true,
-//     roomName: 'test',
-//     createdAt: '202020',
-//     time: '101010',
-//   },
-//   {
-//     isCompleted: true,
-//     roomName: 'test',
-//     createdAt: '202020',
-//     time: '101010',
-//   },
-//   {
-//     isCompleted: true,
-//     roomName: 'test',
-//     createdAt: '202020',
-//     time: '101010',
-//   },
-// ];
+const roomList = [
+  {
+    isCompleted: true,
+    roomName: 'test',
+    createdAt: '202020',
+    time: '101010',
+  },
+  {
+    isCompleted: true,
+    roomName: 'test',
+    createdAt: '202020',
+    time: '101010',
+  },
+  {
+    isCompleted: true,
+    roomName: 'test',
+    createdAt: '202020',
+    time: '101010',
+  },
+  {
+    isCompleted: true,
+    roomName: 'test',
+    createdAt: '202020',
+    time: '101010',
+  },
+];
 
 const MyHome = () => {
   const { category } = useCategoryStore();
   const {
     profileImage,
     username,
+    goalList,
     roomList,
     timeList,
     totalDurationMinute,
@@ -56,8 +57,16 @@ const MyHome = () => {
         totalNumberOfGoals={totalNumberOfGoals}
       />
     ),
-    PARTICIPANTED_MOCAMP: <ParticipantedMocamp />,
-    MOCAMP_USAGE_TREND: <MocampUsageTrend />,
+    PARTICIPANTED_MOCAMP: <ParticipantedMocamp roomList={roomList} />,
+    MOCAMP_USAGE_TREND: (
+      <MocampUsageTrend
+        username={username}
+        timeList={timeList}
+        goalList={goalList}
+        totalDurationMinute={totalDurationMinute}
+        totalNumberOfGoals={totalNumberOfGoals}
+      />
+    ),
   };
 
   useEffect(() => {
@@ -68,6 +77,7 @@ const MyHome = () => {
         setMyhome({
           profileImage: data.imagePath,
           username: data.username,
+          goalList: data.goalList,
           roomList: data.roomList,
           timeList: data.timeList,
           totalDurationMinute: data.totalDurationMinute,

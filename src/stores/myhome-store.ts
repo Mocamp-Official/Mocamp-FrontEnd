@@ -5,6 +5,7 @@ import { create } from 'zustand';
 export interface Myhome {
   profileImage: string;
   username: string;
+  goalList: [];
   roomList: Room[];
   timeList: [];
   totalDurationMinute: number;
@@ -27,6 +28,7 @@ export interface Room {
 export const useMyhomeStore = create<Myhome>((set) => ({
   profileImage: '',
   username: '',
+  goalList: [],
   roomList: [],
   timeList: [],
   totalDurationMinute: 0,
@@ -35,6 +37,7 @@ export const useMyhomeStore = create<Myhome>((set) => ({
     set(() => ({
       profileImage: data.profileImage,
       username: data.username,
+      goalList: data.goalList,
       roomList: data.roomList,
       timeList: data.timeList,
       totalDurationMinute: data.totalDurationMinute,

@@ -1,31 +1,30 @@
+import { Room } from '@/stores/myhome-store';
 import ParticipantedMocampItem from './content/ParticipantedMocampItem';
 
-const ParticipantedMocamp = () => {
+interface ParticipantedMocampProps {
+  roomList: Room[];
+}
+
+const ParticipantedMocamp = ({ roomList }: ParticipantedMocampProps) => {
   return (
     <div className="flex h-[880px] w-[982px] flex-col rounded-[20px] bg-[#ffffff] p-12.5 text-2xl">
-      <p className="mb-7.5">최근 참여한 모캠프</p>
+      <p className="mb-7.5 cursor-default text-2xl font-semibold text-[#4b4b4b]">
+        최근 참여한 모캠프
+      </p>
       <div className="flex flex-col gap-5 overflow-y-auto">
-        <ParticipantedMocampItem
-          size="lg"
-          isCompleted={false}
-          roomName="은학샘과 아이들"
-          createdAt="2025. 04. 27"
-          time="3h 30m"
-        />
-        <ParticipantedMocampItem
-          size="lg"
-          isCompleted={false}
-          roomName="은학샘과 아이들"
-          createdAt="2025. 04. 27"
-          time="3h 30m"
-        />
-        <ParticipantedMocampItem
-          size="lg"
-          isCompleted={true}
-          roomName="은학샘과 아이들"
-          createdAt="2025. 04. 27"
-          time="3h 30m"
-        />
+        {roomList.length > 0 ? (
+          <ParticipantedMocampItem
+            size="lg"
+            isCompleted={false}
+            roomName="은학샘과 아이들"
+            createdAt="2025. 04. 27"
+            time="3h 30m"
+          />
+        ) : (
+          <div className="text-gray6 text-body1 flex h-[736px] w-full items-center justify-center">
+            <p>최근 참여한 모캠프가 없습니다.</p>
+          </div>
+        )}
       </div>
     </div>
   );
