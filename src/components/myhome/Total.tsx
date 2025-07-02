@@ -5,7 +5,14 @@ import TimeGraph from './content/TimeGraph';
 import { useDropDown } from '@/stores/myhome-store';
 import DropDown from './content/DropDown';
 
-const Total = () => {
+interface TotalProps {
+  roomList: any;
+  timeList: any;
+  totalDurationMinute: number;
+  totalNumberOfGoals: number;
+}
+
+const Total = ({ roomList, timeList, totalDurationMinute, totalNumberOfGoals }: TotalProps) => {
   const { selectedType, setSelectedType } = useDropDown();
   const isCompleted: boolean = false;
   const roomName: string = '은학샘과 아이들';

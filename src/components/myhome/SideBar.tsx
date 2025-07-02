@@ -1,7 +1,12 @@
 import { useCategoryStore } from '@/stores/category-store';
 import Image from 'next/image';
 
-const SideBar = () => {
+interface SideBarProps {
+  profileImage: string;
+  username: string;
+}
+
+const SideBar = ({ profileImage, username }: SideBarProps) => {
   const { category, setCategory } = useCategoryStore();
 
   return (
@@ -13,7 +18,7 @@ const SideBar = () => {
 
       <div className="relative mt-[3.125rem] flex h-[12.3125rem] w-[12.5rem] items-center justify-center rounded-full border-2 border-[#27CFA5]">
         <Image
-          src="/defaultProfile.png"
+          src={profileImage.length > 0 ? profileImage : '/defaultProfile.png'}
           width={200}
           height={197}
           alt="프로필 사진"
@@ -21,7 +26,7 @@ const SideBar = () => {
         />
       </div>
       <p className="mt-[1.875rem] cursor-default text-[1.75rem] font-semibold text-[#555555]">
-        이주은님
+        {username}
       </p>
 
       <div className="mt-[1.875rem] flex h-[126px] w-[14.25rem] flex-col gap-4 rounded-[0.625rem] border border-[#e8e8e8] bg-white p-[1.25rem]">
