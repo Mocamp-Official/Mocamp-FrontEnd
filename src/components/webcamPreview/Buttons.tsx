@@ -10,13 +10,13 @@ const Buttons = ({ isHost, roomName, onEditRoom, onEnterRoom }: ButtonsProps) =>
     return (
       <div className="flex gap-4">
         <button
-          className="font-pre flex h-[84px] w-[250px] items-center justify-center rounded-[10px] border border-[var(--color-primary)] bg-[var(--color-gray1)] p-[30px_40px] text-[20px] font-semibold tracking-[-0.4px] text-[var(--color-primary)]"
+          className="font-pre border-primary bg-gray1 text-primary flex h-[44.8px] w-[133.33px] items-center justify-center rounded-[5.333px] border p-[16px_21.33px] text-[10.67px] font-semibold tracking-[-0.4px] lg:h-[63px] lg:w-[187.5px] lg:rounded-[7.5px] lg:p-[22.5px_30px] lg:text-[15px] xl:h-[84px] xl:w-[250px] xl:rounded-[10px] xl:p-[30px_40px] xl:text-[20px]"
           onClick={onEditRoom}
         >
           방 정보 수정하기
         </button>
         <button
-          className="font-pre flex h-[84px] w-[290px] items-center justify-center rounded-[10px] bg-[var(--color-primary)] p-[30px_40px] text-[20px] font-semibold tracking-[-0.4px] text-white"
+          className="font-pre bg-primary flex h-[44.8px] w-[154.66px] items-center justify-center rounded-[5.333px] p-[16px_21.33px] text-[10.67px] font-semibold tracking-[-0.4px] text-white lg:h-[63px] lg:w-[217.5px] lg:rounded-[7.5px] lg:p-[22.5px_30px] lg:text-[15px] xl:h-[84px] xl:w-[290px] xl:rounded-[10px] xl:p-[30px_40px] xl:text-[20px]"
           onClick={onEnterRoom}
         >
           {roomName} 입장하기
@@ -26,7 +26,7 @@ const Buttons = ({ isHost, roomName, onEditRoom, onEnterRoom }: ButtonsProps) =>
   }
   return (
     <button
-      className="font-pre flex h-[84px] w-[560px] items-center justify-center rounded-[10px] bg-[var(--color-primary)] p-[30px_40px] text-[20px] font-semibold tracking-[-0.4px] text-white"
+      className="font-pre bg-primary flex h-[44.8px] w-[298.67px] items-center justify-center rounded-[5.333px] p-[16px_21.33px] text-[10.67px] font-semibold tracking-[-0.4px] text-white lg:h-[63px] lg:w-[420px] lg:rounded-[7.5px] lg:p-[22.5px_30px] lg:text-[15px] xl:h-[84px] xl:w-[560px] xl:rounded-[10px] xl:p-[30px_40px] xl:text-[20px]"
       onClick={onEnterRoom}
     >
       {roomName} 입장하기
