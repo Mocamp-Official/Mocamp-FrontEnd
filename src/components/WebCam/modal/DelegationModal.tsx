@@ -5,6 +5,7 @@ import SelectIcon from '@/public/svgs/select.svg';
 import NoneIcon from '@/public/svgs/none.svg';
 import ModalLayout from '@/components/common/modal/ModalLayout';
 
+
 interface DelegationModalProps {
   participants: Participant[];
   currentUserId: number;

@@ -12,6 +12,7 @@ import WebCamTile from '@/components/WebCam/WebCam';
 import DelegationModal from '@/components/WebCam/modal/DelegationModal';
 import NotDelegationModal from '@/components/WebCam/modal/NotDelegationModal';
 
+
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import { useGroupCall } from '@/hooks/useGroupCall';
@@ -55,6 +56,7 @@ const RoomPage = () => {
     return null;
   }
 
+
   const slidingItems = todoGroups.slice(1);
   const visibleSlide = slidingItems.slice(slideIndex, slideIndex + MAX_VISIBLE);
   const visibleGroups = [todoGroups[0], ...visibleSlide];
@@ -66,6 +68,7 @@ const RoomPage = () => {
     try {
       await leaveRoom(roomId as string);
       leaveGroupCall();
+
       router.push('/myhome');
     } catch (e) {
       alert('방 퇴장 실패');

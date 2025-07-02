@@ -31,12 +31,12 @@ const WebCamTile = ({
   const [micStatus, setMicOn] = useState(participant.micStatus);
   const [statusOpen, setStatusOpen] = useState(false);
   const [isWorking, setIsWorking] = useState(participant.isWorking);
-
   const setParticipantStatus = (working: boolean) => {
     setIsWorking(working);
     setStatusOpen(false);
     onSetWorkStatus(working);
   };
+
 
   useEffect(() => {
     if (videoRef.current && participant.stream instanceof MediaStream) {
@@ -105,6 +105,7 @@ const WebCamTile = ({
         </span>
 
         <div className="ml-auto flex items-center">
+
           <div className="relative">
             <button
               onClick={() => setStatusOpen(!statusOpen)}
@@ -147,8 +148,7 @@ const WebCamTile = ({
 
           <button
             onClick={toggleMic}
-            className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
-          >
+            className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]">
             <VoiceIcon
               width={14}
               height={20}
