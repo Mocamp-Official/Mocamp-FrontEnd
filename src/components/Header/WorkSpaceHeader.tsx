@@ -8,14 +8,22 @@ import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import CopyComplete from '@/components/Header/modal/Copy';
 
+// Kakao SDK를 전역으로 선언하여 TypeScript 오류 방지
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 interface WorkspaceHeaderProps {
   roomName?: string;
   isOwner?: boolean;
-  roomSeq?: string;
+  roomSeq?: string; // 방 고유번호
 }
 
 const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: WorkspaceHeaderProps) => {
-  const { id } = useRouter().query;
+  const router = useRouter();
+  const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
   const { notice, setNotice } = useRoomContext(roomId as string);
@@ -23,6 +31,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
 
   const [showNoticeModal, setShowNoticeModal] = useState(false);
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
+  const [isKakaoInitialized, setIsKakaoInitialized] = useState(false);
 
   const handleNoticeClick = () => {
     if (isOwner) setShowNoticeModal(true);
@@ -37,18 +46,20 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+      setIsKakaoInitialized(true);
+    } else if (typeof window !== 'undefined' && window.Kakao && window.Kakao.isInitialized()) {
+      setIsKakaoInitialized(true);
     }
   }, []);
 
   const handleKakaoShare = () => {
-    if (
-      typeof window === 'undefined' ||
-      !window.Kakao ||
-      !window.Kakao.isInitialized() ||
-      !window.Kakao.Link ||
-      typeof window.Kakao.Link.sendDefault !== 'function'
-    ) {
-      alert('카카오 공유 준비 중입니다. 잠시 후 다시 시도해주세요.');
+    if (!roomSeq) {
+      console.warn('방 고유번호(roomSeq)가 없어 카카오 공유를 할 수 없습니다.');
+      return;
+    }
+
+    if (!isKakaoInitialized) {
+      console.error('카카오 SDK가 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.');
       return;
     }
 
@@ -88,6 +99,11 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       console.error('고유번호 복사 실패:', err);
     }
   };
+
+  const handleGoToTutorial = () => {
+    router.push('/tutorial');
+  };
+
   return (
     <header className="fixed top-0 left-0 z-50 h-[53.34px] w-screen border-b-0 bg-white lg:h-[75px] xl:h-[100px]">
       <div className="relative mx-auto h-full w-full">
@@ -143,11 +159,14 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
           />
         </button>
 
-        {/* 설정 버튼 */}
-        <button className="absolute top-[10.67px] left-[928px] flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#E6E6E6] bg-white lg:top-[15px] lg:left-[1305px] lg:h-[45px] lg:w-[45px] xl:top-[20px] xl:left-[1740px] xl:h-[60px] xl:w-[60px]">
+        {/* 튜토리얼 돌아가기 버튼 */}
+        <button
+          onClick={handleGoToTutorial}
+          className="absolute top-[10.67px] left-[928px] flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#E6E6E6] bg-white lg:top-[15px] lg:left-[1305px] lg:h-[45px] lg:w-[45px] xl:top-[20px] xl:left-[1740px] xl:h-[60px] xl:w-[60px]"
+        >
           <img
-            src="/svgs/setting_icon.svg"
-            alt="설정"
+            src="/svgs/que.svg"
+            alt="튜토리얼로 돌아가기"
             className="h-[15px] w-[15px] lg:h-[21px] lg:w-[21px] xl:h-[28px] xl:w-[28px]"
           />
         </button>
