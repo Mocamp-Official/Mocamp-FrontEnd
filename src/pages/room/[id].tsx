@@ -77,7 +77,7 @@ const RoomPage = () => {
 
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
-      <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} />
+      <WorkspaceHeader roomName={roomData.roomName} />
       <Sidebar
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}

@@ -1,20 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CommonModal from '@/components/common/modal/CommonModal';
 import Portal from '../common/modal/Portal';
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
-import CopyComplete from '@/components/Header/modal/Copy';
 
 interface WorkspaceHeaderProps {
   roomName?: string;
   isOwner?: boolean;
-  roomSeq?: string;
 }
 
-const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: WorkspaceHeaderProps) => {
+const WorkspaceHeader = ({ roomName = '', isOwner = true }: WorkspaceHeaderProps) => {
   const { id } = useRouter().query;
   const roomId = Array.isArray(id) ? id[0] : id;
 
@@ -22,7 +20,6 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
   const { updateNotice } = useRoomPublisher(roomId as string);
 
   const [showNoticeModal, setShowNoticeModal] = useState(false);
-  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
 
   const handleNoticeClick = () => {
     if (isOwner) setShowNoticeModal(true);
@@ -34,63 +31,22 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
     setShowNoticeModal(false);
   };
 
-  useEffect(() => {
-  if (typeof window !== 'undefined' && window.Kakao && !window.Kakao.isInitialized()) {
-    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
-  }
-}, []);
-
-
   const handleKakaoShare = () => {
-  if (
-    typeof window === 'undefined' ||
-    !window.Kakao ||
-    !window.Kakao.isInitialized() ||
-    !window.Kakao.Link ||
-    typeof window.Kakao.Link.sendDefault !== 'function'
-  ) {
-    alert('카카오 공유 준비 중입니다. 잠시 후 다시 시도해주세요.');
-    return;
-  }
+    alert('추후 구현');
+  };
 
-  window.Kakao.Link.sendDefault({
-    objectType: 'feed',
-    content: {
-      title: '모캠프',
-      description: `아래 번호를 참여하기 버튼을 클릭해 입력하세요!\n방 고유번호: ${roomSeq}`,
-      imageUrl: `${window.location.origin}/kakao_preview.png`,
-      link: {
-        mobileWebUrl: window.location.href,
-        webUrl: window.location.href,
-      },
-    },
-    buttons: [
-      {
-        title: '서비스 바로가기',
-        link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
-        },
-      },
-    ],
-  });
-};
-
-  const handleCopyRoomSeq = async () => {
-    if (!roomSeq) return;
-
+  const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(roomSeq);
-      setIsCopyModalOpen(true);
-      setTimeout(() => {
-        setIsCopyModalOpen(false);
-      }, 1500);
+      const link = window.location.href;
+      await navigator.clipboard.writeText(link);
+      alert('링크가 복사되었습니다!');
     } catch (err) {
-      console.error('고유번호 복사 실패:', err);
+      console.error('링크 복사에 실패하였습니다:', err);
     }
   };
+
   return (
-    <header className="fixed top-0 left-0 z-50 h-[53.34px] w-screen border-b-0 bg-white lg:h-[75px] xl:h-[100px]">
+    <header className="fixed top-0 left-0 h-[53.34px] w-screen border-b-0 bg-white lg:h-[75px] xl:h-[100px]">
       <div className="relative mx-auto h-full w-full">
         {/* 로고 */}
         <img
@@ -120,14 +76,14 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
           </span>
         </div>
 
-        {/* 고유 복사 버튼 */}
+        {/* 링크 복사 버튼 */}
         <button
-          onClick={handleCopyRoomSeq}
+          onClick={handleCopyLink}
           className="absolute top-[10.67px] left-[853.34px] flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#E6E6E6] bg-white lg:top-[15px] lg:left-300 lg:h-[45px] lg:w-[45px] xl:top-[20px] xl:left-400 xl:h-[60px] xl:w-[60px]"
         >
           <img
             src="/svgs/link_icon.svg"
-            alt="고유번호 복사"
+            alt="링크 복사"
             className="h-[15px] w-[15px] lg:h-[21px] lg:w-[21px] xl:h-[28px] xl:w-[28px]"
           />
         </button>
@@ -165,13 +121,6 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
             onSubmit={handleNoticeSubmit}
             onClose={() => setShowNoticeModal(false)}
           />
-        </Portal>
-      )}
-
-      {/* 고유 번호 복사 모달 */}
-      {isCopyModalOpen && (
-        <Portal>
-          <CopyComplete onClose={() => setIsCopyModalOpen(false)} />
         </Portal>
       )}
     </header>
