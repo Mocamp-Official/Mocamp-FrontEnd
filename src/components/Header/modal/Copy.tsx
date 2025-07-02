@@ -1,6 +1,5 @@
 import CheckIcon from '@/public/svgs/CheckGray.svg';
 
-
 const CopyComplete = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/40" onClick={onClose}>
