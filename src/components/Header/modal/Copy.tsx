@@ -11,7 +11,7 @@ const CopyComplete = ({ onClose }: { onClose: () => void }) => {
         <div className="flex h-[40px] w-[40px] items-center justify-center">
           <CheckIcon className="h-full w-full" />
         </div>
-        <span className="font-pre text-[22px] leading-none font-semibold whitespace-nowrap text-[#555]">
+        <span className="font-pre text-[20px] leading-none font-semibold whitespace-nowrap text-[#555]">
           고유 번호가 복사 되었습니다!
         </span>
       </div>
