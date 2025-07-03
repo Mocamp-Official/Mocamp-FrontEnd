@@ -20,10 +20,12 @@
       "@/hooks/*": ["src/hooks/*"],
       "@/apis/*": ["src/apis/*"],
       "@/stores/*": ["src/stores/*"],
+      "@/libs/*": ["src/libs/*"],
       "@/utils/*": ["src/utils/*"],
       "@/constants/*": ["src/constants/*"],
       "@/types/*": ["src/types/*"],
-      "@/public/*": ["public/*"]
+      "@/public/*": ["public/*"],
+      "@/libs/*": ["src/libs/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
