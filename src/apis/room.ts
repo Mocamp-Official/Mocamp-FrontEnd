@@ -43,6 +43,13 @@ export const fetchRoomData = async (roomId: string) => {
   return res.data.message;
 };
 
+// 고유번호로 방조회하기 - 추가 부탁함
+// export const fetchRoomDataBySeq = async (roomSeq: string) => {
+//   const res = await apiWithToken.get(`/api/room/seq/${roomSeq}`);
+//   return res.data;
+// };
+
+
 // 방 참가자 목록 조회
 export const fetchRoomParticipants = async (roomId: string): Promise<Participant[]> => {
   try {

@@ -1,36 +1,45 @@
 //마이 홈 헤더
 import { enterRoom } from '@/apis/room';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { fetchRoomDataBySeq } from '@/apis/room';
+import JoinRoomModal from './modal/Join';
+import Portal from '../common/modal/Portal';
 //생성 & 링크 붙여넣기 모달 개발 후 import
 
 const CreateJoinHeader = () => {
-  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setJoinModalOpen] = useState(false);
   const router = useRouter();
-  //모달 열기
-  const handleCreateClick = () => setCreateModalOpen(true);
 
-  const handleJoinClick = async () => {
+  const handleJoinClick = () => setJoinModalOpen(true);
+
+  const closeModals = () => {
+    setJoinModalOpen(false);
+  };
+
+  const handleJoinRoom = async (roomSeq: string) => {
     try {
-      await enterRoom('38', {
+      // roomSeq -> roomId 변환
+      const roomInfo = await fetchRoomDataBySeq(roomSeq);
+      const roomId = roomInfo.roomId;
+
+      //  방 입장 API 호출
+      await enterRoom(roomId.toString(), {
         micTurnedOn: false,
         camTurnedOn: false,
       });
 
-      router.push('/room/38');
-      setJoinModalOpen(true);
+      router.push(`/preview/${roomId}`);
+      closeModals();
     } catch (error) {
       console.error('방 입장 실패:', error);
       alert('방 입장에 실패했습니다.');
     }
   };
 
-  //모달 닫기
-  const closeModals = () => {
-    setCreateModalOpen(false);
-    setJoinModalOpen(false);
-  };
+  const handleCreateClick = () => {
+  router.push('/create');
+}
 
   return (
     <header className="sticky top-0 left-0 h-[53.333px] w-screen bg-white lg:h-[75px] xl:h-[100px]">
@@ -51,18 +60,19 @@ const CreateJoinHeader = () => {
 
         <button
           type="button"
-          // onClick={handleCreateClick}
+          onClick={handleCreateClick} 
           className="font-pre absolute top-[13.33px] right-[169.87px] flex h-[27px] w-[92px] items-center justify-center rounded-[5.333px] bg-[#27CFA5] px-4 py-2 text-[9.6px] leading-[100%] font-semibold tracking-[-0.02em] text-white hover:bg-teal-500 lg:top-[18.75px] lg:right-[240.25px] lg:h-[38.5px] lg:w-[128px] lg:rounded-[7.5px] lg:px-[22.5px] lg:py-[11.25px] lg:text-[13.5px] xl:top-[25px] xl:right-80 xl:h-[51px] xl:w-[171px] xl:rounded-[10px] xl:px-[20px] xl:py-[10px] xl:text-[18px]"
         >
           모캠프 생성하기
         </button>
       </div>
-      {/* 추 후 추가 */}
-      {/* {/*<Modal isOpen={isJoinModalOpen} onClose={closeModals} title="모캠프 참여하기">
-        <p>링크 붙여넣기 모달창</p></Modal> */}
 
-      {/* <Modal isOpen={isCreateModalOpen} onClose={closeModals} title="모캠프 생성하기기">
-        <p>방 생성 모달달</p> </Modal> */}
+      {isJoinModalOpen && (
+        <Portal>
+          <JoinRoomModal onClose={closeModals} onJoin={handleJoinRoom} />
+        </Portal>
+      )}
+  
     </header>
   );
 };
