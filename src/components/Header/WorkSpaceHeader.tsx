@@ -98,7 +98,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       objectType: 'feed',
       content: {
         title: '모캠프',
-        description: `아래 번호를 입력하여 모캠프에 참여하세요 ${roomSeq}`,
+        description: `아래 번호를 입력하여 모캠프에 참여하세요\n 방 고유번호: ${roomSeq}`,
         imageUrl: `${window.location.origin}/kakao_preview.png`,
         link: {
           mobileWebUrl: targetUrl,
