@@ -13,13 +13,17 @@ const ParticipantedMocamp = ({ roomList }: ParticipantedMocampProps) => {
       </p>
       <div className="flex flex-col gap-5 overflow-y-auto">
         {roomList.length > 0 ? (
-          <ParticipantedMocampItem
-            size="lg"
-            isCompleted={false}
-            roomName="은학샘과 아이들"
-            createdAt="2025. 04. 27"
-            time="3h 30m"
-          />
+          roomList.map((room: Room, index: number) => {
+            return (
+              <ParticipantedMocampItem
+                size="lg"
+                isCompleted={room.status}
+                roomName={room.roomName}
+                createdAt={room.startedAt}
+                time={room.duration}
+              />
+            );
+          })
         ) : (
           <div className="text-gray6 text-body1 flex h-[736px] w-full items-center justify-center">
             <p>최근 참여한 모캠프가 없습니다.</p>

@@ -6,13 +6,20 @@ import { Room, useDropDown } from '@/stores/myhome-store';
 import DropDown from './content/DropDown';
 
 interface TotalProps {
-  roomList: any;
-  timeList: any;
+  roomList: Room[];
+  timeList: [];
+  goalList: [];
   totalDurationMinute: number;
   totalNumberOfGoals: number;
 }
 
-const Total = ({ roomList, timeList, totalDurationMinute, totalNumberOfGoals }: TotalProps) => {
+const Total = ({
+  roomList,
+  goalList,
+  timeList,
+  totalDurationMinute,
+  totalNumberOfGoals,
+}: TotalProps) => {
   const { selectedType, setSelectedType } = useDropDown();
 
   return (
@@ -23,14 +30,15 @@ const Total = ({ roomList, timeList, totalDurationMinute, totalNumberOfGoals }: 
           {roomList.length > 0 ? (
             roomList
               .slice(-2) // 마지막 2개만 가져오기
-              .map((room: Room, index: number) => (
+              .map((room: Room) => (
                 <ParticipatedCard
-                  key={index}
+                  key={room.roomId}
+                  roomId={room.roomId}
                   size="lg"
-                  isCompleted={room.isCompleted}
+                  isCompleted={room.status}
                   roomName={room.roomName}
-                  createdAt={room.createdAt}
-                  time={room.time}
+                  createdAt={room.startedAt}
+                  time={room.duration}
                 />
               ))
           ) : (
@@ -55,14 +63,14 @@ const Total = ({ roomList, timeList, totalDurationMinute, totalNumberOfGoals }: 
             <>
               {selectedType === '목표 달성 수' && (
                 <>
-                  <Achievement type="Goal" GoalNumber={123} />
-                  <GoalGraph />
+                  <Achievement type="Goal" GoalNumber={totalNumberOfGoals} />
+                  <GoalGraph goalList={goalList} />
                 </>
               )}
               {selectedType === '사용시간' && (
                 <>
-                  <Achievement type="Time" TimeNumber={123} />
-                  <TimeGraph />
+                  <Achievement type="Time" TimeNumber={totalDurationMinute} />
+                  <TimeGraph timeList={timeList} />
                 </>
               )}
             </>

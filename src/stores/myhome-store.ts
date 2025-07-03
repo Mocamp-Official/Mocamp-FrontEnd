@@ -19,10 +19,11 @@ export interface DropDown {
 }
 
 export interface Room {
-  isCompleted: boolean;
+  roomId: number;
+  duration: string;
+  status: boolean;
   roomName: string;
-  createdAt: string;
-  time: string;
+  startedAt: string;
 }
 
 export const useMyhomeStore = create<Myhome>((set) => ({

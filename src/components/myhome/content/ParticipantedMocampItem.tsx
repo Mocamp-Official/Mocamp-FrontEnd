@@ -1,6 +1,7 @@
 import MocampGrayIcon from '@/public/svgs/mocamp_gray_icon.svg';
 import { useState } from 'react';
 import ParticipantedMocampModal from './ParticipantedMocampModal';
+import { formatDateToString, formatTimeString } from '@/utils/timeUtils';
 
 interface ParticipantedMocampItemProps {
   size?: 'sm' | 'md' | 'lg';
@@ -38,8 +39,8 @@ const ParticipantedMocampItem = ({
             </div>
             <h3 className="text-xl font-semibold text-[#555]">{roomName}</h3>
             <div className="flex items-center gap-4 text-xl font-medium text-[#c4c4c4]">
-              <span>{createdAt}</span>
-              <span>{time}</span>
+              <span>{formatDateToString(createdAt)}</span>
+              <span>{formatTimeString(time)}</span>
             </div>
           </div>
         </div>
