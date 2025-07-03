@@ -17,6 +17,7 @@ const ParticipantedMocamp = ({ roomList }: ParticipantedMocampProps) => {
             return (
               <ParticipantedMocampItem
                 size="lg"
+                roomId={room.roomId}
                 isCompleted={room.status}
                 roomName={room.roomName}
                 createdAt={room.startedAt}

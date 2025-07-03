@@ -9,3 +9,11 @@ export const fetchMyhome = async () => {
     console.error('마이홈 데이터 조회 실패:', err);
   }
 };
+
+export const loginout = async () => {
+  try {
+    const res = await apiWithToken.post('/api/user/logout');
+  } catch (err) {
+    console.error('로그아웃 실패:', err);
+  }
+};

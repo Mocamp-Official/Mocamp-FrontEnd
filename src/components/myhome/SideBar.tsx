@@ -1,5 +1,7 @@
+import { loginout } from '@/apis/myhome';
 import { useCategoryStore } from '@/stores/category-store';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 interface SideBarProps {
   profileImage: string;
@@ -8,6 +10,14 @@ interface SideBarProps {
 
 const SideBar = ({ profileImage, username }: SideBarProps) => {
   const { category, setCategory } = useCategoryStore();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    loginout();
+    localStorage.removeItem('accessToken');
+    router.push('/');
+    alert('로그아웃 완료');
+  };
 
   return (
     <div className="relative flex h-[55rem] min-w-[18rem] flex-col items-center overflow-hidden rounded-[1.25rem] bg-white">
@@ -53,7 +63,10 @@ const SideBar = ({ profileImage, username }: SideBarProps) => {
         </p>
       </div>
 
-      <button className="mt-[121px] h-[4.375rem] w-[14.25rem] rounded-[0.625rem] border border-[#e8e8e8] bg-white text-xl font-semibold text-[#555555]">
+      <button
+        onClick={handleLogout}
+        className="mt-[121px] h-[4.375rem] w-[14.25rem] cursor-pointer rounded-[0.625rem] border border-[#e8e8e8] bg-white text-xl font-semibold text-[#555555] hover:text-[#27cfa5]"
+      >
         로그아웃
       </button>
     </div>

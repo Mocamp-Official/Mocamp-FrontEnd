@@ -8,21 +8,56 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from 'recharts';
-
-interface TimeItem {
-  date: string;
-  duration: number;
-}
+import { TimeItem, DailyGoal } from '@/types/myhome';
 
 interface TimeGraphProps {
   timeList: TimeItem[];
+  goalList: DailyGoal[];
+  onDateClick: (date: string) => void;
+  selectedDate: string | null;
 }
 
-const TimeGraph = ({ timeList }: TimeGraphProps) => {
+const TimeGraph = ({ timeList, goalList, onDateClick, selectedDate }: TimeGraphProps) => {
+  // 차트 데이터에 선택 상태 추가
+  const chartData = timeList.map((item) => ({
+    ...item,
+    isSelected: selectedDate === item.date,
+  }));
+
+  // 커스텀 도트 컴포넌트
+  const CustomDot = (props: any) => {
+    const { cx, cy, payload } = props;
+    const isSelected = payload.isSelected;
+
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={isSelected ? 6 : 4}
+        fill={isSelected ? '#1ea87a' : '#27CFA5'}
+        stroke={isSelected ? '#1ea87a' : '#27CFA5'}
+        strokeWidth={2}
+        style={{ cursor: 'pointer' }}
+        onClick={() => onDateClick(payload.date)}
+      />
+    );
+  };
+
+  // 차트 클릭 핸들러
+  const handleChartClick = (data: any) => {
+    if (data && data.activeLabel) {
+      onDateClick(data.activeLabel);
+    }
+  };
+
   return (
     <div className="h-[390px] w-[553px]">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={timeList} margin={{ top: 20, right: 30, left: 40, bottom: 20 }}>
+        <AreaChart
+          data={chartData}
+          margin={{ top: 20, right: 30, left: 40, bottom: 20 }}
+          onClick={handleChartClick}
+        >
           {/* 그래디언트 정의 */}
           <defs>
             <linearGradient id="colorDuration" x1="0" y1="0" x2="0" y2="1">
@@ -41,17 +76,8 @@ const TimeGraph = ({ timeList }: TimeGraphProps) => {
           />
 
           {/* y축 */}
-          {/* <YAxis
-            domain={[0, 210]} // 필요 시 최대 duration 기준으로 자동 설정 가능
-            ticks={[30, 60, 90, 120, 150, 180, 210]}
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: '#555555', fontSize: 16 }}
-            tickFormatter={(value) => `${value}분`}
-            tickMargin={18}
-          /> */}
           <YAxis
-            domain={[0, 1200]} // 최대 20시간 (20 * 60)
+            domain={[0, 1200]}
             ticks={[300, 600, 900, 1200]}
             axisLine={false}
             tickLine={false}
@@ -100,12 +126,7 @@ const TimeGraph = ({ timeList }: TimeGraphProps) => {
             stroke="#27CFA5"
             strokeWidth={2}
             fill="url(#colorDuration)"
-            dot={{
-              r: 4,
-              fill: '#27CFA5',
-              strokeWidth: 2,
-              stroke: '#27CFA5',
-            }}
+            dot={<CustomDot />}
             activeDot={{ r: 6, fill: '#27CFA5' }}
           />
         </AreaChart>

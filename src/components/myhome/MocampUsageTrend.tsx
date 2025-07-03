@@ -1,14 +1,16 @@
 // MocampUsageTrend.tsx
+import { useState } from 'react';
 import { useDropDown } from '@/stores/myhome-store';
 import DropDown from './content/DropDown';
 import GoalGraph from './content/GoalGraph';
 import GoalList from './content/GoalList';
 import TimeGraph from './content/TimeGraph';
+import { DailyGoal, TimeItem } from '@/types/myhome';
 
 interface MocampUsageTrendProps {
   username: string;
-  goalList: [];
-  timeList: [];
+  goalList: DailyGoal[];
+  timeList: TimeItem[];
   totalDurationMinute: number;
   totalNumberOfGoals: number;
 }
@@ -21,8 +23,20 @@ const MocampUsageTrend = ({
   totalNumberOfGoals,
 }: MocampUsageTrendProps) => {
   const { selectedType } = useDropDown();
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  // console.log(goalList);
+  // 선택된 날짜의 목표들을 가져오는 함수
+  const getSelectedDateGoals = () => {
+    if (!selectedDate) return [];
+    const selectedDayData = goalList.find((item) => item.date === selectedDate);
+    return selectedDayData?.goals || [];
+  };
+
+  // 날짜 클릭 핸들러
+  const handleDateClick = (date: string) => {
+    setSelectedDate(date);
+  };
+
   return (
     <div className="flex h-[880px] w-[982px] flex-col rounded-[20px] bg-[#ffffff] p-12.5">
       {/* 드롭다운 : 모캠프 사용 추이 | 목표 달성 수 */}
@@ -62,9 +76,22 @@ const MocampUsageTrend = ({
       {goalList.length > 0 || timeList.length > 0 ? (
         <div className="flex cursor-default flex-row justify-between rounded-[10px] border border-[#e8e8e8] bg-white p-7.5">
           <div className="mt-auto">
-            {selectedType === '목표 달성 수' ? <GoalGraph /> : <TimeGraph />}
+            {selectedType === '목표 달성 수' ? (
+              <GoalGraph
+                goalList={goalList}
+                onDateClick={handleDateClick}
+                selectedDate={selectedDate}
+              />
+            ) : (
+              <TimeGraph
+                timeList={timeList}
+                goalList={goalList}
+                onDateClick={handleDateClick}
+                selectedDate={selectedDate}
+              />
+            )}
           </div>
-          <GoalList />
+          <GoalList selectedDate={selectedDate} goals={getSelectedDateGoals()} />
         </div>
       ) : (
         <div className="text-gray6 text-body1 flex h-[736px] w-full items-center justify-center">

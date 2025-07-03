@@ -2,6 +2,7 @@ import MocampGrayIcon from '@/public/svgs/mocamp_gray_icon.svg';
 import { useState } from 'react';
 import ParticipantedMocampModal from './ParticipantedMocampModal';
 import { formatDateToString, formatTimeString } from '@/utils/timeUtils';
+import { useRouter } from 'next/router';
 
 interface ParticipantedMocampItemProps {
   size?: 'sm' | 'md' | 'lg';
@@ -9,16 +10,19 @@ interface ParticipantedMocampItemProps {
   roomName: string;
   createdAt: string;
   time: string;
+  roomId: number;
 }
 
 const ParticipantedMocampItem = ({
   size = 'lg',
+  roomId,
   isCompleted,
   roomName,
   createdAt,
   time,
 }: ParticipantedMocampItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="min-h-[169px] w-[852px] rounded-[10px] border border-[#e8e8e8] bg-white p-6">
@@ -55,7 +59,12 @@ const ParticipantedMocampItem = ({
           >
             <span className="text-lg font-semibold text-[#555]">세부 목표 확인</span>
           </button>
-          <button className="flex cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-[#27cfa5] px-[30px] py-[15px] hover:bg-teal-500">
+          <button
+            onClick={() => {
+              router.push(`/room/${roomId}`);
+            }}
+            className="flex cursor-pointer items-center justify-center gap-2.5 rounded-[10px] bg-[#27cfa5] px-[30px] py-[15px] hover:bg-teal-500"
+          >
             <span className="text-lg font-semibold text-white">입장하기</span>
           </button>
         </div>

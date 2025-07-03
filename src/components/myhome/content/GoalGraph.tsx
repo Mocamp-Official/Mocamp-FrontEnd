@@ -1,12 +1,11 @@
+// GoalGraph.tsx
 import { useEffect, useState } from 'react';
-
-interface GoalItem {
-  date: string;
-  amount: number;
-}
+import { DailyGoal } from '@/types/myhome';
 
 interface GoalGraphProps {
-  goalList: GoalItem[];
+  goalList: DailyGoal[];
+  onDateClick: (date: string) => void;
+  selectedDate: string | null;
 }
 
 const getHeightFromAmount = (amount: number): number => {
@@ -33,13 +32,13 @@ const getHeightFromAmount = (amount: number): number => {
   return Math.round(heightLower + ratio * (heightUpper - heightLower));
 };
 
-const GoalGraph = ({ goalList }: GoalGraphProps) => {
+const GoalGraph = ({ goalList, onDateClick, selectedDate }: GoalGraphProps) => {
   const [animated, setAnimated] = useState(false);
 
   const chartData = goalList.map((item) => ({
     ...item,
     height: getHeightFromAmount(item.amount),
-    color: 'bg-[#A9ECDB]', // 필요시 amount 기준 색상 조정 가능
+    color: selectedDate === item.date ? 'bg-[#27CFA5]' : 'bg-[#A9ECDB]',
   }));
 
   useEffect(() => {
@@ -76,8 +75,9 @@ const GoalGraph = ({ goalList }: GoalGraphProps) => {
           {chartData.map((item) => (
             <div
               key={item.date}
-              className={`w-[48px] ${item.color} relative rounded-t-sm border border-[#27CFA5] mix-blend-multiply transition-all duration-700 ease-out hover:opacity-80`}
+              className={`w-[48px] ${item.color} relative cursor-pointer rounded-t-sm border border-[#27CFA5] mix-blend-multiply transition-all duration-700 ease-out hover:opacity-80`}
               style={{ height: animated ? `${item.height}px` : '0px' }}
+              onClick={() => onDateClick(item.date)}
             />
           ))}
         </div>
@@ -85,7 +85,13 @@ const GoalGraph = ({ goalList }: GoalGraphProps) => {
         {/* x축 라벨 */}
         <div className="mt-3 flex justify-between px-2 text-base text-[#555555]">
           {chartData.map((item) => (
-            <span key={item.date} className="w-[48px] text-center">
+            <span
+              key={item.date}
+              className={`w-[48px] cursor-pointer text-center hover:text-[#27CFA5] ${
+                selectedDate === item.date ? 'font-semibold text-[#27CFA5]' : ''
+              }`}
+              onClick={() => onDateClick(item.date)}
+            >
               {item.date}
             </span>
           ))}
