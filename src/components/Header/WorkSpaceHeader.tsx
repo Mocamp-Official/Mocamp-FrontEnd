@@ -7,13 +7,7 @@ import Portal from '../common/modal/Portal';
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import CopyComplete from '@/components/Header/modal/Copy';
-
-// Kakao SDK를 전역으로 선언하여 TypeScript 오류 방지
-declare global {
-  interface Window {
-    Kakao: any;
-  }
-}
+import image from '@/public/kakao_preview.png';
 
 interface WorkspaceHeaderProps {
   roomName?: string;
@@ -85,6 +79,11 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
   }, []);
 
   const handleKakaoShare = () => {
+    const isLoggedIn = Boolean(localStorage.getItem('accessToken'));
+    const targetUrl = isLoggedIn
+      ? `${window.location.origin}/myhome`
+      : `${window.location.origin}/login`;
+
     if (!roomSeq) {
       console.warn('방 고유번호(roomSeq)가 없어 카카오 공유를 할 수 없습니다.');
       return;
@@ -99,19 +98,19 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       objectType: 'feed',
       content: {
         title: '모캠프',
-        description: `아래 번호를 참여하기 버튼을 클릭해 입력하세요!\n방 고유번호: ${roomSeq}`,
+        description: `아래 번호를 입력하여 모캠프에 참여하세요 ${roomSeq}`,
         imageUrl: `${window.location.origin}/kakao_preview.png`,
         link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
+          mobileWebUrl: targetUrl,
+          webUrl: targetUrl,
         },
       },
       buttons: [
         {
           title: '서비스 바로가기',
           link: {
-            mobileWebUrl: window.location.href,
-            webUrl: window.location.href,
+            mobileWebUrl: targetUrl,
+            webUrl: targetUrl,
           },
         },
       ],
