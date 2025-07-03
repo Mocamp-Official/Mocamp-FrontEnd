@@ -4,6 +4,7 @@ import GoalGraph from './content/GoalGraph';
 import TimeGraph from './content/TimeGraph';
 import { Room, useDropDown } from '@/stores/myhome-store';
 import DropDown from './content/DropDown';
+import { useState } from 'react';
 
 interface TotalProps {
   roomList: Room[];
@@ -21,6 +22,12 @@ const Total = ({
   totalNumberOfGoals,
 }: TotalProps) => {
   const { selectedType, setSelectedType } = useDropDown();
+  const [selectedDate, setSelectedDate] = useState<string>(''); // 날짜 선택 상태 추가
+
+  // 날짜 클릭 핸들러
+  const handleDateClick = (date: string) => {
+    setSelectedDate(date);
+  };
 
   return (
     <div className="flex h-[880px] w-[982px] flex-col rounded-[20px] bg-[#ffffff] p-8">
@@ -64,13 +71,22 @@ const Total = ({
               {selectedType === '목표 달성 수' && (
                 <>
                   <Achievement type="Goal" GoalNumber={totalNumberOfGoals} />
-                  <GoalGraph goalList={goalList} />
+                  <GoalGraph
+                    goalList={goalList}
+                    onDateClick={handleDateClick}
+                    selectedDate={selectedDate}
+                  />
                 </>
               )}
               {selectedType === '사용시간' && (
                 <>
                   <Achievement type="Time" TimeNumber={totalDurationMinute} />
-                  <TimeGraph timeList={timeList} />
+                  <TimeGraph
+                    timeList={timeList}
+                    goalList={goalList}
+                    onDateClick={handleDateClick}
+                    selectedDate={selectedDate}
+                  />
                 </>
               )}
             </>
