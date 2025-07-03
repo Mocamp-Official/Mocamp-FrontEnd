@@ -8,11 +8,10 @@ import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import CopyComplete from '@/components/Header/modal/Copy';
 
-
 interface WorkspaceHeaderProps {
   roomName?: string;
   isOwner?: boolean;
-  roomSeq?: string; 
+  roomSeq?: string;
 }
 
 const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: WorkspaceHeaderProps) => {
@@ -98,7 +97,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       objectType: 'feed',
       content: {
         title: '모캠프',
-        description: `아래 번호를 입력하여 모캠프에 참여하세요\n 방 고유번호: ${roomSeq}`,
+        description: `아래 번호를 입력하여 모캠프에 참여하세요! ${roomSeq}`,
         imageUrl: `${window.location.origin}/kakao_preview.png`,
         link: {
           mobileWebUrl: targetUrl,
