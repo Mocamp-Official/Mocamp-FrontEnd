@@ -7,12 +7,12 @@ import Portal from '../common/modal/Portal';
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import CopyComplete from '@/components/Header/modal/Copy';
-import image from '@/public/kakao_preview.png';
+
 
 interface WorkspaceHeaderProps {
   roomName?: string;
   isOwner?: boolean;
-  roomSeq?: string; // 방 고유번호
+  roomSeq?: string; 
 }
 
 const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: WorkspaceHeaderProps) => {
