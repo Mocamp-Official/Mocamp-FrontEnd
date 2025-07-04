@@ -1,7 +1,7 @@
 // 마이 홈 헤더
 import { MYHOME_PATH, ROOM_CREATE_PATH } from '@/constants/routes';
 import { enterRoom } from '@/apis/room';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router'; 
 import { useState } from 'react';
 import { fetchRoomDataBySeq } from '@/apis/room';
 import JoinRoomModal from './modal/Join';
