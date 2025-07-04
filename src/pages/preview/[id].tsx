@@ -5,8 +5,7 @@ import { UserInfo, RoomInfo } from '@/types/preview';
 import CreateJoinHeader from '@/components/Header/CreateJoinHeader';
 import CardPageLayout from '@/components/common/CardPageLayout';
 import { enterRoom } from '@/apis/room';
-
-import { getUserFromToken } from '@/utils/decode';
+import { fetchMyhome } from '@/apis/myhome';
 
 const WebCamPreviewPage = () => {
   const router = useRouter();
@@ -16,15 +15,25 @@ const WebCamPreviewPage = () => {
 
   const [user, setUser] = useState<UserInfo | null>(null);
 
-  // 유저 정보 가져오기 - 추후 마이홈 api로 바꿀 예정
+
   useEffect(() => {
-    const user = getUserFromToken();
-    if (user) {
-      setUser(user);
-    } else {
-      console.error('토큰에서 유저 정보 가져오기 실패');
+     const loadUser = async () => {
+    try {
+      const data = await fetchMyhome();
+      setUser({
+        userId: data.userId,
+        nickname: data.username,
+        isWorking: true, 
+        camStatus: true,
+        micStatus: true,
+      });
+    } catch (error) {
+      console.error('유저 정보 불러오기 실패', error);
     }
-  }, []);
+  };
+
+  loadUser();
+}, []);
 
   const handleEnterRoom = async ({
     camStatus,
