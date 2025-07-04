@@ -8,7 +8,6 @@ import ActionButtons from './Buttons';
 import WebCamSection from './Cam';
 import { RoomInfo, UserInfo } from '../../types/preview';
 
-
 interface WebCamPreviewModalProps {
   roomId: number;
   user: UserInfo;
@@ -17,6 +16,21 @@ interface WebCamPreviewModalProps {
   onEditRoom: () => void;
   onEnterRoom: (options: { camStatus: boolean; micStatus: boolean }) => void; 
 }
+
+const formatDate = (datetimeString: string) => {
+  const date = new Date(datetimeString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}. ${month}. ${day}`;
+};
+
+
+const formatDuration = (duration: string) => {
+  const [hours, minutes] = duration.split(':');
+  return `${parseInt(hours)}h ${parseInt(minutes)}m`;
+};
+
 
 const WebCamPreviewModal = ({
   roomId,
@@ -37,13 +51,13 @@ const [micStatus, setMicStatus] = useState(true);
       try {
         const res = await fetchRoomData(roomId.toString());
         setRoomInfo({
-          roomId: res.roomId,
-          name: res.roomName,
-          status: res.status ? '진행 중' : '진행 전',
-          date: res.startedAt?.split(' ')[0] || '',
-          duration: res.duration,
-          imageUrl: res.imagePath || '',
-        });
+  roomId: res.roomId,
+  name: res.roomName,
+  status: res.status ? '진행 중' : '진행 전',
+  date: formatDate(res.startedAt),
+  duration: formatDuration(res.duration),
+  imageUrl: res.imagePath || '',
+});
       } catch (e) {
         console.error('방 정보 조회 실패', e);
       }

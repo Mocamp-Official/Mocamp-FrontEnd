@@ -19,10 +19,10 @@ const RoomInfoSection = ({ room }: { room: RoomInfo }) => (
       >
         {room.status}
       </span>
-      <span className="font-pre mt-[4.88px] font-semibold tracking-[-0.4px] text-[#4B4B4B] lg:mt-[6.86px] xl:mt-[4px]">
+      <span className="font-pre mt-[3px] font-semibold tracking-[-0.4px] text-[#4B4B4B] lg:mt-[4px] xl:mt-[5px]">
         {room.name}
       </span>
-      <div className="mt-[3.9px] flex gap-[6.4px] lg:mt-[5.48px] lg:gap-[9px] xl:mt-2 xl:gap-3">
+      <div className="mt-[1px] flex gap-[6px] lg:mt-[3px] lg:gap-[8px] xl:mt-[4px] xl:gap-[10px]">
         <span className="font-pre text-gray6 font-medium tracking-[-0.4px]">{room.date}</span>
         <span className="font-pre text-gray6 font-medium tracking-[-0.4px]">{room.duration}</span>
       </div>
