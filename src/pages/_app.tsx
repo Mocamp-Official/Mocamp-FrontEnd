@@ -21,6 +21,7 @@ declare global {
   }
 }
 
+
 export default function App({ Component, pageProps }: AppProps) {
   const handleKakaoScriptLoad = () => {
     if (typeof window !== 'undefined') {

@@ -43,7 +43,7 @@ export const fetchRoomData = async (roomId: string) => {
   return res.data.message;
 };
 
-//고유번호로 방조회하기 - 추가 부탁함
+//고유번호로 방조회하기
 export const fetchRoomDataBySeq = async (roomSeq: string) => {
   const res = await apiWithToken.get(`/api/room/${roomSeq}/seq`);
   return res.data;
@@ -65,4 +65,7 @@ export const fetchRoomParticipants = async (roomId: string): Promise<Participant
 // 방 퇴장 요청
 export const leaveRoom = async (roomId: string) => {
   await apiWithToken.post(`/api/room/exit/${roomId}`);
-};
+  
+}
+
+
