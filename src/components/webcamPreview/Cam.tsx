@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import WebCamMedia from './WebCamMedia';
 import WebcamCamera from '@/public/svgs/webcamcamera.svg';
 import VoiceIcon from '@/public/svgs/VoiceIcon.svg';
-import { UserInfo } from '../../types/preview';
+import { UserInfo } from '@/types/room';
 
 interface CamProps {
   user: UserInfo;

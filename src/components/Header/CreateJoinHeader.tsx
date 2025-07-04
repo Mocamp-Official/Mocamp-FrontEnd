@@ -22,9 +22,9 @@ const CreateJoinHeader = () => {
       }
 
       router.push({
-        pathname: `/preview/${roomInfo.roomId}`,
-        query: { fromJoin: 'true' },
-      });
+  pathname: `/preview/${roomInfo.roomId}`,
+  query: { from: 'join' },
+});
 
       closeJoinModal();
     } catch (error) {
