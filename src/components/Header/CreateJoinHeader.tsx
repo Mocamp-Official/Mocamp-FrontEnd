@@ -1,11 +1,11 @@
-//마이 홈 헤더
+// 마이 홈 헤더
+import { MYHOME_PATH, ROOM_CREATE_PATH } from '@/constants/routes';
 import { enterRoom } from '@/apis/room';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { fetchRoomDataBySeq } from '@/apis/room';
 import JoinRoomModal from './modal/Join';
 import Portal from '../common/modal/Portal';
-//생성 & 링크 붙여넣기 모달 개발 후 import
 
 const CreateJoinHeader = () => {
   const [isJoinModalOpen, setJoinModalOpen] = useState(false);
@@ -39,15 +39,21 @@ const CreateJoinHeader = () => {
 
   const handleCreateClick = () => {
     router.push('/create');
+
+  };
+
+  const handleLogoClick = () => {
+    router.asPath === MYHOME_PATH ? router.reload() : router.push(MYHOME_PATH);
   };
 
   return (
-    <header className="sticky top-0 left-0 h-[53.333px] w-screen bg-white lg:h-[75px] xl:h-[100px]">
-      <div className="relative mx-auto h-full w-full">
+    <header className="h-[100px] justify-center bg-white">
+      <div className="mx-auto flex h-full max-w-[1280px] justify-between">
         <img
           src="/svgs/MocampIcon.svg"
           alt="모캠프 로고"
-          className="absolute top-[13.67px] left-[170.67px] h-[25.83px] w-16 lg:top-[19.5px] lg:left-60 lg:h-[36.32px] lg:w-[90px] xl:top-[26px] xl:left-[320px] xl:h-[48.46px] xl:w-[120px]"
+          className="my-auto h-[48.46px] w-[120px] cursor-pointer"
+          onClick={handleLogoClick}
         />
 
         <button
@@ -72,6 +78,7 @@ const CreateJoinHeader = () => {
           <JoinRoomModal onClose={closeModals} onJoin={handleJoinRoom} />
         </Portal>
       )}
+
     </header>
   );
 };
