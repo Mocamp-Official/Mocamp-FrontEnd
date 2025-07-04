@@ -47,23 +47,31 @@ const WebCamPreviewPage = () => {
 
   // 방 입장 API 호출
   const handleEnterRoom = async ({
-    camStatus,
-    micStatus,
-  }: {
-    camStatus: boolean;
-    micStatus: boolean;
-  }) => {
-    try {
-      await enterRoom(String(roomId), {
-        micTurnedOn: micStatus,
-        camTurnedOn: camStatus,
-      });
+  camStatus,
+  micStatus,
+}: {
+  camStatus: boolean;
+  micStatus: boolean;
+}) => {
+  try {
+    await enterRoom(String(roomId), {
+      micTurnedOn: micStatus,
+      camTurnedOn: camStatus,
+    });
 
-      router.push(`/room/${roomId}`);
-    } catch (err) {
-      alert('방 입장 실패');
-    }
-  };
+    router.push({
+      pathname: `/room/${roomId}`,
+      query: {
+        from: 'join',
+        cam: String(camStatus),
+        mic: String(micStatus),
+      },
+    });
+  } catch (err) {
+    alert('방 입장 실패');
+  }
+};
+
 
   if (!user || !roomId || isHost === null) {
     return (
