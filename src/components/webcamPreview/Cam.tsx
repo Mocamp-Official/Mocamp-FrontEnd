@@ -88,7 +88,7 @@ const WebCamSection = ({ user, stream, error, roomId, onStatusChange }: CamProps
             <VoiceIcon
               width={14}
               height={20}
-              className="h-[20px] w-[14px] lg:h-[22px] lg:w-[16px] xl:h-[24px] xl:w-[18px]"
+              className="translate-x-[2px] translate-y-[2px] lg:h-[22px] lg:w-[16px] xl:h-[24px] xl:w-[20px]"
               style={{ opacity: micStatus ? 1 : 0.2 }}
             />
           </button>
