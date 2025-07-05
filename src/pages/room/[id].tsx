@@ -25,7 +25,7 @@ const RoomPage = () => {
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
   const numericRoomId = Number(roomId);
-
+  if (!numericRoomId || Number.isNaN(numericRoomId)) return null;
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(String(numericRoomId));
 
