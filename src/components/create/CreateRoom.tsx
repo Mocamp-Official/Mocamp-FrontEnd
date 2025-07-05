@@ -4,8 +4,12 @@ import ToggleMicButton from './ToggleMicButton';
 import LabeledBox from './LabeledBox';
 import NumberInput from './NumberInput';
 import ImageUploadBox from './ImageUploadBox';
+import { CreateRoomFormData } from '@/types/create'; 
 
 interface CreateRoomProps {
+  formData: CreateRoomFormData;
+  setFormData: (data: Partial<CreateRoomFormData>) => void;
+  onSubmit: () => void;
   onClose: () => void;
 }
 
@@ -121,6 +125,7 @@ const CreateRoom = ({ onClose }: CreateRoomProps) => {
             ? 'bg-[#27CFA5] text-white cursor-pointer'
             : 'bg-[#f2f2f2] text-[#c4c4c4] cursor-not-allowed'
         }`}
+        
         disabled={!isFormValid}
       >
         모캠프 생성하기

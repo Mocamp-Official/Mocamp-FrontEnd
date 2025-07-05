@@ -8,6 +8,8 @@ interface UseGroupCallProps {
   roomId: number;
   myUserId: number;
   myUsername: string;
+  camStatus: boolean;
+  micStatus: boolean;
   initialParticipants?: Participant[];
   onRoomLeft?: () => void;
 }
@@ -16,6 +18,8 @@ export function useGroupCall({
   roomId,
   myUserId,
   myUsername,
+  camStatus,
+  micStatus,
   initialParticipants = [],
   onRoomLeft,
 }: UseGroupCallProps) {
@@ -65,16 +69,19 @@ export function useGroupCall({
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { width: 480, height: 270 },
-        audio: true,
+        audio: micStatus,
       });
-      setLocalStream(mediaStream);
+
+      if (!camStatus) {
+        mediaStream.getVideoTracks().forEach((track) => (track.enabled = false));
+      }
 
       return mediaStream;
     } catch (err: any) {
       setError(err.message || '카메라/마이크 접근 실패');
       throw err;
     }
-  }, [myUserId, myUsername, adminUsername]);
+  }, [camStatus, micStatus, myUserId, myUsername, adminUsername]);
 
   // 작업 상태 변경 &  서버 전송
   const setParticipantWorkStatus = useCallback(
@@ -296,8 +303,8 @@ export function useGroupCall({
                 userId: myUserId,
                 username: myUsername,
                 isWorking: true,
-                camStatus: true,
-                micStatus: true,
+                camStatus,
+                micStatus,
                 isAdmin: true,
                 stream,
                 goals: [],
@@ -341,8 +348,8 @@ export function useGroupCall({
           {
             userId: remoteUserId,
             username: remoteUsername,
-            camStatus: true,
-            micStatus: true,
+            camStatus,
+            micStatus,
             isAdmin: remoteUsername === adminUsername,
             isWorking: true,
             stream: null,
@@ -376,8 +383,8 @@ export function useGroupCall({
         {
           userId,
           username: name,
-          camStatus: true,
-          micStatus: true,
+          camStatus,
+          micStatus,
           isWorking: true,
           isAdmin: name === adminUsername,
           stream: null,
