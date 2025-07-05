@@ -316,47 +316,46 @@ export function useGroupCall({
     socket.connect();
 
     socket.setOnOpenCallback(async () => {
-  if (hasJoinedRoom.current) return;
+      if (hasJoinedRoom.current) return;
 
-  try {
-    // 1. 서버에서 참가자 목록 받아오기
-    const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
-    const participantsData: Participant[] = res.data?.message;
+      try {
+        // 1. 서버에서 참가자 목록 받아오기
+        const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
+        const participantsData: Participant[] = res.data?.message;
 
-    // 2. 로컬 미디어 스트림 가져오기
-    const stream = await getLocalMediaStream();
-    setLocalStream(stream);
+        // 2. 로컬 미디어 스트림 가져오기
+        const stream = await getLocalMediaStream();
+        setLocalStream(stream);
 
-    // 3. 참가자 정보 구성
-    const myInfo: Participant = {
-      userId: myUserId,
-      username: myUsername,
-      isWorking: true,
-      camStatus,
-      micStatus,
-      isAdmin: true,
-      stream,
-      goals: [],
-      resolution: '',
-      isMyGoal: true,
-      isSecret: false,
-    };
+        // 3. 참가자 정보 구성
+        const myInfo: Participant = {
+          userId: myUserId,
+          username: myUsername,
+          isWorking: true,
+          camStatus,
+          micStatus,
+          isAdmin: true,
+          stream,
+          goals: [],
+          resolution: '',
+          isMyGoal: true,
+          isSecret: false,
+        };
 
+        // 4. 중복 여부 확인 후 최종 참가자 목록에 포함
+        const filtered = participantsData.filter((p: Participant) => p.userId !== myUserId);
 
-    // 4. 중복 여부 확인 후 최종 참가자 목록에 포함
-    const filtered = participantsData.filter((p: Participant) => p.userId !== myUserId);
+        setParticipants([...filtered, myInfo]);
+        participantsRef.current = [...filtered, myInfo];
 
-    setParticipants([...filtered, myInfo]);
-    participantsRef.current = [...filtered, myInfo];
-
-    // 5. 소켓으로 joinRoom 전송
-    socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
-    hasJoinedRoom.current = true;
-  } catch (e) {
-    console.error('[RTC] 초기 설정 실패:', e);
-    setError('초기 설정 실패');
-  }
-});
+        // 5. 소켓으로 joinRoom 전송
+        socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
+        hasJoinedRoom.current = true;
+      } catch (e) {
+        console.error('[RTC] 초기 설정 실패:', e);
+        setError('초기 설정 실패');
+      }
+    });
 
     socket.on(
       'ADMIN_UPDATED',
@@ -435,23 +434,25 @@ export function useGroupCall({
       setError(msg.message || '시그널링 오류');
     });
 
-    socket.on('roomParticipants', (msg: { participants: Participant[]; adminUsername?: string }) => {
-  const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
-  setAdminUsername(effectiveAdmin);
+    socket.on(
+      'roomParticipants',
+      (msg: { participants: Participant[]; adminUsername?: string }) => {
+        const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
+        setAdminUsername(effectiveAdmin);
 
-  const myInfo = participantsRef.current.find((p) => p.userId === myUserId);
-  const others = msg.participants.filter((p) => p.userId !== myUserId);
+        const myInfo = participantsRef.current.find((p) => p.userId === myUserId);
+        const others = msg.participants.filter((p) => p.userId !== myUserId);
 
-  setParticipants([
-    ...(myInfo ? [myInfo] : []),
-    ...others.map((p) => ({
-      ...p,
-      stream: null,
-      isAdmin: p.isAdmin ?? p.username === effectiveAdmin,
-    })),
-  ]);
-});
-
+        setParticipants([
+          ...(myInfo ? [myInfo] : []),
+          ...others.map((p) => ({
+            ...p,
+            stream: null,
+            isAdmin: p.isAdmin ?? p.username === effectiveAdmin,
+          })),
+        ]);
+      },
+    );
 
     socket.on(
       'WORK_STATUS_UPDATED',

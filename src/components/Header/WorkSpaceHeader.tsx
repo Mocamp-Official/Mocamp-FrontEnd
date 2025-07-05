@@ -162,7 +162,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
         {/* 공지사항 필드 */}
         <div
           className="absolute top-[10.67px] left-[434.67px] flex h-8 w-102 items-center rounded-[10px] border border-[#E8E8E8] bg-white px-[21.33px] focus:outline-none lg:top-[15px] lg:left-[611px] lg:h-[45px] lg:w-[573.75px] lg:px-7.5 xl:top-[20px] xl:left-[815px] xl:h-[60px] xl:w-[765px] xl:px-10"
-          onClick={handleNoticeClick}
+          onClick={isOwner ? handleNoticeClick : undefined}
         >
           <span
             key={notice}
