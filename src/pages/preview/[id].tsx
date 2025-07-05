@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { getAccessToken } from '@/utils/token';
 
 import WebCamPreviewModal from '@/components/webcamPreview/WebCamPreview';
 import CreateJoinHeader from '@/components/Header/CreateJoinHeader';
@@ -26,6 +27,7 @@ const WebCamPreviewPage = () => {
 
   // 유저 정보 불러오기
   useEffect(() => {
+    const token = getAccessToken();
     const loadUser = async () => {
       try {
         const data = await fetchMyhome();

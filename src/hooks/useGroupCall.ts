@@ -324,6 +324,12 @@ export function useGroupCall({
     socket.setOnOpenCallback(async () => {
       if (hasJoinedRoom.current) return;
 
+       const token = getAccessToken();
+  if (!token) {
+    console.warn('[auth] 소켓 open 중 accessToken 없음, 중단');
+    return;
+  }
+
       try {
         // 1. 서버에서 참가자 목록 받아오기
         const res = await apiWithToken.get(`/api/room/participant/${roomId}`);

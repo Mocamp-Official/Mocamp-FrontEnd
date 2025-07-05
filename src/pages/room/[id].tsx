@@ -18,6 +18,7 @@ import { useGroupCall } from '@/hooks/useGroupCall';
 import type { Participant } from '@/types/room';
 import { useRoomSubscriber } from '@/hooks/room/useRoomSubscriber';
 
+
 const MAX_VISIBLE = 2;
 const RoomPage = () => {
   const router = useRouter();

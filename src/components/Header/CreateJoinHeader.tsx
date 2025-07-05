@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import { fetchRoomDataBySeq } from '@/apis/room';
 import { MYHOME_PATH, ROOM_CREATE_PATH } from '@/constants/routes';
+import { getAccessToken } from '@/utils/token';
 
 import Portal from '../common/modal/Portal';
 import JoinRoomModal from './modal/Join';
@@ -15,6 +16,12 @@ const CreateJoinHeader = () => {
   const closeJoinModal = () => setJoinModalOpen(false);
 
   const handleJoinRoom = async (roomSeq: string) => {
+    const token = getAccessToken();
+  if (!token) {
+    alert('로그인이 필요합니다.');
+    router.push('/login');
+    return;
+  }
     try {
       const roomInfo = await fetchRoomDataBySeq(roomSeq);
       if (!roomInfo?.roomId) {
