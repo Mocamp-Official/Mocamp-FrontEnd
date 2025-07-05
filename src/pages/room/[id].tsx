@@ -25,7 +25,6 @@ const RoomPage = () => {
   const roomId = Array.isArray(id) ? id[0] : id;
   const numericRoomId = Number(roomId);
 
-
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(String(numericRoomId));
 
@@ -50,7 +49,7 @@ const RoomPage = () => {
     selectedDelegateId,
     setSelectedDelegateId,
   } = useGroupCall({
-     roomId: numericRoomId,
+    roomId: numericRoomId,
     myUserId,
     myUsername,
     camStatus,
@@ -65,25 +64,24 @@ const RoomPage = () => {
       const { userId, username, goals = [] } = payload;
 
       setParticipants((prev: Participant[]) => {
-  if (prev.some((p: Participant) => p.userId === userId)) return prev;
-  return [
-    ...prev,
-    {
-      userId,
-      username,
-      isWorking: true,
-      camStatus: true,
-      micStatus: true,
-      stream: null,
-      goals,
-      resolution: '',
-      isMyGoal: false,
-      isSecret: false,
-      isAdmin: false,
-    },
-  ];
-});
-
+        if (prev.some((p: Participant) => p.userId === userId)) return prev;
+        return [
+          ...prev,
+          {
+            userId,
+            username,
+            isWorking: true,
+            camStatus: true,
+            micStatus: true,
+            stream: null,
+            goals,
+            resolution: '',
+            isMyGoal: false,
+            isSecret: false,
+            isAdmin: false,
+          },
+        ];
+      });
 
       setTodosByUser(userId, goals);
     },
@@ -118,6 +116,22 @@ const RoomPage = () => {
     }
   };
 
+  const sortedCallParticipants = Array.isArray(callParticipants)
+    ? [...callParticipants].sort((a, b) => {
+        if (a.isMyGoal) return -1;
+        if (b.isMyGoal) return 1;
+        return 0;
+      })
+    : [];
+
+  const sortedTodoGroups = Array.isArray(todoGroups)
+    ? [...todoGroups].sort((a, b) => {
+        if (a.isMyGoal) return -1;
+        if (b.isMyGoal) return 1;
+        return 0;
+      })
+    : [];
+
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
       <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} />
@@ -133,7 +147,7 @@ const RoomPage = () => {
         {/* 웹캠 영역 */}
         <div className="mb-5 flex w-full gap-[10.67px] lg:gap-[15px] xl:gap-5">
           {Array.isArray(callParticipants) &&
-            callParticipants.map((participant: Participant) => (
+            sortedCallParticipants.map((participant) => (
               <WebCamTile
                 key={participant.userId}
                 participant={participant}
@@ -178,7 +192,7 @@ const RoomPage = () => {
 
           {/* TodoSection 리스트 */}
           <div className="flex w-[789.33px] gap-[10.67px] lg:w-[1110px] lg:gap-[15px] xl:w-[1480px] xl:gap-5">
-            {visibleGroups.map((g) => (
+            {sortedTodoGroups.map((g) => (
               <TodoSection
                 key={g.id}
                 resolution={g.resolution}
