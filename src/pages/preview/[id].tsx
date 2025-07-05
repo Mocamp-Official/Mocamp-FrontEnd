@@ -20,7 +20,6 @@ const WebCamPreviewPage = () => {
 
   useEffect(() => {
     if (!router.isReady) return;
-
     const from = router.query.from;
     setIsHost(from === 'create');
   }, [router.isReady, router.query.from]);
@@ -71,6 +70,7 @@ const WebCamPreviewPage = () => {
     alert('방 입장 실패');
   }
 };
+
 
 
   if (!user || !roomId || isHost === null) {

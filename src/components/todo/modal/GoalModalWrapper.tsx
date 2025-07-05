@@ -91,13 +91,13 @@ const GoalModalWrapper = ({
       <div className="absolute bottom-[26.67px] flex h-[44.8px] w-full items-center gap-[10.67px] lg:bottom-[37.5px] lg:h-16 lg:gap-[15px] xl:bottom-[50px] xl:h-[84px] xl:gap-5">
         <button
           onClick={handleAddTodo}
-          className="h-full w-[99.67px] rounded-[5.333px] border border-[#e8e8e8] bg-white text-[10.67px] font-semibold tracking-[-0.02em] text-[#27cfa5] lg:w-[140px] lg:rounded-[7.5px] lg:text-[15px] xl:w-[187px] xl:rounded-[10px] xl:text-[18px]"
+          className="h-full w-[99.67px] cursor-pointer rounded-[5.333px] border border-[#e8e8e8] bg-white text-[10.67px] font-semibold tracking-[-0.02em] text-[#27cfa5] hover:bg-[#b2b2b2] hover:text-[#1B9174] lg:w-[140px] lg:rounded-[7.5px] lg:text-[15px] xl:w-[187px] xl:rounded-[10px] xl:text-[18px]"
         >
           목표 생성하기
         </button>
         <button
           onClick={handleSubmit}
-          className="h-full w-[188.267px] rounded-[10px] bg-[#27cfa5] text-[10.67px] font-semibold text-white lg:w-[264.75px] lg:text-[15px] xl:w-[353px] xl:text-[20px]"
+          className="h-full w-[188.267px] cursor-pointer rounded-[10px] bg-[#27cfa5] text-[10.67px] font-semibold text-white hover:bg-[#1B9174] hover:text-[#B2B2B2] lg:w-[264.75px] lg:text-[15px] xl:w-[353px] xl:text-[20px]"
         >
           완료하기
         </button>

@@ -65,7 +65,4 @@ export const fetchRoomParticipants = async (roomId: string): Promise<Participant
 // 방 퇴장 요청
 export const leaveRoom = async (roomId: string) => {
   await apiWithToken.post(`/api/room/exit/${roomId}`);
-  
-}
-
-
+};
