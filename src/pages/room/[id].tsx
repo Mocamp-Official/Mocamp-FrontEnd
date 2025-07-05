@@ -116,6 +116,7 @@ const RoomPage = () => {
     }
   };
 
+  // 유저 좌측 고정
   const sortedCallParticipants = Array.isArray(callParticipants)
     ? [...callParticipants].sort((a, b) => {
         if (a.isMyGoal) return -1;
