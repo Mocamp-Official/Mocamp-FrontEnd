@@ -67,7 +67,7 @@ const ProfileModal = ({ username, profileImage, onClose }: ProfileModalProps) =>
       <div onClick={handleOverlayClick} className="absolute inset-0 bg-black opacity-50" />
 
       {/* 모달 내용 */}
-      <div className="relative z-10 flex h-[711px] w-[660px] flex-col rounded-[20px] border border-[#e8e8e8] bg-white p-12">
+      <div className="relative z-10 flex h-[736px] w-[660px] flex-col rounded-[20px] border border-[#e8e8e8] bg-white p-12">
         {/* 헤더 : "프로필 수정하기" + 닫기 버튼 */}
         <div className="mb-8">
           <h1 className="text-gray9 mb-2 text-[32px] font-semibold">프로필 수정하기</h1>
@@ -124,7 +124,7 @@ const ProfileModal = ({ username, profileImage, onClose }: ProfileModalProps) =>
         <div className="mt-auto">
           <button
             onClick={handleSubmit}
-            className="flex w-full items-center justify-center rounded-[10px] bg-[#27cfa5] py-[30px] transition-colors hover:bg-[#22b894]"
+            className="flex w-full items-center justify-center rounded-[10px] bg-[#27cfa5] py-[28px] transition-colors hover:bg-[#22b894]"
           >
             <p className="text-xl font-semibold text-white">프로필 수정하기</p>
           </button>
