@@ -50,15 +50,22 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
     };
 
     const tryInitKakao = () => {
-      if (
+        const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+
+          if (!kakaoKey) {
+            console.error('Kakao API 키가 undefined입니다. 환경 변수 확인 필요!');
+            return;
+          }
+      
+       if (
         typeof window !== 'undefined' &&
         window.kakaoSdkLoaded &&
         window.Kakao &&
         !window.Kakao.isInitialized()
       ) {
-        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
-        console.log('Kakao SDK 초기화 시작');
-        waitForKakaoReady(); // 기다림
+        window.Kakao.init(kakaoKey); 
+        console.log('✅ Kakao SDK 초기화 시작');
+        waitForKakaoReady();
       } else if (window.Kakao?.isInitialized() && window.Kakao?.Link) {
         setIsKakaoInitialized(true);
         console.log('Kakao SDK 이미 초기화됨 + Link 준비됨');
