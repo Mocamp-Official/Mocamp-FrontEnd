@@ -367,12 +367,14 @@ export function useGroupCall({
       'ADMIN_UPDATED',
       (msg: DelegationUpdateResponse & { type: string; previousAdminUsername: string }) => {
         setAdminUsername(msg.newAdminUsername);
-        setParticipants((prev) =>
-          prev.map((p) => ({
+        setParticipants((prev) => {
+          const updated = prev.map((p) => ({
             ...p,
             isAdmin: p.username === msg.newAdminUsername,
-          })),
-        );
+          }));
+          participantsRef.current = updated;
+          return updated;
+        });
       },
     );
 
@@ -463,22 +465,34 @@ export function useGroupCall({
     socket.on(
       'WORK_STATUS_UPDATED',
       (msg: { type: string; userId: number; workStatus: boolean }) => {
-        setParticipants((prev) =>
-          prev.map((p) => (p.userId === msg.userId ? { ...p, isWorking: msg.workStatus } : p)),
-        );
+        setParticipants((prev) => {
+          const updated = prev.map((p) =>
+            p.userId === msg.userId ? { ...p, isWorking: msg.workStatus } : p,
+          );
+          participantsRef.current = updated;
+          return updated;
+        });
       },
     );
 
     socket.on('CAM_STATUS_UPDATED', (msg: { type: string; userId: number; camStatus: boolean }) => {
-      setParticipants((prev) =>
-        prev.map((p) => (p.userId === msg.userId ? { ...p, camStatus: msg.camStatus } : p)),
-      );
+      setParticipants((prev) => {
+        const updated = prev.map((p) =>
+          p.userId === msg.userId ? { ...p, camStatus: msg.camStatus } : p,
+        );
+        participantsRef.current = updated;
+        return updated;
+      });
     });
 
     socket.on('MIC_STATUS_UPDATED', (msg: { type: string; userId: number; micStatus: boolean }) => {
-      setParticipants((prev) =>
-        prev.map((p) => (p.userId === msg.userId ? { ...p, micStatus: msg.micStatus } : p)),
-      );
+      setParticipants((prev) => {
+        const updated = prev.map((p) =>
+          p.userId === msg.userId ? { ...p, micStatus: msg.micStatus } : p,
+        );
+        participantsRef.current = updated;
+        return updated;
+      });
     });
 
     return () => {
