@@ -16,6 +16,7 @@ import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import { useGroupCall } from '@/hooks/useGroupCall';
 import type { Participant } from '@/types/room';
+import { useRoomSubscriber } from '@/hooks/room/useRoomSubscriber';
 
 const MAX_VISIBLE = 2;
 const RoomPage = () => {
@@ -30,12 +31,12 @@ const RoomPage = () => {
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
 
-  const camStatus = router.query.cam !== 'false';   
-const micStatus = router.query.mic !== 'false';
-
+  const camStatus = router.query.cam !== 'false';
+  const micStatus = router.query.mic !== 'false';
 
   const {
     participants: callParticipants,
+    setParticipants,
     toggleMedia,
     delegateAdmin,
     adminUsername,
@@ -50,12 +51,48 @@ const micStatus = router.query.mic !== 'false';
     roomId: Number(roomId ?? 0),
     myUserId,
     myUsername,
-    camStatus,    
-  micStatus,
+    camStatus,
+    micStatus,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
+
+  useRoomSubscriber(roomId as string, {
+    onUserUpdate: (payload) => {
+      const { userId, username, goals = [] } = payload;
+
+      setParticipants((prev: Participant[]) => {
+  if (prev.some((p: Participant) => p.userId === userId)) return prev;
+  return [
+    ...prev,
+    {
+      userId,
+      username,
+      isWorking: true,
+      camStatus: true,
+      micStatus: true,
+      stream: null,
+      goals,
+      resolution: '',
+      isMyGoal: false,
+      isSecret: false,
+      isAdmin: false,
+    },
+  ];
+});
+
+
+      setTodosByUser(userId, goals);
+    },
+
+    onUserLeave: (payload) => {
+      const { userId } = payload;
+
+      setParticipants((prev) => prev.filter((p) => p.userId !== userId));
+      setTodosByUser(userId, []);
+    },
+  });
 
   if (!router.isReady || !roomId || !roomData || participants.length === 0) {
     return null;
