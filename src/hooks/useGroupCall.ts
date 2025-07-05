@@ -316,65 +316,47 @@ export function useGroupCall({
     socket.connect();
 
     socket.setOnOpenCallback(async () => {
-      if (hasJoinedRoom.current) return;
+  if (hasJoinedRoom.current) return;
 
-      try {
-        // 1. 참가자 목록 먼저 불러오기
-        if (!roomId || isNaN(Number(roomId))) {
-          console.error('[RTC] 유효하지 않은 roomId:', roomId);
-          return;
-        }
+  try {
+    // 1. 서버에서 참가자 목록 받아오기
+    const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
+    const participantsData: Participant[] = res.data?.message;
 
-        const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
-        const participantsData = res.data?.message;
+    // 2. 로컬 미디어 스트림 가져오기
+    const stream = await getLocalMediaStream();
+    setLocalStream(stream);
 
-        if (!Array.isArray(participantsData)) {
-          console.error('[RTC] 참가자 목록이 배열이 아님:', participantsData);
-          return;
-        }
+    // 3. 참가자 정보 구성
+    const myInfo: Participant = {
+      userId: myUserId,
+      username: myUsername,
+      isWorking: true,
+      camStatus,
+      micStatus,
+      isAdmin: true,
+      stream,
+      goals: [],
+      resolution: '',
+      isMyGoal: true,
+      isSecret: false,
+    };
 
-        if (!Array.isArray(participantsData)) {
-          console.error('[RTC] 참가자 목록이 배열이 아님:', participantsData);
-          return;
-        }
-        // 2. 참가자 상태 업데이트
-        setParticipants(participantsData);
-        participantsRef.current = participantsData;
 
-        // 3. 내 로컬 미디어 획득
-        const stream = await getLocalMediaStream();
-        setLocalStream(stream);
+    // 4. 중복 여부 확인 후 최종 참가자 목록에 포함
+    const filtered = participantsData.filter((p: Participant) => p.userId !== myUserId);
 
-        // 4. 내 정보 생성 및 반영
-        const myInfo: Participant = {
-          userId: myUserId,
-          username: myUsername,
-          isWorking: true,
-          camStatus,
-          micStatus,
-          isAdmin: true,
-          stream,
-          goals: [],
-          resolution: '',
-          isMyGoal: true,
-          isSecret: false,
-        };
+    setParticipants([...filtered, myInfo]);
+    participantsRef.current = [...filtered, myInfo];
 
-        setParticipants((prev) => {
-          const exists = prev.some((p) => p.userId === myUserId);
-          if (exists) return prev;
-          return [...prev, myInfo];
-        });
-        participantsRef.current = [...participantsRef.current, myInfo];
-
-        // 5. joinRoom 전송
-        socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
-        hasJoinedRoom.current = true;
-      } catch (e) {
-        console.error('[RTC] 초기 설정 실패:', e);
-        setError('초기 설정 실패');
-      }
-    });
+    // 5. 소켓으로 joinRoom 전송
+    socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
+    hasJoinedRoom.current = true;
+  } catch (e) {
+    console.error('[RTC] 초기 설정 실패:', e);
+    setError('초기 설정 실패');
+  }
+});
 
     socket.on(
       'ADMIN_UPDATED',
@@ -418,7 +400,7 @@ export function useGroupCall({
 
     socket.on('newParticipantArrived', (msg) => {
       const { name } = msg;
-      if (!name) return;
+      if (!name || name === myUsername) return;
 
       const exists = participantsRef.current.find((p) => p.username === name);
       if (exists) return;
@@ -453,22 +435,23 @@ export function useGroupCall({
       setError(msg.message || '시그널링 오류');
     });
 
-    socket.on('roomParticipants', (msg) => {
-      const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
-      setAdminUsername(effectiveAdmin);
+    socket.on('roomParticipants', (msg: { participants: Participant[]; adminUsername?: string }) => {
+  const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
+  setAdminUsername(effectiveAdmin);
 
-      const myInfo = participantsRef.current.find((p: Participant) => p.userId === myUserId);
-      const others = msg.participants.filter((p: Participant) => p.userId !== myUserId);
+  const myInfo = participantsRef.current.find((p) => p.userId === myUserId);
+  const others = msg.participants.filter((p) => p.userId !== myUserId);
 
-      setParticipants([
-        ...(myInfo ? [myInfo] : []),
-        ...others.map((p: Participant) => ({
-          ...p,
-          stream: null,
-          isAdmin: p.isAdmin ?? p.username === effectiveAdmin,
-        })),
-      ]);
-    });
+  setParticipants([
+    ...(myInfo ? [myInfo] : []),
+    ...others.map((p) => ({
+      ...p,
+      stream: null,
+      isAdmin: p.isAdmin ?? p.username === effectiveAdmin,
+    })),
+  ]);
+});
+
 
     socket.on(
       'WORK_STATUS_UPDATED',

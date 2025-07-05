@@ -23,9 +23,11 @@ const RoomPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
+  const numericRoomId = Number(roomId);
+
 
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
-    useRoomContext(roomId);
+    useRoomContext(String(numericRoomId));
 
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
@@ -48,7 +50,7 @@ const RoomPage = () => {
     selectedDelegateId,
     setSelectedDelegateId,
   } = useGroupCall({
-    roomId: Number(roomId ?? 0),
+     roomId: numericRoomId,
     myUserId,
     myUsername,
     camStatus,
