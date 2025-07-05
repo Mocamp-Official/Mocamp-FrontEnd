@@ -28,10 +28,17 @@ const ParticipantedMocampModal = ({ setIsOpen, userGoalList }: Props) => {
           </p>
         </div>
 
-        <div className="flex flex-1 flex-col gap-5">
-          {/* {userGoalList.map((goal: any, index: number) => {
-            return <GoalDetailItem isCompleted={goal.status}>{goal.content}</GoalDetailItem>;
-          })} */}
+        <div
+          className={`flex flex-1 flex-col gap-5 overflow-y-auto ${userGoalList.length === 0 && 'items-center justify-center'}`}
+        >
+          {userGoalList.length > 0 ? (
+            userGoalList.map((goal: any, index: number) => {
+              return <GoalDetailItem isCompleted={goal.status}>{goal.content}</GoalDetailItem>;
+            })
+          ) : (
+            <div className="text-body1 text-gray7">완료한 목표가 없습니다</div>
+          )}
+          {}
         </div>
       </div>
     </div>

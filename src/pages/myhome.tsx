@@ -33,7 +33,7 @@ const MyHome = () => {
         totalNumberOfGoals={totalNumberOfGoals}
       />
     ),
-    PARTICIPANTED_MOCAMP: <ParticipantedMocamp roomList={roomList} goalList={goalList} />,
+    PARTICIPANTED_MOCAMP: <ParticipantedMocamp roomList={roomList} />,
     MOCAMP_USAGE_TREND: (
       <MocampUsageTrend
         username={username}
