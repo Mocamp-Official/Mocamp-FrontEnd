@@ -41,7 +41,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       const checkLinkReady = setInterval(() => {
         if (window.Kakao?.Link) {
           setIsKakaoInitialized(true);
-          console.log('Kakao SDK 완전 초기화 완료');
+          console.log('Kakao SDK 초기화 완료');
           clearInterval(checkLinkReady);
         } else {
           console.log('Kakao.Link 아직 준비되지 않음');
@@ -64,7 +64,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
         !window.Kakao.isInitialized()
       ) {
         window.Kakao.init(kakaoKey); 
-        console.log('✅ Kakao SDK 초기화 시작');
+        console.log('Kakao SDK 초기화 시작');
         waitForKakaoReady();
       } else if (window.Kakao?.isInitialized() && window.Kakao?.Link) {
         setIsKakaoInitialized(true);

@@ -3,6 +3,7 @@ import { KurentoSignalingSocket } from '@/libs/groupcallsignal';
 import { Participant } from '@/types/room';
 import { apiWithToken } from '@/apis/axios';
 import { DelegationUpdateResponse } from '@/types/delegation';
+import { getAccessToken } from '@/utils/token';
 
 interface UseGroupCallProps {
   roomId: number;
@@ -55,6 +56,11 @@ export function useGroupCall({
   }, [participants]);
 
   useEffect(() => {
+    const token = getAccessToken();
+    if (!token) {
+      console.warn('[auth] accessToken 없음, API 호출 중단');
+      return;
+    }
     const fetchData = async () => {
       try {
         const { data: roomData } = await apiWithToken.get(`/api/room/${roomId}`);
