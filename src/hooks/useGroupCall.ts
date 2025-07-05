@@ -4,7 +4,6 @@ import { Participant } from '@/types/room';
 import { apiWithToken } from '@/apis/axios';
 import { DelegationUpdateResponse } from '@/types/delegation';
 
-
 interface UseGroupCallProps {
   roomId: number;
   myUserId: number;
@@ -14,6 +13,14 @@ interface UseGroupCallProps {
   initialParticipants?: Participant[];
   onRoomLeft?: () => void;
 }
+
+export const getMainVideoResolution = () => {
+  const width = typeof window !== 'undefined' ? window.innerWidth : 1920;
+
+  if (width >= 1920) return { width: 480, height: 270 };
+  if (width >= 1440) return { width: 360, height: 202.5 };
+  return { width: 256, height: 144 };
+};
 
 export function useGroupCall({
   roomId,
@@ -68,8 +75,9 @@ export function useGroupCall({
   // 로컬 미디어(캠/마이크) 스트림 가져오기
   const getLocalMediaStream = useCallback(async () => {
     try {
+      const { width, height } = getMainVideoResolution();
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 480, height: 270 },
+        video: { width, height },
         audio: micStatus,
       });
 
@@ -307,25 +315,23 @@ export function useGroupCall({
     kurentoSignalingRef.current = socket;
     socket.connect();
 
-    
-
     socket.setOnOpenCallback(async () => {
       if (hasJoinedRoom.current) return;
 
       try {
         // 1. 참가자 목록 먼저 불러오기
         if (!roomId || isNaN(Number(roomId))) {
-  console.error('[RTC] 유효하지 않은 roomId:', roomId);
-  return;
-}
+          console.error('[RTC] 유효하지 않은 roomId:', roomId);
+          return;
+        }
 
-const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
-const participantsData = res.data?.message;
+        const res = await apiWithToken.get(`/api/room/participant/${roomId}`);
+        const participantsData = res.data?.message;
 
-if (!Array.isArray(participantsData)) {
-  console.error('[RTC] 참가자 목록이 배열이 아님:', participantsData);
-  return;
-}
+        if (!Array.isArray(participantsData)) {
+          console.error('[RTC] 참가자 목록이 배열이 아님:', participantsData);
+          return;
+        }
 
         if (!Array.isArray(participantsData)) {
           console.error('[RTC] 참가자 목록이 배열이 아님:', participantsData);
@@ -355,10 +361,10 @@ if (!Array.isArray(participantsData)) {
         };
 
         setParticipants((prev) => {
-  const exists = prev.some((p) => p.userId === myUserId);
-  if (exists) return prev;
-  return [...prev, myInfo];
-});
+          const exists = prev.some((p) => p.userId === myUserId);
+          if (exists) return prev;
+          return [...prev, myInfo];
+        });
         participantsRef.current = [...participantsRef.current, myInfo];
 
         // 5. joinRoom 전송
@@ -411,11 +417,11 @@ if (!Array.isArray(participantsData)) {
     });
 
     socket.on('newParticipantArrived', (msg) => {
-        const { name } = msg;
-        if (!name) return;
+      const { name } = msg;
+      if (!name) return;
 
-       const exists = participantsRef.current.find((p) => p.username === name);
-  if (exists) return;
+      const exists = participantsRef.current.find((p) => p.username === name);
+      if (exists) return;
 
       const userId =
         name.split('').reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0) % 10000;
@@ -434,11 +440,11 @@ if (!Array.isArray(participantsData)) {
         isSecret: false,
       };
 
-       setParticipants((prev) => {
-    const alreadyExists = prev.some((p) => p.username === name);
-    if (alreadyExists) return prev;
-    return [...prev, newParticipant];
-  });
+      setParticipants((prev) => {
+        const alreadyExists = prev.some((p) => p.username === name);
+        if (alreadyExists) return prev;
+        return [...prev, newParticipant];
+      });
 
       participantsRef.current = [...participantsRef.current, newParticipant];
     });
