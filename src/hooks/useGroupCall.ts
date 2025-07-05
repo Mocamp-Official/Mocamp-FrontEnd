@@ -68,6 +68,7 @@ export function useGroupCall({
         audio: true,
       });
       setLocalStream(mediaStream);
+
       return mediaStream;
     } catch (err: any) {
       setError(err.message || '카메라/마이크 접근 실패');
@@ -88,7 +89,6 @@ export function useGroupCall({
     },
     [myUserId, roomId],
   );
-
   // 캠/마이크 토글 (켜기/끄기) 처리
   const toggleMedia = useCallback(
     (type: 'video' | 'audio', status: boolean) => {
@@ -99,6 +99,7 @@ export function useGroupCall({
         setParticipants((prev) =>
           prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
         );
+
         kurentoSignalingRef.current?.send(`/pub/data/cam-status/${roomId}`, {
           userId: myUserId,
           camStatus: status,
@@ -108,6 +109,7 @@ export function useGroupCall({
         setParticipants((prev) =>
           prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
         );
+
         kurentoSignalingRef.current?.send(`/pub/data/mic-status/${roomId}`, {
           userId: myUserId,
           micStatus: status,
@@ -116,7 +118,6 @@ export function useGroupCall({
     },
     [localStream, myUserId, roomId],
   );
-
   // 방장 위임 요청 전송
   const delegateAdmin = useCallback(
     (newAdminId: number) => {
@@ -178,7 +179,6 @@ export function useGroupCall({
                   micStatus: true,
                   isAdmin: false,
                   stream: e.streams[0],
-
                   goals: [],
                   resolution: '',
                   isMyGoal: false,
@@ -237,7 +237,6 @@ export function useGroupCall({
   }, []);
 
   // 참가자 상태 업데이트
-
   const addParticipant = (participant: Participant) => {
     setParticipants((prev) =>
       prev.some((p) => p.userId === participant.userId) ? prev : [...prev, participant],
@@ -308,7 +307,6 @@ export function useGroupCall({
                 isSecret: false,
               },
             ]);
-
             socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
             hasJoinedRoom.current = true;
           }
@@ -463,7 +461,6 @@ export function useGroupCall({
     selectedDelegateId,
     setSelectedDelegateId,
     setAdminUsername,
-
     openDelegationModal,
     delegateAdmin,
     toggleMedia,
