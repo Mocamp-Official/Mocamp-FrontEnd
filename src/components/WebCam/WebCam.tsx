@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { useEffect, useRef, useState } from 'react';
 import WebcamCamera from '@/public/svgs/webcamcamera.svg';
 import VoiceIcon from '@/public/svgs/VoiceIcon.svg';
@@ -72,9 +74,10 @@ const WebCamTile = ({
   return (
     <div className="relative flex h-[144px] w-[256px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D] lg:h-[202.5px] lg:w-[360px] xl:h-[270px] xl:w-[480px]">
       {camStatus && participant.stream ? (
-        <div className="absolute inset-0 z-0" style={{ transform: 'rotateY(180deg)' }}>
-          <WebCamMedia stream={participant.stream} />
-        </div>
+      <div className="absolute inset-0 z-0">
+          <WebCamMedia stream={participant.stream} isMirror={isLocal} />
+      </div>
+
       ) : (
         <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold tracking-[-0.4px] text-[rgba(255,255,255,0.20)] select-none">
           카메라가 꺼져있습니다
