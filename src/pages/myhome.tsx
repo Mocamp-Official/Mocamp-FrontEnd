@@ -1,5 +1,7 @@
+import { apiWithToken } from '@/apis/axios';
 import { fetchMyhome } from '@/apis/myhome';
 import CreateJoinHeader from '@/components/Header/CreateJoinHeader';
+import ProfileModal from '@/components/myhome/content/ProfileModal';
 import MocampUsageTrend from '@/components/myhome/MocampUsageTrend';
 import ParticipantedMocamp from '@/components/myhome/ParticipantedMocamp';
 import SideBar from '@/components/myhome/SideBar';
@@ -9,7 +11,7 @@ import { useMyhomeStore } from '@/stores/myhome-store';
 import { useEffect } from 'react';
 
 const MyHome = () => {
-  const { category } = useCategoryStore();
+  const { category, isProfileModal, setIsProfileModal } = useCategoryStore();
   const {
     profileImage,
     username,
@@ -31,7 +33,7 @@ const MyHome = () => {
         totalNumberOfGoals={totalNumberOfGoals}
       />
     ),
-    PARTICIPANTED_MOCAMP: <ParticipantedMocamp roomList={roomList} />,
+    PARTICIPANTED_MOCAMP: <ParticipantedMocamp roomList={roomList} goalList={goalList} />,
     MOCAMP_USAGE_TREND: (
       <MocampUsageTrend
         username={username}
@@ -41,6 +43,10 @@ const MyHome = () => {
         totalNumberOfGoals={totalNumberOfGoals}
       />
     ),
+  };
+
+  const handleCloseModal = () => {
+    setIsProfileModal(false);
   };
 
   useEffect(() => {
@@ -69,9 +75,12 @@ const MyHome = () => {
     <div className="h-screen w-screen bg-[#e6e6e6]">
       <CreateJoinHeader />
       <div className="mt-[50px] flex justify-center gap-[10px] px-4 sm:px-6 md:px-8 lg:px-12">
-        <SideBar profileImage={profileImage} username={username} />
+        <SideBar profileImage={profileImage} username={username} isProfileModal={isProfileModal} />
         {categoryMap[category] ?? null}
       </div>
+      {isProfileModal && (
+        <ProfileModal username={username} profileImage={profileImage} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

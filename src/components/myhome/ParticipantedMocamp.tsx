@@ -22,6 +22,7 @@ const ParticipantedMocamp = ({ roomList }: ParticipantedMocampProps) => {
                 roomName={room.roomName}
                 createdAt={room.startedAt}
                 time={room.duration}
+                userGoalList={room.userGoalList}
               />
             );
           })

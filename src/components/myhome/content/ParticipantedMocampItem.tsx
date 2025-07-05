@@ -11,6 +11,7 @@ interface ParticipantedMocampItemProps {
   createdAt: string;
   time: string;
   roomId: number;
+  userGoalList: [];
 }
 
 const ParticipantedMocampItem = ({
@@ -20,6 +21,7 @@ const ParticipantedMocampItem = ({
   roomName,
   createdAt,
   time,
+  userGoalList,
 }: ParticipantedMocampItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -71,7 +73,7 @@ const ParticipantedMocampItem = ({
           )}
         </div>
       </div>
-      {isOpen && <ParticipantedMocampModal setIsOpen={setIsOpen} />}
+      {isOpen && <ParticipantedMocampModal setIsOpen={setIsOpen} userGoalList={userGoalList} />}
     </div>
   );
 };

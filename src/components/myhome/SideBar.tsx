@@ -6,10 +6,11 @@ import { useRouter } from 'next/router';
 interface SideBarProps {
   profileImage: string;
   username: string;
+  isProfileModal: boolean;
 }
 
 const SideBar = ({ profileImage, username }: SideBarProps) => {
-  const { category, setCategory } = useCategoryStore();
+  const { category, setCategory, setIsProfileModal } = useCategoryStore();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -39,7 +40,17 @@ const SideBar = ({ profileImage, username }: SideBarProps) => {
         {username}
       </p>
 
-      <div className="mt-[1.875rem] flex h-[126px] w-[14.25rem] flex-col gap-4 rounded-[0.625rem] border border-[#e8e8e8] bg-white p-[1.25rem]">
+      <div className="mt-[1.875rem] flex h-[188px] w-[14.25rem] flex-col justify-between rounded-[0.625rem] border border-[#e8e8e8] bg-white p-[1.25rem]">
+        <p
+          onClick={() => {
+            setIsProfileModal(true);
+          }}
+          className={`hover:text-subhead text-body1 text-gray9 cursor-pointer font-medium hover:text-[#27cfa5]`}
+        >
+          나의 프로필
+        </p>
+        <hr className="border-[#e8e8e8]" />
+
         <p
           onClick={() => {
             setCategory('PARTICIPANTED_MOCAMP');
