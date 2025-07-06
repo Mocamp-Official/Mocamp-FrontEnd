@@ -53,6 +53,7 @@ const RoomPage = () => {
     camStatus,
     micStatus,
     isHost,
+    initialParticipants: participants,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);

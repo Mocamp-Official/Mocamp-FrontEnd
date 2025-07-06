@@ -3,6 +3,7 @@ import { KurentoSignalingSocket } from '@/libs/groupcallsignal';
 import { Participant } from '@/types/room';
 import { apiWithToken } from '@/apis/axios';
 import { DelegationUpdateResponse } from '@/types/delegation';
+import { signalingSocket } from '@/libs/socket';
 
 interface UseGroupCallProps {
   roomId: number;
@@ -74,10 +75,10 @@ export function useGroupCall({
       setParticipants((prev) =>
         prev.map((p) => (p.userId === myUserId ? { ...p, isWorking: status } : p)),
       );
-      kurentoSignalingRef.current?.send(`/pub/data/work-status/${roomId}`, {
-        userId: myUserId,
-        workStatus: status,
-      });
+     signalingSocket.send(`/pub/data/work-status/${roomId}`, {
+  userId: myUserId,
+  workStatus: status,
+});
     },
     [myUserId, roomId],
   );
@@ -90,19 +91,19 @@ export function useGroupCall({
         setParticipants((prev) =>
           prev.map((p) => (p.userId === myUserId ? { ...p, camStatus: status } : p)),
         );
-        kurentoSignalingRef.current?.send(`/pub/data/cam-status/${roomId}`, {
-          userId: myUserId,
-          camStatus: status,
-        });
+        signalingSocket.send(`/pub/data/cam-status/${roomId}`, {
+  userId: myUserId,
+  camStatus: status,
+});
       } else {
         localStream.getAudioTracks().forEach((track) => (track.enabled = status));
         setParticipants((prev) =>
           prev.map((p) => (p.userId === myUserId ? { ...p, micStatus: status } : p)),
         );
-        kurentoSignalingRef.current?.send(`/pub/data/mic-status/${roomId}`, {
-          userId: myUserId,
-          micStatus: status,
-        });
+        signalingSocket.send(`/pub/data/mic-status/${roomId}`, {
+  userId: myUserId,
+  micStatus: status,
+});
       }
     },
     [localStream, myUserId, roomId],
@@ -110,7 +111,9 @@ export function useGroupCall({
 
   const delegateAdmin = useCallback(
     (newAdminId: number) => {
-      kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, { newAdminId });
+      signalingSocket.send(`/pub/data/delegation/${roomId}`, {
+  newAdminId,
+});
     },
     [roomId],
   );
@@ -209,30 +212,24 @@ export function useGroupCall({
     kurentoSignalingRef.current = socket;
     socket.connect();
 
-    socket.setOnOpenCallback(async () => {
-      const stream = await getLocalMediaStream();
-      if (stream) {
-        setLocalStream(stream);
+   socket.setOnOpenCallback(async () => {
+  const stream = await getLocalMediaStream();
+  if (stream) {
+    setLocalStream(stream);
 
-        const me = {
-          userId: myUserId,
-          username: myUsername,
-          isWorking: true,
-          camStatus,
-          micStatus,
-          isAdmin: isHost,
-          stream,
-          goals: [],
-          resolution: '',
-          isMyGoal: true,
-          isSecret: false,
-        };
+    const updatedInitial = initialParticipants.map((p) => ({
+      ...p,
+      isAdmin: p.username === adminUsernameRef.current,
+      stream: p.userId === myUserId ? stream : null,
+    }));
 
-        setParticipants([me]);
-        participantsRef.current = [me];
-      }
-      socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
-    });
+    setParticipants(updatedInitial);
+    participantsRef.current = updatedInitial;
+  }
+
+  socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
+});
+
 
     socket.on('roomParticipants', (msg) => {
       const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
@@ -255,11 +252,16 @@ export function useGroupCall({
 
     socket.on('ADMIN_UPDATED', (msg: DelegationUpdateResponse) => {
       setAdminUsername(msg.newAdminUsername);
+
       setParticipants((prev) => {
-        const updated = prev.map((p) => ({
-          ...p,
-          isAdmin: p.username === msg.newAdminUsername,
-        }));
+        const updated = prev.map((p) => {
+          const isNowAdmin = p.username === msg.newAdminUsername;
+          return {
+            ...p,
+            isAdmin: isNowAdmin,
+          };
+        });
+
         participantsRef.current = updated;
         return updated;
       });
@@ -347,7 +349,6 @@ export function useGroupCall({
     };
   }, [roomId, myUsername, getLocalMediaStream]);
 
-  
   return {
     participants,
     localStream,
