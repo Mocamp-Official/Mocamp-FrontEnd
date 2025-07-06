@@ -214,7 +214,6 @@ export function useGroupCall({
       if (stream) {
         setLocalStream(stream);
 
-        // ✅ 1. 내 정보 명확히 세팅 (중복 방지 위해 강제 세팅)
         const me = {
           userId: myUserId,
           username: myUsername,
@@ -232,8 +231,6 @@ export function useGroupCall({
         setParticipants([me]);
         participantsRef.current = [me];
       }
-
-      // ✅ 2. joinRoom은 반드시 setParticipants 이후 호출
       socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
     });
 
