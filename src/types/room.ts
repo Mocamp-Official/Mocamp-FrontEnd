@@ -19,6 +19,16 @@ export interface Participant {
   stream?: MediaStream | null;  
 }
 
+export interface GroupCallState {
+  participants: Participant[];
+  streams: { [userId: number]: MediaStream | null };
+  localStream: MediaStream | null;
+  roomId: number;
+  myUserId: number;
+}
+
+
+
 export interface RoomInfo {
   roomId: number;
   roomName: string;
