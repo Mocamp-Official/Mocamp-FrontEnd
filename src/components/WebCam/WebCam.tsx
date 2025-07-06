@@ -70,7 +70,7 @@ const WebCamTile = ({
   };
 
   return (
-    <div className="relative flex h-[270px] w-[480px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
+     <div className="relative flex h-[144px] w-[256px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D] lg:h-[202.5px] lg:w-[360px] xl:h-[270px] xl:w-[480px]">
       {camStatus && participant.stream ? (
         <div className="absolute inset-0 z-0">
           <WebCamMedia stream={participant.stream} isMirror={isLocal} />

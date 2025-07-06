@@ -14,6 +14,14 @@ interface UseGroupCallProps {
   onRoomLeft?: () => void;
 }
 
+export const getMainVideoResolution = () => {
+  const width = typeof window !== 'undefined' ? window.innerWidth : 1920;
+
+  if (width >= 1920) return { width: 480, height: 270 };
+  if (width >= 1440) return { width: 360, height: 202.5 };
+  return { width: 256, height: 144 };
+};
+
 export function useGroupCall({
   roomId,
   myUserId,
@@ -67,8 +75,9 @@ export function useGroupCall({
   // 로컬 미디어(캠/마이크) 스트림 가져오기
   const getLocalMediaStream = useCallback(async () => {
     try {
+      const { width, height } = getMainVideoResolution();
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 480, height: 270 },
+        video: { width, height },
         audio: micStatus,
       });
 
