@@ -1,3 +1,9 @@
+// 1. 다른 사람 캠이 있다 없음 - 새로 고침하면 그러함
+// 2. 방장 위임해도 방장 아이콘이 안옮겨짐 ㅋㅋ 
+// 미치네 진짜 , 위임된 사람 캠 타일 위로 가야함
+// 3. 상태도(마이크/ 캠/ 작업중) 안넘어감 + 저장 안됨
+// 4. 내가 방장인데 방장이 아니래 ㅋㅋ 미친
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { KurentoSignalingSocket } from '@/libs/groupcallsignal';
 import { Participant } from '@/types/room';
