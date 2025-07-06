@@ -81,13 +81,11 @@ const RoomPage = () => {
   };
 
   // 유저 좌측 고정
-  const sortedCallParticipants = Array.isArray(callParticipants)
-    ? [...callParticipants].sort((a, b) => {
-        if (a.isMyGoal) return -1;
-        if (b.isMyGoal) return 1;
-        return 0;
-      })
-    : [];
+  const sortedCallParticipants = [...callParticipants].sort((a, b) => {
+    if (a.isMyGoal) return -1;
+    if (b.isMyGoal) return 1;
+    return 0;
+  });
 
   const sortedTodoGroups = Array.isArray(todoGroups)
     ? [...todoGroups].sort((a, b) => {
@@ -99,7 +97,7 @@ const RoomPage = () => {
 
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
-      <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} isOwner={isHost}   />
+      <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} isOwner={isHost} />
       <Sidebar
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}
@@ -120,12 +118,12 @@ const RoomPage = () => {
                 adminUsername={adminUsername}
                 onToggleMedia={toggleMedia}
                 onOpenDelegationModal={() => {
-    if (isHost) {
-      openDelegationModal();
-    } else {
-      setIsNotDelegationModalOpen(true);
-    }
-  }}
+                  if (isHost) {
+                    openDelegationModal();
+                  } else {
+                    setIsNotDelegationModalOpen(true);
+                  }
+                }}
                 onShowNotDelegationModal={() => setIsNotDelegationModalOpen(true)}
                 onSetWorkStatus={setParticipantWorkStatus}
               />
