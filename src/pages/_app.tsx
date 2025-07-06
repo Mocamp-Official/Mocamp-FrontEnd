@@ -4,8 +4,6 @@ import Script from 'next/script';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { useEffect } from 'react';
-import { signalingSocket } from '@/libs/socket';
 
 const pretendard = localFont({
   src: [
@@ -23,14 +21,7 @@ declare global {
   }
 }
 
-
 export default function App({ Component, pageProps }: AppProps) {
-
-  useEffect(() => {
-  signalingSocket.connect();
-}, []);
-
-
   const handleKakaoScriptLoad = () => {
     if (typeof window !== 'undefined') {
       window.kakaoSdkLoaded = true;

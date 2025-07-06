@@ -16,29 +16,26 @@ import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import { useGroupCall } from '@/hooks/useGroupCall';
 import type { Participant } from '@/types/room';
-import { useRoomSubscriber } from '@/hooks/room/useRoomSubscriber';
-
 
 const MAX_VISIBLE = 2;
 const RoomPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
-  const numericRoomId = Number(roomId);
-  if (!numericRoomId || Number.isNaN(numericRoomId)) return null;
+
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
-    useRoomContext(String(numericRoomId));
+    useRoomContext(roomId);
 
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
 
-  const camStatus = router.query.cam !== 'false';
-  const micStatus = router.query.mic !== 'false';
+  const camStatus = router.query.cam !== 'false';   
+const micStatus = router.query.mic !== 'false';
+
 
   const {
     participants: callParticipants,
-    setParticipants,
     toggleMedia,
     delegateAdmin,
     adminUsername,
@@ -50,50 +47,15 @@ const RoomPage = () => {
     selectedDelegateId,
     setSelectedDelegateId,
   } = useGroupCall({
-    roomId: numericRoomId,
+    roomId: Number(roomId ?? 0),
     myUserId,
     myUsername,
-    camStatus,
-    micStatus,
+    camStatus,    
+  micStatus,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
-
-  useRoomSubscriber(roomId as string, {
-    onUserUpdate: (payload) => {
-      const { userId, username, goals = [] } = payload;
-
-      setParticipants((prev: Participant[]) => {
-        if (prev.some((p: Participant) => p.userId === userId)) return prev;
-        return [
-          ...prev,
-          {
-            userId,
-            username,
-            isWorking: true,
-            camStatus: true,
-            micStatus: true,
-            stream: null,
-            goals,
-            resolution: '',
-            isMyGoal: false,
-            isSecret: false,
-            isAdmin: false,
-          },
-        ];
-      });
-
-      setTodosByUser(userId, goals);
-    },
-
-    onUserLeave: (payload) => {
-      const { userId } = payload;
-
-      setParticipants((prev) => prev.filter((p) => p.userId !== userId));
-      setTodosByUser(userId, []);
-    },
-  });
 
   if (!router.isReady || !roomId || !roomData || participants.length === 0) {
     return null;
@@ -117,23 +79,6 @@ const RoomPage = () => {
     }
   };
 
-  // 유저 좌측 고정
-  const sortedCallParticipants = Array.isArray(callParticipants)
-    ? [...callParticipants].sort((a, b) => {
-        if (a.isMyGoal) return -1;
-        if (b.isMyGoal) return 1;
-        return 0;
-      })
-    : [];
-
-  const sortedTodoGroups = Array.isArray(todoGroups)
-    ? [...todoGroups].sort((a, b) => {
-        if (a.isMyGoal) return -1;
-        if (b.isMyGoal) return 1;
-        return 0;
-      })
-    : [];
-
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
       <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} />
@@ -149,7 +94,7 @@ const RoomPage = () => {
         {/* 웹캠 영역 */}
         <div className="mb-5 flex w-full gap-[10.67px] lg:gap-[15px] xl:gap-5">
           {Array.isArray(callParticipants) &&
-            sortedCallParticipants.map((participant) => (
+            callParticipants.map((participant: Participant) => (
               <WebCamTile
                 key={participant.userId}
                 participant={participant}
@@ -194,7 +139,7 @@ const RoomPage = () => {
 
           {/* TodoSection 리스트 */}
           <div className="flex w-[789.33px] gap-[10.67px] lg:w-[1110px] lg:gap-[15px] xl:w-[1480px] xl:gap-5">
-            {sortedTodoGroups.map((g) => (
+            {visibleGroups.map((g) => (
               <TodoSection
                 key={g.id}
                 resolution={g.resolution}

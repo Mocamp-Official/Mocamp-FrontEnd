@@ -51,11 +51,11 @@ export const useRoomSubscriber = (roomId: string | null, handlers: RoomSubscribe
     };
 
     // 구독 등록
-    // signalingSocket.subscribe(destination, handleMessage);
+    signalingSocket.subscribe(destination, handleMessage);
 
     // 연결 시도
     if (!signalingSocket.isConnected()) {
-      signalingSocket.subscribe(destination, handleMessage);
+      signalingSocket.connect();
     }
 
     return () => {

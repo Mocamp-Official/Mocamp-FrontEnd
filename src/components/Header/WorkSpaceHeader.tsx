@@ -41,7 +41,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
       const checkLinkReady = setInterval(() => {
         if (window.Kakao?.Link) {
           setIsKakaoInitialized(true);
-          console.log('Kakao SDK 초기화 완료');
+          console.log('Kakao SDK 완전 초기화 완료');
           clearInterval(checkLinkReady);
         } else {
           console.log('Kakao.Link 아직 준비되지 않음');
@@ -50,22 +50,15 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
     };
 
     const tryInitKakao = () => {
-        const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
-
-          if (!kakaoKey) {
-            console.error('Kakao API 키가 undefined입니다. 환경 변수 확인 필요!');
-            return;
-          }
-      
-       if (
+      if (
         typeof window !== 'undefined' &&
         window.kakaoSdkLoaded &&
         window.Kakao &&
         !window.Kakao.isInitialized()
       ) {
-        window.Kakao.init(kakaoKey); 
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
         console.log('Kakao SDK 초기화 시작');
-        waitForKakaoReady();
+        waitForKakaoReady(); // 기다림
       } else if (window.Kakao?.isInitialized() && window.Kakao?.Link) {
         setIsKakaoInitialized(true);
         console.log('Kakao SDK 이미 초기화됨 + Link 준비됨');
@@ -162,7 +155,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
         {/* 공지사항 필드 */}
         <div
           className="absolute top-[10.67px] left-[434.67px] flex h-8 w-102 items-center rounded-[10px] border border-[#E8E8E8] bg-white px-[21.33px] focus:outline-none lg:top-[15px] lg:left-[611px] lg:h-[45px] lg:w-[573.75px] lg:px-7.5 xl:top-[20px] xl:left-[815px] xl:h-[60px] xl:w-[765px] xl:px-10"
-          onClick={isOwner ? handleNoticeClick : undefined}
+          onClick={handleNoticeClick}
         >
           <span
             key={notice}

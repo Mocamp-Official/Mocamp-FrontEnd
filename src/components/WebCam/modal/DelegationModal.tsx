@@ -5,6 +5,7 @@ import SelectIcon from '@/public/svgs/select.svg';
 import NoneIcon from '@/public/svgs/none.svg';
 import ModalLayout from '@/components/common/modal/ModalLayout';
 
+
 interface DelegationModalProps {
   participants: Participant[];
   currentUserId: number;
@@ -24,7 +25,9 @@ const DelegationModal = ({
 }: DelegationModalProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const delegatableParticipants = participants;
+  const delegatableParticipants = participants.filter(
+    (p: Participant) => p.userId !== currentUserId,
+  );
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -37,10 +40,7 @@ const DelegationModal = ({
 
   return (
     <ModalLayout onClose={onClose} className="h-[406px] w-[660px]">
-      <button
-        onClick={onClose}
-        className="text-gray5 absolute top-[50px] right-[50px] h-[25px] w-[25px]"
-      >
+      <button onClick={onClose} className="text-gray5 absolute top-[50px] right-[50px] h-[25px] w-[25px]">
         <CloseButton />
       </button>
 
