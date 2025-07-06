@@ -47,27 +47,26 @@ const CreateJoinHeader = () => {
     'my-auto flex h-[50.4px] w-[171px] cursor-pointer items-center justify-center rounded-[10px] text-[17.9px] leading-[100%] font-semibold tracking-[-0.02em]';
 
   return (
-    <header className="h-[100px] justify-center bg-white">
-      <div className="mx-auto flex h-full max-w-[1280px] justify-between">
+    <header className="sticky top-0 left-0 h-[53.333px] w-screen bg-white lg:h-[75px] xl:h-[100px]">
+      <div className="relative mx-auto h-full w-full">
         <img
           src="/svgs/MocampIcon.svg"
           alt="모캠프 로고"
-          className="my-auto h-[48.46px] w-[120px] cursor-pointer"
-          onClick={handleLogoClick}
+          className="absolute top-[13.67px] left-[170.67px] h-[25.83px] w-16 lg:top-[19.5px] lg:left-60 lg:h-[36.32px] lg:w-[90px] xl:top-[26px] xl:left-[320px] xl:h-[48.46px] xl:w-[120px]"
         />
 
         <div className="my-auto flex flex-row gap-[8.45px]">
           <button
             type="button"
             onClick={openJoinModal}
-            className={`${baseButtonStyle} bg-gray-100 text-[#555555] hover:bg-gray-200`}
+            className="font-pre absolute top-[13.33px] right-[266.4px] flex h-[27px] w-[92px] items-center justify-center rounded-[5.333px] bg-gray-100 px-4 py-2 text-[9.6px] leading-[100%] font-semibold tracking-[-0.02em] text-[#555555] hover:bg-gray-200 lg:top-[18.75px] lg:right-[376px] lg:h-[38.5px] lg:w-[128px] lg:rounded-[7.5px] lg:px-[22.5px] lg:py-[11.25px] lg:text-[13.5px] xl:top-[25px] xl:right-[501px] xl:h-[51px] xl:w-[171px] xl:rounded-[10px] xl:px-[20px] xl:py-[10px] xl:text-[18px]"
           >
             모캠프 참여하기
           </button>
           <button
             type="button"
             onClick={handleCreateClick}
-            className={`${baseButtonStyle} bg-[#27CFA5] text-white hover:bg-teal-500`}
+            className="font-pre absolute top-[13.33px] right-[169.87px] flex h-[27px] w-[92px] items-center justify-center rounded-[5.333px] bg-[#27CFA5] px-4 py-2 text-[9.6px] leading-[100%] font-semibold tracking-[-0.02em] text-white hover:bg-teal-500 lg:top-[18.75px] lg:right-[240.25px] lg:h-[38.5px] lg:w-[128px] lg:rounded-[7.5px] lg:px-[22.5px] lg:py-[11.25px] lg:text-[13.5px] xl:top-[25px] xl:right-80 xl:h-[51px] xl:w-[171px] xl:rounded-[10px] xl:px-[20px] xl:py-[10px] xl:text-[18px]"
           >
             모캠프 생성하기
           </button>
