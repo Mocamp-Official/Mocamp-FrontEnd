@@ -37,7 +37,6 @@ const WebCamTile = ({
     onSetWorkStatus(working);
   };
 
-
   useEffect(() => {
     if (videoRef.current && participant.stream instanceof MediaStream) {
       videoRef.current.srcObject = participant.stream;
@@ -73,8 +72,8 @@ const WebCamTile = ({
   return (
     <div className="relative flex h-[270px] w-[480px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D]">
       {camStatus && participant.stream ? (
-        <div className="absolute inset-0 z-0" style={{ transform: 'rotateY(180deg)' }}>
-          <WebCamMedia stream={participant.stream} />
+        <div className="absolute inset-0 z-0">
+          <WebCamMedia stream={participant.stream} isMirror={isLocal} />
         </div>
       ) : (
         <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold tracking-[-0.4px] text-[rgba(255,255,255,0.20)] select-none">
@@ -105,7 +104,6 @@ const WebCamTile = ({
         </span>
 
         <div className="ml-auto flex items-center">
-
           <div className="relative">
             <button
               onClick={() => setStatusOpen(!statusOpen)}
@@ -148,7 +146,8 @@ const WebCamTile = ({
 
           <button
             onClick={toggleMic}
-            className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]">
+            className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
+          >
             <VoiceIcon
               width={14}
               height={20}
