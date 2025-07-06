@@ -27,13 +27,13 @@ const SideBar = ({ profileImage, username }: SideBarProps) => {
         <p className="text-xl font-semibold text-white">마이페이지</p>
       </div>
 
-      <div className="relative mt-[3.125rem] flex h-[12.3125rem] w-[12.5rem] items-center justify-center rounded-full border-2 border-[#27CFA5]">
+      <div className="relative mt-[3.125rem] flex h-[12.5rem] w-[12.5rem] items-center justify-center rounded-full border-2 border-[#27CFA5]">
         <Image
-          src={profileImage.length > 0 ? profileImage : '/defaultProfile.png'}
+          src={profileImage.length > 0 ? profileImage : '/defaultProfile2.png'}
           width={200}
           height={197}
           alt="프로필 사진"
-          className="rounded-full"
+          className="aspect-square rounded-full object-cover"
         />
       </div>
       <p className="mt-[1.875rem] cursor-default text-[1.75rem] font-semibold text-[#555555]">
