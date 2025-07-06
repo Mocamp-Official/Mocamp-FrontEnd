@@ -1,7 +1,26 @@
-// 1. 다른 사람 캠이 있다 없음 - 새로 고침하면 그러함
-// 2. 방장 위임해도 방장 아이콘이 안옮겨짐 ㅋㅋ : 방장 위임시 참가자 조회가 안됨
-// 미치네 진짜 , 위임된 사람 캠 타일 위로 가야함
+// 1. 다른 사람 캠이 있다 없음 - 새로 고침하면 그러함 : 내 생각에 배포하면 좀 나아질거 같음 느낌이 그러함
+///sub/data/{roomId} 
+// {GoalListResponse
+// GoalResponse
+// NoticeUpdateResponse
+// ResolutionUpdateResponse
+// DelegationUpdateResponse
+// AlertResponse
+// RoomEnterUserUpdateResponse
+// RoomExitUserUpdateResponse
+// StatusDTO
+// }
+
+// 2. 방장 위임해도 방장 아이콘이 안옮겨짐 ㅋㅋ : 방장 위임시 참가자 조회가 안됨 미치네 진짜 , 위임된 사람 캠 타일 위로 가야함
+///pub/data/delegation/{roomId}
+// Request Boody : DelegationUpdateReqeust
+
+
 // 3. 상태도(마이크/ 캠/ 작업중) 안넘어감 + 저장 안됨
+///pub/data/work-status/{roomId} // /pub/data/mic-status/{roomId} // /pub/data/cam-status/{roomId}
+// Request Boody : StatusDTO
+
+
 // 4. 내가 방장인데 방장이 아니래 ㅋㅋ 미친
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -100,6 +119,7 @@ export function useGroupCall({
     }
   }, [camStatus, micStatus, myUserId, myUsername, adminUsername]);
 
+
   // 작업 상태 변경 &  서버 전송
   const setParticipantWorkStatus = useCallback(
     (status: boolean) => {
@@ -113,7 +133,10 @@ export function useGroupCall({
     },
     [myUserId, roomId],
   );
-  // 캠/마이크 토글 (켜기/끄기) 처리
+
+
+
+  // 캠/마이크 토글 (켜기/끄기) 처리  &  서버 전송
   const toggleMedia = useCallback(
     (type: 'video' | 'audio', status: boolean) => {
       if (!localStream) return;
@@ -142,7 +165,9 @@ export function useGroupCall({
     },
     [localStream, myUserId, roomId],
   );
-  // 방장 위임 요청 전송
+
+
+  // 방장 위임 요청 전송  &  서버 전송
   const delegateAdmin = useCallback(
     (newAdminId: number) => {
       kurentoSignalingRef.current?.send(`/pub/data/delegation/${roomId}`, {
@@ -152,7 +177,7 @@ export function useGroupCall({
     [roomId],
   );
 
-  // 방장 위임 모달 열기
+  // 방장 위임 모달 열기  &  서버 전송
   const openDelegationModal = useCallback(() => {
     setIsDelegationOpen(true);
   }, []);
