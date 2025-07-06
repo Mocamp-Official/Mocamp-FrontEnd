@@ -26,6 +26,7 @@ const RoomPage = () => {
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(roomId);
 
+  const isHost = router.query.from === 'create';
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
@@ -51,6 +52,7 @@ const RoomPage = () => {
     myUsername,
     camStatus,
     micStatus,
+    isHost,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);
@@ -97,7 +99,7 @@ const RoomPage = () => {
 
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
-      <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} />
+      <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} isOwner={isHost}   />
       <Sidebar
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}
@@ -117,7 +119,13 @@ const RoomPage = () => {
                 isLocal={participant.userId === myUserId}
                 adminUsername={adminUsername}
                 onToggleMedia={toggleMedia}
-                onOpenDelegationModal={openDelegationModal}
+                onOpenDelegationModal={() => {
+    if (isHost) {
+      openDelegationModal();
+    } else {
+      setIsNotDelegationModalOpen(true);
+    }
+  }}
                 onShowNotDelegationModal={() => setIsNotDelegationModalOpen(true)}
                 onSetWorkStatus={setParticipantWorkStatus}
               />

@@ -12,6 +12,7 @@ interface UseGroupCallProps {
   micStatus: boolean;
   initialParticipants?: Participant[];
   onRoomLeft?: () => void;
+  isHost: boolean;
 }
 
 export const getMainVideoResolution = () => {
@@ -30,6 +31,7 @@ export function useGroupCall({
   micStatus,
   initialParticipants = [],
   onRoomLeft,
+  isHost,
 }: UseGroupCallProps) {
   // 참가자 목록 상태 및 참조
   const [participants, setParticipants] = useState<Participant[]>(initialParticipants);
@@ -315,7 +317,7 @@ export function useGroupCall({
                 isWorking: true,
                 camStatus,
                 micStatus,
-                isAdmin: true,
+                isAdmin: isHost,
                 stream,
                 goals: [],
                 resolution: '',
