@@ -172,7 +172,7 @@ export const useRoomContext = (roomId?: string) => {
   });
 
   const setTodosByUser = useCallback((userId: number, updated: Todo[]) => {
-    setTodoGroups((prev) => prev.map((g) => (g.userId === userId ? { ...g, items: updated } : g)));
+    setTodoGroups((prev) => prev.map((g) => (g.userId === userId ? { ...g, goals: updated } : g)));
   }, []);
 
   const setAlertVisible = (visible: boolean) => {
