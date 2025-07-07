@@ -3,16 +3,16 @@ import ProgressCard from '@/components/todo/progress/ProgressCard';
 import TodoSecretContent from './TodoSecretContent';
 import TodoCard from './TodoCard';
 
-import { Todo } from '@/types/todo';
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
+import { Goal } from '@/types/room';
 
 interface TodoSectionProps {
   roomId: string;
-  goals: Todo[];
+  goals: Goal[];
   resolution: string;
   isMyGoal: boolean;
   isSecret: boolean;
-  setTodos: (newTodos: Todo[]) => void;
+  setTodos: (newTodos: Goal[]) => void;
 }
 const TodoSection = ({
   roomId,

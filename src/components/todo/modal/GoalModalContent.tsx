@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Todo } from '@/types/todo';
 import CloseButton from '@/public/svgs/CloseButton.svg';
+import { Goal } from '@/types/room';
 
 interface GoalModalContentProps {
-  todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  todos: Goal[];
+  setTodos: React.Dispatch<React.SetStateAction<Goal[]>>;
   mode: 'add' | 'edit';
 }
 

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Todo } from '@/types/todo';
 import GoalModalWrapper from '@/components/todo/modal/GoalModalWrapper';
+import { Goal } from '@/types/room';
 
 interface TodoEmptyContentProps {
-  onAddTodos: (newTodos: Todo[]) => void;
+  onAddTodos: (newTodos: Goal[]) => void;
   roomId: string;
   isMyGoal: boolean;
   isSecret: boolean;

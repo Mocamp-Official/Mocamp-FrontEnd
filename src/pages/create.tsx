@@ -9,7 +9,6 @@ import CardPageLayout from '@/components/common/CardPageLayout';
 import CreateJoinHeader from '@/components/Header/CreateJoinHeader';
 import { useRoomFormStore } from '@/stores/roomForm-store';
 import { CreateRoomFormData } from '@/types/create';
-import { createRoom } from '@/apis/room';
 
 const Create = () => {
   const router = useRouter();

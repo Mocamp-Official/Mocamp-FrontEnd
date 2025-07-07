@@ -7,14 +7,15 @@ import UnlockButton from '@/public/svgs/UnlockIcon.svg';
 import LockButton from '@/public/svgs/LockIcon.svg';
 
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
-import { Todo } from '@/types/todo';
+
 import { useRoomContext } from '@/hooks/room/useRoomContext';
+import { Goal } from '@/types/room';
 
 interface GoalModalWrapperProps {
   onClose: () => void;
   mode: 'add' | 'edit';
-  todos?: Todo[];
-  onSubmit: (updatedTodos: Todo[]) => void;
+  todos?: Goal[];
+  onSubmit: (updatedTodos: Goal[]) => void;
   roomId: string;
   isSecret: boolean;
 }
@@ -27,7 +28,7 @@ const GoalModalWrapper = ({
   roomId,
   isSecret,
 }: GoalModalWrapperProps) => {
-  const [currentTodos, setCurrentTodos] = useState<Todo[]>(todos);
+  const [currentTodos, setCurrentTodos] = useState<Goal[]>(todos);
   const { updateGoals } = useRoomPublisher(roomId);
   const [isPrivate, setIsPrivate] = useState(isSecret);
 

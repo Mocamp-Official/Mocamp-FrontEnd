@@ -1,14 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Todo } from '@/types/todo';
+
 import { fetchRoomData, fetchRoomParticipants } from '@/apis/room';
 import { useRoomSubscriber } from '@/hooks/room/useRoomSubscriber';
 import { Goal, Participant, RoomInfo } from '@/types/room';
 
 export interface TodoGroup {
   userId: number;
-  goals: Todo[];
+  goals: Goal[];
   resolution: string;
   isMyGoal: boolean;
   isSecret: boolean;
@@ -62,21 +62,16 @@ export const useRoomContext = (roomId?: string) => {
       if (!d?.goals || typeof d.userId !== 'number') return;
 
       setTodoGroups((prev) => {
-        const prevGroup = prev.find((g) => g.userId === d.userId);
+        const exists = prev.some((g) => g.userId === d.userId);
 
         const formatted: TodoGroup = {
           userId: d.userId,
-          goals: d.goals.map((goal: Todo) => ({
-            goalId: goal.goalId,
-            content: goal.content,
-            isCompleted: goal.isCompleted,
-          })),
-          resolution: d.resolution ?? prevGroup?.resolution ?? '',
-          isSecret: d.isSecret ?? prevGroup?.isSecret ?? false,
-          isMyGoal: d.isMyGoal ?? prevGroup?.isMyGoal ?? false,
+          goals: d.goals.map((goal: Goal) => ({ ...goal })), // 새 객체 배열
+          resolution: d.resolution ?? '',
+          isSecret: d.isSecret ?? false,
+          isMyGoal: d.isMyGoal ?? false,
         };
 
-        const exists = prev.some((g) => g.userId === d.userId);
         return exists
           ? prev.map((g) => (g.userId === d.userId ? formatted : g))
           : [...prev, formatted];
@@ -171,7 +166,7 @@ export const useRoomContext = (roomId?: string) => {
     },
   });
 
-  const setTodosByUser = useCallback((userId: number, updated: Todo[]) => {
+  const setTodosByUser = useCallback((userId: number, updated: Goal[]) => {
     setTodoGroups((prev) => {
       const exists = prev.some((g) => g.userId === userId);
       if (exists) {

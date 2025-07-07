@@ -3,7 +3,6 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useRoomForm, RoomFormInput } from '@/hooks/useRoomForm';
-import { createRoom, enterRoom } from '@/apis/room';
 
 import CloseIcon from '@/public/svgs/closeIcon.svg';
 
@@ -11,7 +10,7 @@ import ToggleMicButton from './ToggleMicButton';
 import LabeledBox from './LabeledBox';
 import NumberInput from './NumberInput';
 import ImageUploadBox from './ImageUploadBox';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { CreateRoomFormData } from '@/types/create';
 import { useRoomFormStore } from '@/stores/roomForm-store';
 

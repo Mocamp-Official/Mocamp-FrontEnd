@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { Todo } from '@/types/todo';
+import { Goal } from '@/types/room';
 
 interface TodoCardProps {
-  goals: Todo[];
+  goals: Goal[];
   onToggle: (id: number, isCompleted: boolean) => void;
   editable?: boolean;
 }
