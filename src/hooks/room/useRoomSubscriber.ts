@@ -36,6 +36,7 @@ export const useRoomSubscriber = (roomId: string | null, handlers: RoomSubscribe
           break;
         case 'NOTICE_UPDATED':
           handlers.onNoticeUpdate?.(data);
+          break;
         case 'RESOLUTION_UPDATED':
           handlers.onResolutionUpdate?.(data);
           break;

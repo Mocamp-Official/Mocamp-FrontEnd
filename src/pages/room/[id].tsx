@@ -20,8 +20,10 @@ import type { Participant } from '@/types/room';
 const MAX_VISIBLE = 2;
 const RoomPage = () => {
   const router = useRouter();
+  if (!router.isReady) return null;
+
   const { id } = router.query;
-  const roomId = Array.isArray(id) ? id[0] : id;
+  const roomId = Array.isArray(id) ? id[0] : id!;
 
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(roomId);
