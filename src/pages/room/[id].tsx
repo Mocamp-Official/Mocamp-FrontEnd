@@ -110,9 +110,9 @@ const RoomPage = () => {
         alertInfo={alertInfo}
         onCloseAlert={() => setAlertVisible(false)}
       />
-      <div className="relative flex h-full w-[789.33px] flex-col justify-center lg:w-[1110px] xl:w-[1480px]">
+      <div className="relative flex h-full w-[789.33px] flex-col justify-center pt-[53.333px] lg:w-[1110px] lg:pt-[75px] xl:w-[1480px] xl:pt-[100px]">
         {/* 웹캠 영역 */}
-        <div className="mb-5 flex w-full gap-[10.67px] lg:gap-[15px] xl:gap-5">
+        <div className="mb-[10.67px] flex w-full gap-[10.67px] lg:mb-[15px] lg:gap-[15px] xl:mb-5 xl:gap-5">
           {Array.isArray(callParticipants) &&
             visibleCallTiles.map((participant: Participant) => (
               <WebCamTile
