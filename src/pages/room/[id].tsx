@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Arrow from '@/public/svgs/LeftArrowButton.svg';
@@ -21,21 +21,19 @@ const MAX_VISIBLE = 2;
 
 const RoomPage = () => {
   const router = useRouter();
-  if (!router.isReady) return null;
+  const { id, from, cam, mic } = router.query;
 
-  const { id } = router.query;
-  const roomId = Array.isArray(id) ? id[0] : id!;
+  const roomId = Array.isArray(id) ? id[0] : id || '';
+  const isHost = from === 'create';
+  const camStatus = cam !== 'false';
+  const micStatus = mic !== 'false';
 
   const { todoGroups, setTodosByUser, roomData, participants, alertInfo, setAlertVisible } =
     useRoomContext(roomId);
 
-  const isHost = router.query.from === 'create';
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
-
-  const camStatus = router.query.cam !== 'false';
-  const micStatus = router.query.mic !== 'false';
 
   const {
     participants: callParticipants,
@@ -50,7 +48,7 @@ const RoomPage = () => {
     selectedDelegateId,
     setSelectedDelegateId,
   } = useGroupCall({
-    roomId: Number(roomId ?? 0),
+    roomId: Number(roomId),
     myUserId,
     myUsername,
     camStatus,
@@ -62,16 +60,33 @@ const RoomPage = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
 
+  const meGroup = todoGroups.find((g) => g.isMyGoal);
+  const meParticipant = callParticipants.find((p) => p.isMyGoal);
+
+  const othersTodo = todoGroups.filter((g) => !g.isMyGoal);
+  const othersCall = callParticipants.filter((p) => !p.isMyGoal);
+
+  const visibleTodoSlide = othersTodo.slice(slideIndex, slideIndex + MAX_VISIBLE);
+  const visibleCallSlide = othersCall.slice(slideIndex, slideIndex + MAX_VISIBLE);
+
+  /* 실제 화면에 보여줄 배열 */
+  const visibleTodoGroups = meGroup ? [meGroup, ...visibleTodoSlide] : visibleTodoSlide;
+  const visibleCallTiles = meParticipant ? [meParticipant, ...visibleCallSlide] : visibleCallSlide;
+
+  /* 화살표 표시 조건 */
+  const canSlideLeft = slideIndex > 0;
+  const canSlideRight = slideIndex + MAX_VISIBLE < othersTodo.length;
+
+  /* 슬라이드 인덱스 보정 (새 유저 추가 등) */
+  useEffect(() => {
+    if (othersTodo.length > MAX_VISIBLE && slideIndex + MAX_VISIBLE >= othersTodo.length) {
+      setSlideIndex(Math.max(0, othersTodo.length - MAX_VISIBLE));
+    }
+  }, [othersTodo.length]);
+
   if (!router.isReady || !roomId || !roomData || todoGroups.length === 0) {
     return null;
   }
-
-  const slidingItems = todoGroups.slice(1);
-  const visibleSlide = slidingItems.slice(slideIndex, slideIndex + MAX_VISIBLE);
-  const visibleGroups = [todoGroups[0], ...visibleSlide];
-
-  const canSlideLeft = slideIndex > 0;
-  const canSlideRight = slideIndex + MAX_VISIBLE < slidingItems.length;
 
   const handleLeaveRoom = async () => {
     try {
@@ -83,21 +98,6 @@ const RoomPage = () => {
       alert('방 퇴장 실패');
     }
   };
-
-  // 유저 좌측 고정
-  const sortedCallParticipants = [...callParticipants].sort((a, b) => {
-    if (a.isMyGoal) return -1;
-    if (b.isMyGoal) return 1;
-    return 0;
-  });
-
-  const sortedTodoGroups = Array.isArray(todoGroups)
-    ? [...todoGroups].sort((a, b) => {
-        if (a.isMyGoal) return -1;
-        if (b.isMyGoal) return 1;
-        return 0;
-      })
-    : [];
 
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
@@ -114,7 +114,7 @@ const RoomPage = () => {
         {/* 웹캠 영역 */}
         <div className="mb-5 flex w-full gap-[10.67px] lg:gap-[15px] xl:gap-5">
           {Array.isArray(callParticipants) &&
-            sortedCallParticipants.map((participant: Participant) => (
+            visibleCallTiles.map((participant: Participant) => (
               <WebCamTile
                 key={participant.userId}
                 participant={participant}
@@ -165,7 +165,7 @@ const RoomPage = () => {
 
           {/* TodoSection 리스트 */}
           <div className="flex w-[789.33px] gap-[10.67px] lg:w-[1110px] lg:gap-[15px] xl:w-[1480px] xl:gap-5">
-            {sortedTodoGroups.map((g) => (
+            {visibleTodoGroups.map((g) => (
               <TodoSection
                 key={g.userId}
                 resolution={g.resolution}
