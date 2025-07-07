@@ -20,6 +20,7 @@ const Create = () => {
 
   const [formData, setLocalFormData] = useState<CreateRoomFormData>(
     storedFormData ?? {
+      roomId: '',
       roomName: '',
       capacity: 1,
       duration: '',
@@ -27,6 +28,7 @@ const Create = () => {
       micTurnedOn: true,
       camTurnedOn: true,
       image: null as unknown as File,
+      initialPreviewUrl: '',
     },
   );
 
@@ -39,21 +41,6 @@ const Create = () => {
     }
   }, [hasOngoingRoom, isEdit]);
 
-  const handleSubmit = async () => {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
-        alert('로그인이 필요합니다.');
-        return;
-      }
-
-      const createdRoomId = await createRoom(formData, accessToken);
-      router.push(`/preview/${createdRoomId}?from=create`);
-    } catch (error) {
-      console.error('방 생성 실패', error);
-    }
-  };
-
   return (
     <div className="flex h-screen flex-col">
       <CreateJoinHeader />
@@ -62,7 +49,6 @@ const Create = () => {
           <CreateRoom
             formData={formData}
             setFormData={(next) => setLocalFormData((prev) => ({ ...prev, ...next }))}
-            onSubmit={handleSubmit}
             onClose={() => router.back()}
           />
         </CardPageLayout>

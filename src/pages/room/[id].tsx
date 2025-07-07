@@ -61,7 +61,7 @@ const RoomPage = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
 
-  if (!router.isReady || !roomId || !roomData || participants.length === 0) {
+  if (!router.isReady || !roomId || !roomData || todoGroups.length === 0) {
     return null;
   }
 

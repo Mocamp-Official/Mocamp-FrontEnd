@@ -8,11 +8,10 @@ interface CamProps {
   user: UserInfo;
   stream: MediaStream | null;
   error?: string | null;
-  roomId: number;
   onStatusChange: (status: { camStatus: boolean; micStatus: boolean }) => void;
 }
 
-const WebCamSection = ({ user, stream, error, roomId, onStatusChange }: CamProps) => {
+const WebCamSection = ({ user, stream, error, onStatusChange }: CamProps) => {
   const [camStatus, setCameraOn] = useState(true);
   const [micStatus, setMicOn] = useState(true);
 

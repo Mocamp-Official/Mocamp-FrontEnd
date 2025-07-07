@@ -4,7 +4,7 @@ import { Participant } from '@/types/room';
 import { CreateRoomFormData } from '@/types/create';
 
 // 방 생성
-export const createRoom = async (payload: CreateRoomFormData, accessToken: string) => {
+export const createRoom = async (payload: CreateRoomFormData) => {
   try {
     const { image, ...roomPayload } = payload;
     const formData = new FormData();

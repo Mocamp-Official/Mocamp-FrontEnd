@@ -58,6 +58,7 @@ export const useRoomContext = (roomId?: string) => {
   useRoomSubscriber(roomId && typeof roomId === 'string' ? roomId : null, {
     // 목표 리스트 업데이트
     onListUpdate: (d) => {
+      console.log('🔥 GOAL_LIST_UPDATED from server', d.userId, d.goals);
       if (!d?.goals || typeof d.userId !== 'number') return;
 
       setTodoGroups((prev) => {
@@ -65,22 +66,22 @@ export const useRoomContext = (roomId?: string) => {
 
         const formatted: TodoGroup = {
           userId: d.userId,
-          goals: d.goals.map((g: any) => ({
-            goalId: g.goalId,
-            content: g.content,
-            isCompleted: g.isCompleted,
+          goals: d.goals.map((goal: Todo) => ({
+            goalId: goal.goalId,
+            content: goal.content,
+            isCompleted: goal.isCompleted,
           })),
-          resolution: d.resolution ?? '',
-          isMyGoal: d.isMyGoal ?? prevGroup?.isMyGoal ?? false,
+          resolution: d.resolution ?? prevGroup?.resolution ?? '',
           isSecret: d.isSecret ?? prevGroup?.isSecret ?? false,
+          isMyGoal: d.isMyGoal ?? prevGroup?.isMyGoal ?? false,
         };
 
-        return prev.some((g) => g.userId === d.userId)
+        const exists = prev.some((g) => g.userId === d.userId);
+        return exists
           ? prev.map((g) => (g.userId === d.userId ? formatted : g))
           : [...prev, formatted];
       });
     },
-
     // 사용자 입장 시 참가자 목록 업데이트
     onUserUpdate: (d) => {
       if (typeof d.userId !== 'number') return;
@@ -134,16 +135,15 @@ export const useRoomContext = (roomId?: string) => {
     // 목표 토글 업데이트
     onCompleteUpdate: (d) => {
       setTodoGroups((prev) =>
-        prev.map((g) =>
-          g.userId === d.userId
-            ? {
-                ...g,
-                goals: g.goals.map((i) =>
-                  i.goalId === d.goalId ? { ...i, isCompleted: d.isCompleted } : i,
-                ),
-              }
-            : g,
-        ),
+        prev.map((g) => {
+          if (g.userId !== d.userId) return { ...g };
+          return {
+            ...g,
+            goals: g.goals.map((i) =>
+              i.goalId === d.goalId ? { ...i, isCompleted: d.isCompleted } : i,
+            ),
+          };
+        }),
       );
     },
 
@@ -172,7 +172,17 @@ export const useRoomContext = (roomId?: string) => {
   });
 
   const setTodosByUser = useCallback((userId: number, updated: Todo[]) => {
-    setTodoGroups((prev) => prev.map((g) => (g.userId === userId ? { ...g, goals: updated } : g)));
+    setTodoGroups((prev) => {
+      const exists = prev.some((g) => g.userId === userId);
+      if (exists) {
+        return prev.map((g) => (g.userId === userId ? { ...g, goals: updated } : g));
+      } else {
+        return [
+          ...prev,
+          { userId, goals: updated, isMyGoal: false, resolution: '', isSecret: false },
+        ];
+      }
+    });
   }, []);
 
   const setAlertVisible = (visible: boolean) => {

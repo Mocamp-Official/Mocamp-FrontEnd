@@ -32,6 +32,7 @@ export interface RoomInfo {
   imagePath: string;
   micAvailability: boolean;
   adminUsername: string;
+  initialPriviewUrl?: string;
 }
 
 export interface GroupCallState {
