@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { KurentoSignalingSocket } from '@/libs/groupcallsignal';
 import { Participant } from '@/types/room';
-import { apiWithToken } from '@/apis/axios';
+import { useRoomStore } from '@/stores/roomStore';
 import { DelegationUpdateResponse } from '@/types/delegation';
 import { signalingSocket } from '@/libs/socket';
+
 
 interface UseGroupCallProps {
   roomId: number;
@@ -31,7 +32,6 @@ export function useGroupCall({
   micStatus,
   initialParticipants = [],
   onRoomLeft,
-  isHost,
 }: UseGroupCallProps) {
   const [participants, setParticipants] = useState<Participant[]>(initialParticipants);
   const participantsRef = useRef<Participant[]>([]);
@@ -44,6 +44,7 @@ export function useGroupCall({
   const peerConnections = useRef<{ [userId: number]: RTCPeerConnection }>({});
   const kurentoSignalingRef = useRef<KurentoSignalingSocket | null>(null);
   const hasJoinedRoom = useRef(false);
+  const isHost = useRoomStore.getState().isHost;
 
   useEffect(() => {
     participantsRef.current = participants;
@@ -212,45 +213,88 @@ export function useGroupCall({
     kurentoSignalingRef.current = socket;
     socket.connect();
 
-    socket.setOnOpenCallback(async () => {
-      const stream = await getLocalMediaStream();
-      if (stream) {
-        setLocalStream(stream);
+   socket.setOnOpenCallback(async () => {
+  if (hasJoinedRoom.current) return;
+  hasJoinedRoom.current = true;
 
-        const updatedInitial = initialParticipants.map((p) => ({
-          ...p,
-          isAdmin: p.username === adminUsernameRef.current,
-          stream: p.userId === myUserId ? stream : null,
-        }));
+  const stream = await getLocalMediaStream();
+  if (stream) {
+    setLocalStream(stream);
+    useRoomStore.getState().setMyUserId(myUserId);
+    useRoomStore.getState().setAdminUsername(isHost ? myUsername : '');
 
-        setParticipants(updatedInitial);
-        participantsRef.current = updatedInitial;
-      }
+    const myParticipant: Participant = {
+      userId: myUserId,
+      username: myUsername,
+      camStatus,
+      micStatus,
+      isWorking: true,
+      isAdmin: isHost, // 여기서만 방장 여부 판단!
+      stream,
+      goals: [],
+      resolution: '',
+      isMyGoal: true,
+      isSecret: false,
+    };
 
-      socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
-    });
-
-    socket.on('roomParticipants', (msg) => {
-      const effectiveAdmin = msg.adminUsername || msg.participants[0]?.username || '';
-      setAdminUsername(effectiveAdmin);
-
-      const filtered = msg.participants.filter((p: Participant) => p.username !== myUsername);
-      const updated = filtered.map((p: Participant) => ({
+    const others = initialParticipants
+      .filter((p) => p.userId !== myUserId)
+      .map((p) => ({
         ...p,
+        isAdmin: false, // others는 방장이 아님
         stream: null,
-        isAdmin: p.username === effectiveAdmin,
-        isMyGoal: false,
       }));
 
-      const me = participantsRef.current.find((p) => p.username === myUsername);
-      const finalList = me ? [me, ...updated] : updated;
+    const allParticipants = [myParticipant, ...others];
+    setParticipants(allParticipants);
+    participantsRef.current = allParticipants;
+  }
 
-      setParticipants(finalList);
-      participantsRef.current = finalList;
+  socket.send('joinRoom', { room: `room${roomId}`, name: myUsername });
+});
+
+
+
+    socket.on('roomParticipants', (msg) => {
+      const effectiveAdmin =
+  msg.adminUsername ?? (isHost ? myUsername : null); 
+
+setAdminUsername(effectiveAdmin || ''); 
+
+const others = msg.participants
+  .filter((p: Participant) => p.username !== myUsername)
+  .map((p: Participant) => ({
+    ...p,
+    stream: null,
+    isAdmin: p.username === effectiveAdmin,
+    isMyGoal: false,
+  }));
+
+let me = participantsRef.current.find((p) => p.username === myUsername);
+if (!me) {
+  me = {
+    userId: myUserId,
+    username: myUsername,
+    camStatus,
+    micStatus,
+    isWorking: true,
+    isAdmin: effectiveAdmin === myUsername,
+    stream: localStream,
+    goals: [],
+    resolution: '',
+    isMyGoal: true,
+    isSecret: false,
+  };
+}
+
+const all = [me, ...others];
+setParticipants(all);
+participantsRef.current = all;
     });
 
     socket.on('ADMIN_UPDATED', (msg: DelegationUpdateResponse) => {
       setAdminUsername(msg.newAdminUsername);
+      useRoomStore.getState().setAdminUsername(msg.newAdminUsername);
 
       setParticipants((prev) => {
         const updated = prev.map((p) => {

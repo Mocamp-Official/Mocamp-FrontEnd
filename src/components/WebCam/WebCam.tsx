@@ -6,12 +6,12 @@ import SelectIcon from '@/public/svgs/select.svg';
 import NoneIcon from '@/public/svgs/none.svg';
 import { Participant } from '@/types/room';
 import WebCamMedia from '@/components/webcamPreview/WebCamMedia';
+import { useRoomStore } from '@/stores/roomStore';
 
 interface WebCamTileProps {
   participant: Participant;
   isLocal?: boolean;
   onToggleMedia: (mediaType: 'video' | 'audio', status: boolean) => void;
-  adminUsername: string;
   onOpenDelegationModal: () => void;
   onSetWorkStatus: (status: boolean) => void;
   onShowNotDelegationModal: () => void;
@@ -21,7 +21,6 @@ const WebCamTile = ({
   participant,
   isLocal = false,
   onToggleMedia,
-  adminUsername,
   onOpenDelegationModal,
   onSetWorkStatus,
   onShowNotDelegationModal,
@@ -31,6 +30,10 @@ const WebCamTile = ({
   const camStatus = participant.camStatus;
   const micStatus = participant.micStatus;
   const isWorking = participant.isWorking;
+
+  const adminUsername = useRoomStore((state) => state.adminUsername);
+const isAdmin = participant.username === adminUsername;
+
 
   const setParticipantStatus = (working: boolean) => {
     setStatusOpen(false);
@@ -72,18 +75,18 @@ const WebCamTile = ({
         </span>
       )}
 
-      {participant.isAdmin && (
-        <div className="absolute top-[20px] bottom-[215px] left-[21px] flex flex-col items-center gap-[5px]">
-          <button
-            onClick={() => {
-              if (isLocal && participant.isAdmin) {
-                onOpenDelegationModal();
-              } else {
-                onShowNotDelegationModal();
-              }
-            }}
-          >
-            <ChiefIcon width={35} height={35} />
+      {isAdmin && (
+  <div className="absolute top-[20px] bottom-[215px] left-[21px] flex flex-col items-center gap-[5px]">
+    <button
+      onClick={() => {
+        if (isLocal && isAdmin) {
+          onOpenDelegationModal(); 
+        } else {
+          onShowNotDelegationModal(); 
+        }
+      }}
+    >
+      <ChiefIcon width={35} height={35} />
           </button>
           <span className="text-[10px] text-white">방장</span>
         </div>

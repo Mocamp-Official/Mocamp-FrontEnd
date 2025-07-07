@@ -16,6 +16,7 @@ import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import { useGroupCall } from '@/hooks/useGroupCall';
 import type { Participant } from '@/types/room';
+import { useRoomStore } from '@/stores/roomStore';
 
 const MAX_VISIBLE = 2;
 
@@ -24,7 +25,10 @@ const RoomPage = () => {
   const { id, from, cam, mic } = router.query;
 
   const roomId = Array.isArray(id) ? id[0] : id || '';
-  const isHost = from === 'create';
+ const isHost = from === 'create';
+useEffect(() => {
+  useRoomStore.getState().setIsHost(isHost);
+}, [isHost]);
   const camStatus = cam !== 'false';
   const micStatus = mic !== 'false';
 
@@ -56,6 +60,8 @@ const RoomPage = () => {
     isHost,
     initialParticipants: participants,
   });
+
+  
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
@@ -119,7 +125,6 @@ const RoomPage = () => {
                 key={participant.userId}
                 participant={participant}
                 isLocal={participant.userId === myUserId}
-                adminUsername={adminUsername}
                 onToggleMedia={toggleMedia}
                 onOpenDelegationModal={() => {
                   if (isHost) {
