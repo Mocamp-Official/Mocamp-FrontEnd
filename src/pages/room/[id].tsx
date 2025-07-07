@@ -12,7 +12,6 @@ import WebCamTile from '@/components/WebCam/WebCam';
 import DelegationModal from '@/components/WebCam/modal/DelegationModal';
 import NotDelegationModal from '@/components/WebCam/modal/NotDelegationModal';
 
-
 import { leaveRoom } from '@/apis/room';
 import { useRoomContext } from '@/hooks/room/useRoomContext';
 import { useGroupCall } from '@/hooks/useGroupCall';
@@ -31,6 +30,9 @@ const RoomPage = () => {
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
 
+  const camStatus = router.query.cam !== 'false';
+  const micStatus = router.query.mic !== 'false';
+
   const {
     participants: callParticipants,
     toggleMedia,
@@ -47,6 +49,8 @@ const RoomPage = () => {
     roomId: Number(roomId ?? 0),
     myUserId,
     myUsername,
+    camStatus,
+    micStatus,
   });
 
   const [slideIndex, setSlideIndex] = useState(0);
@@ -55,7 +59,6 @@ const RoomPage = () => {
   if (!router.isReady || !roomId || !roomData || participants.length === 0) {
     return null;
   }
-
 
   const slidingItems = todoGroups.slice(1);
   const visibleSlide = slidingItems.slice(slideIndex, slideIndex + MAX_VISIBLE);
@@ -77,7 +80,7 @@ const RoomPage = () => {
 
   return (
     <div className="bg-gray3 relative flex h-screen w-screen flex-1 items-center justify-center gap-5 pl-[106.667px] lg:pl-[150px] xl:pl-[200px]">
-      <WorkspaceHeader roomName={roomData.roomName} />
+      <WorkspaceHeader roomName={roomData.roomName} roomSeq={roomData.roomSeq} />
       <Sidebar
         startTime={roomData.startedAt}
         endTime={roomData.endedAt}

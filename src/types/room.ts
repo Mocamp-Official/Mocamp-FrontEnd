@@ -12,11 +12,11 @@ export interface Participant {
   resolution: string;
   isMyGoal: boolean;
   isSecret: boolean;
-  isAdmin: boolean;     
-  camStatus: boolean;   
-  micStatus: boolean;   
+  isAdmin: boolean;
+  camStatus: boolean;
+  micStatus: boolean;
   isWorking: boolean;
-  stream?: MediaStream | null;  
+  stream?: MediaStream | null;
 }
 
 export interface RoomInfo {
@@ -42,3 +42,12 @@ export interface GroupCallState {
   myUserId: number;
 }
 
+export interface UserInfo {
+  userId: number;
+  nickname: string;
+  isWorking: boolean;
+  camStatus: boolean;
+  micStatus: boolean;
+  stream?: MediaStream | null;
+  error?: string | null;
+}
