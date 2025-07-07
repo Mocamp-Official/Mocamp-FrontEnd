@@ -77,9 +77,11 @@ export const useRoomStore = create<RoomState>()(
           s.todoGroups = s.todoGroups.filter((g) => g.userId !== uid);
           s.participants = s.participants.filter((p) => p.userId !== uid);
         }),
-
-      setNotice: (n) => set(() => ({ notice: n })),
-
+      setNotice: (n) => {
+        set((s) => {
+          s.notice = typeof n === 'string' ? n : '';
+        });
+      },
       setAlert: (m) => {
         set((s) => {
           s.alertInfo = { visible: m > 0, minutesLeft: m };

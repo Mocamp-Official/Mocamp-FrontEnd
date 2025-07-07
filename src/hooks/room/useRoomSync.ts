@@ -92,7 +92,7 @@ export const useRoomSync = (roomId?: string) => {
     onUserLeave: (d) => removeUser(d.userId),
 
     /* 공지/다짐/알림 ------------------ */
-    onNoticeUpdate: (d) => setNotice(d.notice),
+    onNoticeUpdate: (d) => setNotice(d.content),
     onResolutionUpdate: (d) => setResolutionByUser(d.userId, d.resolution),
     onAlertUpdate: (d) => setAlert(d.minutesLeft),
 

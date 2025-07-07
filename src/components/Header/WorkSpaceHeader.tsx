@@ -18,9 +18,7 @@ const WorkspaceHeader = ({ roomName = '', isOwner = true, roomSeq = '' }: Worksp
   const router = useRouter();
   const { id } = router.query;
   const roomId = Array.isArray(id) ? id[0] : id;
-
   const notice = useRoomStore((s) => {
-    console.log('📌 notice 구독된 값:', s.notice);
     return s.notice;
   });
   const { updateNotice } = useRoomPublisher(roomId as string);
