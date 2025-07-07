@@ -166,13 +166,13 @@ const RoomPage = () => {
           <div className="flex w-[789.33px] gap-[10.67px] lg:w-[1110px] lg:gap-[15px] xl:w-[1480px] xl:gap-5">
             {sortedTodoGroups.map((g) => (
               <TodoSection
-                key={g.id}
+                key={g.userId}
                 resolution={g.resolution}
                 isMyGoal={g.isMyGoal}
                 isSecret={g.isSecret}
                 roomId={String(roomId)}
-                todos={g.items}
-                setTodos={(updated) => setTodosByUser(g.id, updated)}
+                goals={g.goals}
+                setTodos={(updated) => setTodosByUser(g.userId, updated)}
               />
             ))}
           </div>

@@ -60,8 +60,9 @@ export const useRoomSubscriber = (roomId: string | null, handlers: RoomSubscribe
     }
 
     return () => {
-      signalingSocket.close(); // 전체 연결 종료
-      console.log('소켓 해제');
+      const sub = signalingSocket['activeSubscriptions'].get(destination);
+      sub?.unsubscribe();
+      signalingSocket['activeSubscriptions'].delete(destination);
     };
   }, [roomId]);
 };

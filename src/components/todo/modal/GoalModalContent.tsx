@@ -28,7 +28,7 @@ const GoalModalContent = ({ todos, setTodos }: GoalModalContentProps) => {
           const isCompleted = todoItem.isCompleted;
           const isEditing = editingId === todoItem.goalId || todoItem.content === '';
 
-          const isLongList = todos.length > 6;
+          const isLongList = todos.length > 5;
           const maxWidthClass = isLongList
             ? 'xl:max-w-[530px] lg:max-w-[397.5px] max-w-[282.67px]'
             : 'xl:max-w-[560px] lg:max-w-[427.5px] max-w-[312.67px]';

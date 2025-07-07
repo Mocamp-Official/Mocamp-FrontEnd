@@ -8,7 +8,6 @@ import LockButton from '@/public/svgs/LockIcon.svg';
 
 import { useRoomPublisher } from '@/hooks/room/useRoomPublisher';
 import { Todo } from '@/types/todo';
-
 interface GoalModalWrapperProps {
   onClose: () => void;
   mode: 'add' | 'edit';

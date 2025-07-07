@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { Todo } from '@/types/todo';
 import { fetchRoomData, fetchRoomParticipants } from '@/apis/room';
 import { useRoomSubscriber } from '@/hooks/room/useRoomSubscriber';
-import { Participant, RoomInfo } from '@/types/room';
+import { Goal, Participant, RoomInfo } from '@/types/room';
 
 export interface TodoGroup {
-  id: number;
-  items: Todo[];
+  userId: number;
+  goals: Todo[];
   resolution: string;
   isMyGoal: boolean;
   isSecret: boolean;
@@ -39,8 +39,8 @@ export const useRoomContext = (roomId?: string) => {
       setNotice(room.notice ?? '');
 
       const formatted = users.map((u) => ({
-        id: u.userId,
-        items: (u.goals ?? []).map((g) => ({
+        userId: u.userId,
+        goals: (u.goals ?? []).map((g) => ({
           goalId: g.goalId,
           content: g.content,
           isCompleted: g.isCompleted,
@@ -61,11 +61,11 @@ export const useRoomContext = (roomId?: string) => {
       if (!d?.goals || typeof d.userId !== 'number') return;
 
       setTodoGroups((prev) => {
-        const prevGroup = prev.find((g) => g.id === d.userId);
+        const prevGroup = prev.find((g) => g.userId === d.userId);
 
         const formatted: TodoGroup = {
-          id: d.userId,
-          items: d.goals.map((g: any) => ({
+          userId: d.userId,
+          goals: d.goals.map((g: any) => ({
             goalId: g.goalId,
             content: g.content,
             isCompleted: g.isCompleted,
@@ -75,8 +75,8 @@ export const useRoomContext = (roomId?: string) => {
           isSecret: d.isSecret ?? prevGroup?.isSecret ?? false,
         };
 
-        return prev.some((g) => g.id === d.userId)
-          ? prev.map((g) => (g.id === d.userId ? formatted : g))
+        return prev.some((g) => g.userId === d.userId)
+          ? prev.map((g) => (g.userId === d.userId ? formatted : g))
           : [...prev, formatted];
       });
     },
@@ -92,11 +92,10 @@ export const useRoomContext = (roomId?: string) => {
         resolution: d.resolution ?? '',
         isMyGoal: d.isMyGoal,
         isSecret: d.isSecret,
-         isAdmin: false, 
-          camStatus: false, 
-          micStatus: false,
-          isWorking: false,
-
+        isAdmin: false,
+        camStatus: false,
+        micStatus: false,
+        isWorking: false,
       };
 
       setParticipants((prev) => {
@@ -105,13 +104,13 @@ export const useRoomContext = (roomId?: string) => {
       });
 
       setTodoGroups((prev) => {
-        const exists = prev.some((g) => g.id === newParticipant.userId);
+        const exists = prev.some((g) => g.userId === newParticipant.userId);
         if (exists) return prev;
 
         const newGroup: TodoGroup = {
-          id: newParticipant.userId,
+          userId: newParticipant.userId,
           resolution: newParticipant.resolution ?? '',
-          items: (newParticipant.goals ?? []).map((g: any) => ({
+          goals: (newParticipant.goals ?? []).map((g: any) => ({
             goalId: g.goalId,
             content: g.content,
             isCompleted: g.isCompleted,
@@ -129,17 +128,17 @@ export const useRoomContext = (roomId?: string) => {
       if (typeof d.userId !== 'number') return;
 
       setParticipants((prev) => prev.filter((p) => p.userId !== d.userId));
-      setTodoGroups((prev) => prev.filter((g) => g.id !== d.userId));
+      setTodoGroups((prev) => prev.filter((g) => g.userId !== d.userId));
     },
 
     // 목표 토글 업데이트
     onCompleteUpdate: (d) => {
       setTodoGroups((prev) =>
         prev.map((g) =>
-          g.id === d.userId
+          g.userId === d.userId
             ? {
                 ...g,
-                items: g.items.map((i) =>
+                goals: g.goals.map((i) =>
                   i.goalId === d.goalId ? { ...i, isCompleted: d.isCompleted } : i,
                 ),
               }
@@ -151,7 +150,7 @@ export const useRoomContext = (roomId?: string) => {
     // 다짐 업데이트
     onResolutionUpdate: (d) => {
       setTodoGroups((prev) =>
-        prev.map((g) => (g.id === d.userId ? { ...g, resolution: d.resolution } : g)),
+        prev.map((g) => (g.userId === d.userId ? { ...g, resolution: d.resolution } : g)),
       );
     },
 
@@ -173,7 +172,7 @@ export const useRoomContext = (roomId?: string) => {
   });
 
   const setTodosByUser = useCallback((userId: number, updated: Todo[]) => {
-    setTodoGroups((prev) => prev.map((g) => (g.id === userId ? { ...g, items: updated } : g)));
+    setTodoGroups((prev) => prev.map((g) => (g.userId === userId ? { ...g, items: updated } : g)));
   }, []);
 
   const setAlertVisible = (visible: boolean) => {
