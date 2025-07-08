@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { OpenVidu, Session, Publisher, StreamManager } from 'openvidu-browser';
 import { initOpenVidu, getOVInstance } from '@/libs/openviduClient';
+import { apiWithToken } from '@/apis/axios';
 
 interface UseOpenViduParams {
   sessionId: string;
@@ -61,27 +62,21 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     }
 
     try {
-      const res = await fetch('/api/openvidu-token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ sessionId }),
+      // ✅ 세션 생성 + 토큰 발급 axios 요청
+      const sessionRes = await apiWithToken.post('/api/sessions', {
+        customSessionId: sessionId,
       });
+      const sessionIdFromServer = sessionRes.data; // text/plain 이면 sessionId가 문자열로 반환됨
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error('[OpenVidu] Token request failed:', errorText);
-        return;
-      }
+      const tokenRes = await apiWithToken.post(`/api/sessions/${sessionIdFromServer}/connections`);
+      const token = tokenRes.data; // 역시 text/plain 토큰 문자열
 
-      const { token } = await res.json();
-
+      // ✅ 세션 연결
       await session.connect(token, { clientData: userName });
 
       const ovInstance = getOVInstance();
       if (!ovInstance) {
-        console.error('[OpenVidu] joinSession: OpenVidu instance not initialized.');
+        console.error('[OpenVidu] OpenVidu instance not initialized');
         return;
       }
 
@@ -97,8 +92,8 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
 
       session.publish(newPublisher);
       setPublisher(newPublisher);
-    } catch (err) {
-      console.error('[OpenVidu] joinSession error:', err);
+    } catch (error) {
+      console.error('[OpenVidu] joinSession error:', error);
     }
   };
 
