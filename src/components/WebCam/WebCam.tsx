@@ -66,7 +66,7 @@ const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
   const handleWorkStatus = (working: boolean) => {
     setIsWorking(working);
     setStatusOpen(false);
-    // TODO: stomp 등 서버로 상태 전송 로직 필요 시 여기에 추가
+    // stomp 서버로 상태 전송 로직 필요 
   };
 
     if (!streamManager || !streamManager.stream) {
@@ -95,9 +95,9 @@ const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
           <button
             onClick={() => {
               if (isMe && isAdmin) {
-                // TODO: 방장 위임 모달 열기
+                // 방장 위임 모달 열기 - 아이콘이 떠야 확인을 하지. 
               } else {
-                // TODO: 위임 불가 알림
+                // 위임 불가 알림
               }
             }}
           >

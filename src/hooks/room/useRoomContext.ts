@@ -1,4 +1,3 @@
-// `useRoomContext.ts` 파일 수정
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -22,12 +21,10 @@ export const useRoomContext = (roomId?: string) => {
   const [alertInfo, setAlertInfo] = useState({ visible: false, minutesLeft: 0 });
 
   useEffect(() => {
-    // roomId가 없을 경우, 데이터 로딩 로직을 실행하지 않지만,
-    // useEffect 훅 자체는 항상 호출됩니다.
+
     if (!roomId) {
-      // roomId가 유효하지 않을 때 이전 상태를 초기화할 필요가 있다면 여기서 수행합니다.
-      // 예: setRoomData(null); setParticipants([]); setTodoGroups([]); 등
-      return; // 데이터 로딩만 스킵하고 Hook은 계속 진행됩니다.
+    
+      return; 
     }
 
     const load = async () => {
@@ -52,10 +49,8 @@ export const useRoomContext = (roomId?: string) => {
     };
 
     load();
-  }, [roomId]); // roomId가 변경될 때마다 실행
+  }, [roomId]); 
 
-  // useRoomSubscriber는 roomId가 null이 아닐 때만 유효하게 동작하도록 이미 처리되어 있으므로
-  // 이곳의 호출 순서에는 영향을 미 미칠 것으로 보입니다.
   useRoomSubscriber(roomId ?? null, {
     onListUpdate: (d) => {
       if (!d?.goals || typeof d.userId !== 'number') return;
