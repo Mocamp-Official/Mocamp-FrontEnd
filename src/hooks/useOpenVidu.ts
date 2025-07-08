@@ -62,16 +62,16 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     }
 
     try {
-      // ✅ 세션 생성 + 토큰 발급 axios 요청
+      // 세션 생성 + 토큰 발급 axios 요청
       const sessionRes = await apiWithToken.post('/api/sessions', {
         customSessionId: sessionId,
       });
-      const sessionIdFromServer = sessionRes.data; // text/plain 이면 sessionId가 문자열로 반환됨
+      const sessionIdFromServer = sessionRes.data;
 
       const tokenRes = await apiWithToken.post(`/api/sessions/${sessionIdFromServer}/connections`);
-      const token = tokenRes.data; // 역시 text/plain 토큰 문자열
+      const token = tokenRes.data; 
 
-      // ✅ 세션 연결
+      // 세션 연결 - 연결 확인하면 수정좀..(해상도)
       await session.connect(token, { clientData: userName });
 
       const ovInstance = getOVInstance();
