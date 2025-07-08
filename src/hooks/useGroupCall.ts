@@ -5,6 +5,8 @@ import { useRoomStore } from '@/stores/roomStore';
 import { DelegationUpdateResponse } from '@/types/delegation';
 import { signalingSocket } from '@/libs/socket';
 
+// 엉엉슨...
+// goroupcall : receiveVideofrom , joinroom, onIceCandidate, 
 
 interface UseGroupCallProps {
   roomId: number;
@@ -224,17 +226,17 @@ export function useGroupCall({
     useRoomStore.getState().setAdminUsername(isHost ? myUsername : '');
 
     const myParticipant: Participant = {
-      userId: myUserId,
-      username: myUsername,
-      camStatus,
-      micStatus,
-      isWorking: true,
-      isAdmin: isHost, // 여기서만 방장 여부 판단!
-      stream,
-      goals: [],
-      resolution: '',
-      isMyGoal: true,
-      isSecret: false,
+     userId: myUserId,
+  username: myUsername,
+  camStatus,
+  micStatus,
+  isWorking: true,
+  isAdmin: isHost, // 방장여부
+  stream,
+  goals: [],
+  resolution: '',
+  isMyGoal: true,
+  isSecret: false,
     };
 
     const others = initialParticipants
