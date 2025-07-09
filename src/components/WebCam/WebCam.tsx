@@ -69,7 +69,7 @@ const WebCamTile = ({ streamManager, isLocal, toggleCamera, toggleMic }: WebCamT
   if (!streamManager || !streamManager.stream) {
     return null;
   }
-
+// 카메라 꺼진 서버에서 주는데 안받아옴
   return (
     <div className="relative flex h-[144px] w-[256px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D] lg:h-[202.5px] lg:w-[360px] xl:h-[270px] xl:w-[480px]">
       {camStatus && streamManager?.stream?.videoActive ? (
