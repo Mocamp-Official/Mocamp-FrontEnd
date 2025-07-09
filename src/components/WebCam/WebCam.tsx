@@ -16,7 +16,7 @@ interface WebCamTileProps {
   toggleMic?: () => void;
 }
 
-const WebCamTile = ({ streamManager, isLocal, }: WebCamTileProps) => {
+const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
   const [statusOpen, setStatusOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -26,13 +26,11 @@ const WebCamTile = ({ streamManager, isLocal, }: WebCamTileProps) => {
   const { toggleMic, toggleCam } = useOpenViduControls();
   // const [camStatus, setCamStatus] = useState(true);
   // const [micStatus, setMicStatus] = useState(true);
-const videoActive = isLocal
-  ? streamManager.stream.videoActive // 나의 publisher
-  : true;
+  const videoActive = isLocal
+    ? streamManager.stream.videoActive // 나의 publisher
+    : true;
 
-const audioActive = isLocal
-  ? streamManager.stream.audioActive
-  : true;
+  const audioActive = isLocal ? streamManager.stream.audioActive : true;
 
   const nickname = JSON.parse(streamManager.stream.connection.data).clientData;
   const isAdmin = nickname === adminUsername;
@@ -79,7 +77,7 @@ const audioActive = isLocal
   if (!streamManager || !streamManager.stream) {
     return null;
   }
-// 카메라 꺼진 서버에서 주는데 안받아옴
+  // 카메라 꺼진 서버에서 주는데 안받아옴
   return (
     <div className="relative flex h-[144px] w-[256px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D] lg:h-[202.5px] lg:w-[360px] xl:h-[270px] xl:w-[480px]">
       {videoActive ? (
@@ -88,7 +86,7 @@ const audioActive = isLocal
           autoPlay
           playsInline
           muted={isLocal}
-          className="absolute inset-0 z-0 rounded-[20px] object-cover"
+          className="absolute inset-0 z-0 h-full w-full rounded-[20px] object-cover"
         />
       ) : (
         <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10.67px] font-semibold tracking-[-0.4px] text-[rgba(255,255,255,0.20)] select-none lg:text-[15px] xl:text-[20px]">
@@ -166,11 +164,11 @@ const audioActive = isLocal
             className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
             <VoiceIcon
-  width={14}
-  height={20}
-  className="absolute top-[10px] right-[13px] bottom-[10px] left-[13px]"
-  style={{ opacity: audioActive ? 1 : 0.2 }}
-/>
+              width={14}
+              height={20}
+              className="absolute top-[10px] right-[13px] bottom-[10px] left-[13px]"
+              style={{ opacity: audioActive ? 1 : 0.2 }}
+            />
           </button>
         </div>
       </div>

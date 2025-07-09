@@ -97,17 +97,30 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
         return;
       }
 
+      const getVideoResolution = () => {
+        const width = window.innerWidth;
+
+        if (width >= 1920) {
+          return '480x270';
+        }
+
+        if (width >= 1440) {
+          return '360x202';
+        }
+
+        return '256x144';
+      };
+
       const newPublisher = ovInstance.initPublisher(undefined, {
         audioSource: undefined,
         videoSource: undefined,
         publishAudio: micStatus,
         publishVideo: camStatus,
-        resolution: '640x480',
+        resolution: getVideoResolution(),
         frameRate: 30,
         insertMode: 'APPEND',
       });
 
-    
       await session.publish(newPublisher);
       console.log('[OpenVidu] Publisher successfully published');
       setPublisher(newPublisher);
@@ -126,24 +139,23 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     setSubscribers([]);
   };
 
-// 미디어 스트림 트랙 스탑
+  // 미디어 스트림 트랙 스탑
 
-// 카메라
-const toggleMic = () => {
-  if (publisher) {
-    const isAudioActive = publisher.stream.audioActive;
-    publisher.publishAudio(!isAudioActive);
-  }
-};
+  // 카메라
+  const toggleMic = () => {
+    if (publisher) {
+      const isAudioActive = publisher.stream.audioActive;
+      publisher.publishAudio(!isAudioActive);
+    }
+  };
 
-// 마이크
-const toggleCam = () => {
-  if (publisher) {
-    const isVideoActive = publisher.stream.videoActive;
-    publisher.publishVideo(!isVideoActive);
-  }
-};
-
+  // 마이크
+  const toggleCam = () => {
+    if (publisher) {
+      const isVideoActive = publisher.stream.videoActive;
+      publisher.publishVideo(!isVideoActive);
+    }
+  };
 
   return {
     session,
@@ -151,7 +163,7 @@ const toggleCam = () => {
     subscribers,
     joinSession,
     leaveSession,
-      toggleMic,
-  toggleCam,
+    toggleMic,
+    toggleCam,
   };
 };
