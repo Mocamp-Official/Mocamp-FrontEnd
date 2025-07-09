@@ -20,27 +20,27 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
       OVRef.current = initOpenVidu();
     }
 
-    const currentOV = OVRef.current;
+    if (!sessionId || !userName) return;
 
-    if (!currentOV || !sessionId || !userName) {
-      if (session) {
-        session.disconnect();
-      }
-      setSession(null);
-      setPublisher(null);
-      setSubscribers([]);
-      return;
-    }
-
-    const newSession = currentOV.initSession();
+    const ov = OVRef.current!;
+    const newSession = ov.initSession();
 
     newSession.on('streamCreated', (event) => {
-      const subscriber = newSession.subscribe(event.stream, undefined);
-      setSubscribers((prev) => [...prev, subscriber]);
+      const newConnectionId = event.stream.connection.connectionId;
+      setSubscribers((prev) => {
+        const exists = prev.some((sub) => sub.stream.connection.connectionId === newConnectionId);
+        if (exists) return prev;
+        const subscriber = newSession.subscribe(event.stream, undefined);
+        return [...prev, subscriber];
+      });
     });
 
     newSession.on('streamDestroyed', (event) => {
-      setSubscribers((prev) => prev.filter((sub) => sub !== event.stream.streamManager));
+      setSubscribers((prev) =>
+        prev.filter(
+          (sub) => sub.stream.connection.connectionId !== event.stream.connection.connectionId,
+        ),
+      );
     });
 
     setSession(newSession);
@@ -69,7 +69,7 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
       const sessionIdFromServer = sessionRes.data;
 
       const tokenRes = await apiWithToken.post(`/api/sessions/${sessionIdFromServer}/connections`);
-      const token = tokenRes.data; 
+      const token = tokenRes.data;
 
       // 세션 연결 - 연결 확인하면 수정좀..(해상도)
       await session.connect(token, { clientData: userName });
