@@ -6,6 +6,8 @@ import SelectIcon from '@/public/svgs/select.svg';
 import NoneIcon from '@/public/svgs/none.svg';
 import { StreamManager, Publisher } from 'openvidu-browser';
 import { useRoomStore } from '@/stores/roomStore';
+import { useOpenVidu } from '@/hooks/useOpenVidu';
+import { useOpenViduControls } from '@/hooks/useOpenViduControls';
 
 interface WebCamTileProps {
   streamManager: StreamManager;
@@ -14,15 +16,23 @@ interface WebCamTileProps {
   toggleMic?: () => void;
 }
 
-const WebCamTile = ({ streamManager, isLocal, toggleCamera, toggleMic }: WebCamTileProps) => {
+const WebCamTile = ({ streamManager, isLocal, }: WebCamTileProps) => {
   const [statusOpen, setStatusOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const adminUsername = useRoomStore((state) => state.adminUsername);
   const myUsername = useRoomStore((state) => state.myUsername);
   const [isWorking, setIsWorking] = useState(true);
-  const [camStatus, setCamStatus] = useState(true);
-  const [micStatus, setMicStatus] = useState(true);
+  const { toggleMic, toggleCam } = useOpenViduControls();
+  // const [camStatus, setCamStatus] = useState(true);
+  // const [micStatus, setMicStatus] = useState(true);
+const videoActive = isLocal
+  ? streamManager.stream.videoActive // 나의 publisher
+  : true;
+
+const audioActive = isLocal
+  ? streamManager.stream.audioActive
+  : true;
 
   const nickname = JSON.parse(streamManager.stream.connection.data).clientData;
   const isAdmin = nickname === adminUsername;
@@ -49,17 +59,17 @@ const WebCamTile = ({ streamManager, isLocal, toggleCamera, toggleMic }: WebCamT
     };
   }, [streamManager]);
 
-  const handleToggleCamera = () => {
-    if (!isMe || !toggleCamera) return;
-    toggleCamera();
-    setCamStatus((prev) => !prev);
-  };
+  // const handleToggleCamera = () => {
+  //   if (!isMe || !toggleCamera) return;
+  //   toggleCamera();
+  //   setCamStatus((prev) => !prev);
+  // };
 
-  const handleToggleMic = () => {
-    if (!isMe || !toggleMic) return;
-    toggleMic();
-    setMicStatus((prev) => !prev);
-  };
+  // const handleToggleMic = () => {
+  //   if (!isMe || !toggleMic) return;
+  //   toggleMic();
+  //   setMicStatus((prev) => !prev);
+  // };
 
   const handleWorkStatus = (working: boolean) => {
     setIsWorking(working);
@@ -72,7 +82,7 @@ const WebCamTile = ({ streamManager, isLocal, toggleCamera, toggleMic }: WebCamT
 // 카메라 꺼진 서버에서 주는데 안받아옴
   return (
     <div className="relative flex h-[144px] w-[256px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D] lg:h-[202.5px] lg:w-[360px] xl:h-[270px] xl:w-[480px]">
-      {camStatus && streamManager?.stream?.videoActive ? (
+      {videoActive ? (
         <video
           ref={videoRef}
           autoPlay
@@ -145,22 +155,22 @@ const WebCamTile = ({ streamManager, isLocal, toggleCamera, toggleMic }: WebCamT
           )}
 
           <button
-            onClick={handleToggleCamera}
+            onClick={toggleCam}
             className="ml-[15px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
-            <WebcamCamera width={24} height={24} style={{ opacity: camStatus ? 1 : 0.2 }} />
+            <WebcamCamera width={24} height={24} style={{ opacity: videoActive ? 1 : 0.2 }} />
           </button>
 
           <button
-            onClick={handleToggleMic}
+            onClick={toggleMic}
             className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
             <VoiceIcon
-              width={14}
-              height={20}
-              className="absolute top-[10px] right-[13px] bottom-[10px] left-[13px]"
-              style={{ opacity: micStatus ? 1 : 0.2 }}
-            />
+  width={14}
+  height={20}
+  className="absolute top-[10px] right-[13px] bottom-[10px] left-[13px]"
+  style={{ opacity: audioActive ? 1 : 0.2 }}
+/>
           </button>
         </div>
       </div>

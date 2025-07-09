@@ -49,7 +49,7 @@ const RoomPage = () => {
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
 
-  const { session, publisher, subscribers, joinSession, leaveSession, toggleCamera, toggleMic } =
+  const { session, publisher, subscribers, joinSession, leaveSession, toggleCam, toggleMic } =
     useOpenVidu({
       sessionId: String(roomId),
       userName: myUsername,
@@ -119,21 +119,21 @@ const RoomPage = () => {
       <div className="relative flex h-full w-[789.33px] flex-col justify-center pt-[53.333px] lg:w-[1110px] lg:pt-[75px] xl:w-[1480px] xl:pt-[100px]">
         <div className="mb-[10.67px] flex w-full gap-[10.67px] lg:mb-[15px] lg:gap-[15px] xl:mb-5 xl:gap-5">
           {publisher && (
-  <WebCamTile
-    key="me"
-    streamManager={publisher}
-    isLocal={true}
-    toggleCamera={toggleCamera}
-    toggleMic={toggleMic}
-  />
-)}
-  {subscribers.map((subscriber, index) => (
-  <WebCamTile
-    key={subscriber.stream.connection.connectionId}
-    streamManager={subscriber}
-    isLocal={false}
-  />
-))}
+            <WebCamTile
+              key="me"
+              streamManager={publisher}
+              isLocal={true}
+              toggleCamera={toggleCam}
+              toggleMic={toggleMic}
+            />
+          )}
+          {subscribers.map((subscriber, index) => (
+            <WebCamTile
+              key={subscriber.stream.connection.connectionId}
+              streamManager={subscriber}
+              isLocal={false}
+            />
+          ))}
         </div>
 
         <div className="flex">

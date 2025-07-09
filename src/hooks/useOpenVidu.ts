@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { OpenVidu, Session, Publisher, StreamManager } from 'openvidu-browser';
 import { initOpenVidu, getOVInstance } from '@/libs/openviduClient';
 import { apiWithToken } from '@/apis/axios';
-
+import { useOpenViduStore } from '@/stores/openViduStore';
 interface UseOpenViduParams {
   sessionId: string;
   userName: string;
@@ -107,9 +107,11 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
         insertMode: 'APPEND',
       });
 
+    
       await session.publish(newPublisher);
       console.log('[OpenVidu] Publisher successfully published');
       setPublisher(newPublisher);
+      useOpenViduStore.getState().setPublisher(newPublisher);
     } catch (error) {
       console.error('[OpenVidu] joinSession error:', error);
     }
@@ -127,23 +129,19 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
 // 미디어 스트림 트랙 스탑
 
 // 카메라
-const toggleCamera = () => {
-  if (!publisher) return;
-
-  const isVideoOn = publisher.stream.videoActive;
-
-  publisher.publishVideo(!isVideoOn); 
-  setCamStatus(!isVideoOn);
+const toggleMic = () => {
+  if (publisher) {
+    const isAudioActive = publisher.stream.audioActive;
+    publisher.publishAudio(!isAudioActive);
+  }
 };
 
 // 마이크
-const toggleMic = () => {
-  if (!publisher) return;
-
-  const isAudioOn = publisher.stream.audioActive;
-
-  publisher.publishAudio(!isAudioOn); 
-  setMicStatus(!isAudioOn);
+const toggleCam = () => {
+  if (publisher) {
+    const isVideoActive = publisher.stream.videoActive;
+    publisher.publishVideo(!isVideoActive);
+  }
 };
 
 
@@ -153,9 +151,7 @@ const toggleMic = () => {
     subscribers,
     joinSession,
     leaveSession,
-    toggleCamera,
-    toggleMic,
-    micStatus,
-    camStatus,
+      toggleMic,
+  toggleCam,
   };
 };
