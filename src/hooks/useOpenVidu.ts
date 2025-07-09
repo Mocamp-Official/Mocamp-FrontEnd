@@ -12,6 +12,8 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
   const [session, setSession] = useState<Session | null>(null);
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [subscribers, setSubscribers] = useState<StreamManager[]>([]);
+  const [micStatus, setMicStatus] = useState(true);
+  const [camStatus, setCamStatus] = useState(true);
 
   const OVRef = useRef<OpenVidu | null>(null);
 
@@ -26,12 +28,31 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     const newSession = ov.initSession();
 
     newSession.on('streamCreated', (event) => {
-      const newConnectionId = event.stream.connection.connectionId;
+      const stream = event.stream;
+
+      if (
+        !stream ||
+        !stream.connection ||
+        !stream.connection.connectionId ||
+        !stream.connection.data
+      ) {
+        console.warn('[OpenVidu] Skipping subscription: invalid stream or connection data');
+        return;
+      }
+
+      const newConnectionId = stream.connection.connectionId;
+
       setSubscribers((prev) => {
         const exists = prev.some((sub) => sub.stream.connection.connectionId === newConnectionId);
         if (exists) return prev;
-        const subscriber = newSession.subscribe(event.stream, undefined);
-        return [...prev, subscriber];
+
+        try {
+          const subscriber = newSession.subscribe(stream, undefined);
+          return [...prev, subscriber];
+        } catch (error) {
+          console.error('[OpenVidu] subscribe() failed:', error);
+          return prev;
+        }
       });
     });
 
@@ -46,9 +67,7 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     setSession(newSession);
 
     return () => {
-      if (newSession) {
-        newSession.disconnect();
-      }
+      newSession.disconnect();
       setSession(null);
       setPublisher(null);
       setSubscribers([]);
@@ -62,7 +81,6 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     }
 
     try {
-      // 세션 생성 + 토큰 발급 axios 요청
       const sessionRes = await apiWithToken.post('/api/sessions', {
         customSessionId: sessionId,
       });
@@ -71,7 +89,6 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
       const tokenRes = await apiWithToken.post(`/api/sessions/${sessionIdFromServer}/connections`);
       const token = tokenRes.data;
 
-      // 세션 연결 - 연결 확인하면 수정좀..(해상도)
       await session.connect(token, { clientData: userName });
 
       const ovInstance = getOVInstance();
@@ -83,14 +100,15 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
       const newPublisher = ovInstance.initPublisher(undefined, {
         audioSource: undefined,
         videoSource: undefined,
-        publishAudio: true,
-        publishVideo: true,
+        publishAudio: micStatus,
+        publishVideo: camStatus,
         resolution: '640x480',
         frameRate: 30,
         insertMode: 'APPEND',
       });
 
-      session.publish(newPublisher);
+      await session.publish(newPublisher);
+      console.log('[OpenVidu] Publisher successfully published');
       setPublisher(newPublisher);
     } catch (error) {
       console.error('[OpenVidu] joinSession error:', error);
@@ -106,11 +124,38 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
     setSubscribers([]);
   };
 
+// 미디어 스트림 트랙 스탑
+
+// 카메라
+const toggleCamera = () => {
+  if (!publisher) return;
+
+  const isVideoOn = publisher.stream.videoActive;
+
+  publisher.publishVideo(!isVideoOn); 
+  setCamStatus(!isVideoOn);
+};
+
+// 마이크
+const toggleMic = () => {
+  if (!publisher) return;
+
+  const isAudioOn = publisher.stream.audioActive;
+
+  publisher.publishAudio(!isAudioOn); 
+  setMicStatus(!isAudioOn);
+};
+
+
   return {
     session,
     publisher,
     subscribers,
     joinSession,
     leaveSession,
+    toggleCamera,
+    toggleMic,
+    micStatus,
+    camStatus,
   };
 };

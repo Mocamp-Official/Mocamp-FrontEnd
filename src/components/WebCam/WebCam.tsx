@@ -10,9 +10,11 @@ import { useRoomStore } from '@/stores/roomStore';
 interface WebCamTileProps {
   streamManager: StreamManager;
   isLocal: boolean;
+  toggleCamera?: () => void;
+  toggleMic?: () => void;
 }
 
-const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
+const WebCamTile = ({ streamManager, isLocal, toggleCamera, toggleMic }: WebCamTileProps) => {
   const [statusOpen, setStatusOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -27,18 +29,18 @@ const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
   const isMe = nickname === myUsername;
 
   useEffect(() => {
-    if (videoRef.current && streamManager) { 
+    if (videoRef.current && streamManager) {
       try {
         streamManager.addVideoElement(videoRef.current);
       } catch (error) {
-        console.error("Error adding video element:", error);
+        console.error('Error adding video element:', error);
       }
     }
-  
+
     return () => {
-      if (videoRef.current && streamManager && streamManager.videos) {       
+      if (videoRef.current && streamManager && streamManager.videos) {
         const videoElementIndex = streamManager.videos.findIndex(
-          (video) => video.video === videoRef.current
+          (video) => video.video === videoRef.current,
         );
         if (videoElementIndex > -1) {
           streamManager.videos.splice(videoElementIndex, 1);
@@ -47,36 +49,30 @@ const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
     };
   }, [streamManager]);
 
-  const toggleCamera = () => {
-    if (!isMe) return;
-    const pub = streamManager as Publisher;
-    const videoTracks = pub.stream.getMediaStream().getVideoTracks();
-    videoTracks.forEach((track) => (track.enabled = !track.enabled));
-    setCamStatus(!camStatus);
+  const handleToggleCamera = () => {
+    if (!isMe || !toggleCamera) return;
+    toggleCamera();
+    setCamStatus((prev) => !prev);
   };
 
-  const toggleMic = () => {
-    if (!isMe) return;
-    const pub = streamManager as Publisher;
-    const audioTracks = pub.stream.getMediaStream().getAudioTracks();
-    audioTracks.forEach((track) => (track.enabled = !track.enabled));
-    setMicStatus(!micStatus);
+  const handleToggleMic = () => {
+    if (!isMe || !toggleMic) return;
+    toggleMic();
+    setMicStatus((prev) => !prev);
   };
 
   const handleWorkStatus = (working: boolean) => {
     setIsWorking(working);
     setStatusOpen(false);
-    // stomp 서버로 상태 전송 로직 필요 
   };
 
-    if (!streamManager || !streamManager.stream) {
- 
+  if (!streamManager || !streamManager.stream) {
     return null;
   }
 
   return (
     <div className="relative flex h-[144px] w-[256px] flex-shrink-0 flex-col justify-end rounded-[20px] bg-[#3D3D3D] lg:h-[202.5px] lg:w-[360px] xl:h-[270px] xl:w-[480px]">
-      {camStatus ? (
+      {camStatus && streamManager?.stream?.videoActive ? (
         <video
           ref={videoRef}
           autoPlay
@@ -95,7 +91,7 @@ const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
           <button
             onClick={() => {
               if (isMe && isAdmin) {
-                // 방장 위임 모달 열기 - 아이콘이 떠야 확인을 하지. 
+                // 방장 위임 모달 열기 - 아이콘이 떠야 확인을 하지.
               } else {
                 // 위임 불가 알림
               }
@@ -149,14 +145,14 @@ const WebCamTile = ({ streamManager, isLocal }: WebCamTileProps) => {
           )}
 
           <button
-            onClick={toggleCamera}
+            onClick={handleToggleCamera}
             className="ml-[15px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
             <WebcamCamera width={24} height={24} style={{ opacity: camStatus ? 1 : 0.2 }} />
           </button>
 
           <button
-            onClick={toggleMic}
+            onClick={handleToggleMic}
             className="relative ml-[10px] flex h-[40px] w-[40px] items-center justify-center rounded bg-[rgba(95,95,95,0.50)] backdrop-blur-[2px]"
           >
             <VoiceIcon

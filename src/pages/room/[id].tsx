@@ -49,17 +49,17 @@ const RoomPage = () => {
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
 
-  const { session, publisher, subscribers, joinSession, leaveSession } = useOpenVidu({
-    sessionId: String(roomId),
-    userName: myUsername,
-  });
+  const { session, publisher, subscribers, joinSession, leaveSession, toggleCamera, toggleMic } =
+    useOpenVidu({
+      sessionId: String(roomId),
+      userName: myUsername,
+    });
 
   useEffect(() => {
-  if (session && roomId && myUsername) {
-    joinSession();
-  }
-}, [session, roomId, myUsername]);
-
+    if (session && roomId && myUsername) {
+      joinSession();
+    }
+  }, [session, roomId, myUsername]);
 
   const handleLeaveRoom = async () => {
     try {
@@ -72,11 +72,10 @@ const RoomPage = () => {
   };
 
   useEffect(() => {
-  if (roomId && myUsername && !session) {
-    joinSession();
-  }
-}, [roomId, myUsername, session, joinSession]);
-
+    if (roomId && myUsername && !session) {
+      joinSession();
+    }
+  }, [roomId, myUsername, session, joinSession]);
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [isNotDelegationModalOpen, setIsNotDelegationModalOpen] = useState(false);
@@ -119,7 +118,14 @@ const RoomPage = () => {
       />
       <div className="relative flex h-full w-[789.33px] flex-col justify-center pt-[53.333px] lg:w-[1110px] lg:pt-[75px] xl:w-[1480px] xl:pt-[100px]">
         <div className="mb-[10.67px] flex w-full gap-[10.67px] lg:mb-[15px] lg:gap-[15px] xl:mb-5 xl:gap-5">
-          {publisher && <WebCamTile streamManager={publisher} isLocal />}
+          {publisher && (
+            <WebCamTile
+              streamManager={publisher}
+              isLocal
+              toggleCamera={toggleCamera}
+              toggleMic={toggleMic}
+            />
+          )}
           {subscribers.map((sub, index) => (
             <WebCamTile
               key={sub.stream.connection.connectionId}
