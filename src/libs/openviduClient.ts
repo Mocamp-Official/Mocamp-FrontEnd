@@ -14,11 +14,7 @@ let ovInstance: OpenVidu | null = null;
 export const initOpenVidu = () => {
   ovInstance = new OpenVidu();
 
-  ovInstance.setAdvancedConfiguration({
-    ...({
-      websocketUri: process.env.NEXT_PUBLIC_OPENVIDU_WSS,
-    } as any),
-  });
+  (OpenVidu as any).websocketUri = OPENVIDU_WSS;
 
   return ovInstance;
 };
