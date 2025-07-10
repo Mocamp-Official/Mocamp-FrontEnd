@@ -12,6 +12,8 @@ export const useOpenViduControls = () => {
     }
   };
 
+// 캠 
+
   const toggleCam = () => {
     if (publisher) {
       const isVideoActive = publisher.stream.videoActive;
