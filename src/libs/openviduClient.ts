@@ -16,6 +16,7 @@ export const initOpenVidu = () => {
 
   (OpenVidu as any).websocketUri = OPENVIDU_WSS;
 
+
   return ovInstance;
 };
 
