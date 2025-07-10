@@ -11,7 +11,7 @@ export const useOpenViduControls = () => {
       publisher.publishAudio(!isAudioActive);
     }
   };
-// 캠 
+
   const toggleCam = () => {
     if (publisher) {
       const isVideoActive = publisher.stream.videoActive;
