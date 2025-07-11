@@ -68,9 +68,6 @@ const { openDelegationModal, openNotDelegationModal } = useModalStore();
   console.log('👤 myUsername from store:', myUsername);
   console.log('✅ isMe 결과:', nickname === myUsername);
 
-  const participant = participants.find((p) => p.username === nickname);
-  const peerIsWorking = participant?.isWorking ?? true;
-
   useEffect(() => {
   if (videoRef.current && streamManager && videoActive) {
     try {
