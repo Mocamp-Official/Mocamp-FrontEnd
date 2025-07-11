@@ -15,6 +15,8 @@ import { leaveRoom } from '@/apis/room';
 import { useRoomSync } from '@/hooks/room/useRoomSync';
 import { useOpenVidu } from '@/hooks/useOpenVidu';
 import { useRoomStore } from '@/stores/todo-store';
+import { useRoomStoreName } from '@/stores/roomStore';
+
 
 const MAX_VISIBLE = 2;
 
@@ -48,6 +50,13 @@ const RoomPage = () => {
   const me = participants.find((p) => p.isMyGoal);
   const myUserId = me?.userId ?? 0;
   const myUsername = me?.username ?? '';
+
+  useEffect(() => {
+  if (me?.username) {
+    useRoomStoreName.getState().setMyUsername(me.username);
+  }
+}, [me?.username]);
+
 
   const { session, publisher, subscribers, joinSession, leaveSession, toggleCam, toggleMic } =
     useOpenVidu({
@@ -125,6 +134,9 @@ const RoomPage = () => {
               isLocal={true}
               toggleCamera={toggleCam}
               toggleMic={toggleMic}
+              roomId={String(roomId)}
+              myUserId={myUserId}
+              participants={participants}
             />
           )}
           {subscribers.map((subscriber, index) => (
@@ -132,6 +144,9 @@ const RoomPage = () => {
               key={subscriber.stream.connection.connectionId}
               streamManager={subscriber}
               isLocal={false}
+              roomId={String(roomId)}
+  myUserId={myUserId}
+  participants={participants} 
             />
           ))}
         </div>
