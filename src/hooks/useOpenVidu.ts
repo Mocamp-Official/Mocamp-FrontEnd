@@ -15,8 +15,8 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [subscribers, setSubscribers] = useState<StreamManager[]>([]);
 
-  const { isCameraOn, isMicOn } = useOpenViduControlsStore.getState(); // ✅ 전역 상태
-  const { setPublisher: setStorePublisher } = useOpenViduControlsStore.getState(); // ✅ store method
+  const { isCameraOn, isMicOn } = useOpenViduControlsStore.getState(); // 전역 상태
+  const { setPublisher: setStorePublisher } = useOpenViduControlsStore.getState(); // tore method
 
   const OVRef = useRef<OpenVidu | null>(null);
 
@@ -122,7 +122,7 @@ export const useOpenVidu = ({ sessionId, userName }: UseOpenViduParams) => {
       console.log('[OpenVidu] Publisher successfully published');
       setPublisher(newPublisher);
       useOpenViduStore.getState().setPublisher(newPublisher); // (기존 스토어 유지하는 경우)
-      setStorePublisher(newPublisher); // ✅ controls store에도 저장
+      setStorePublisher(newPublisher); // controls store에도 저장
     } catch (error) {
       console.error('[OpenVidu] joinSession error:', error);
     }
