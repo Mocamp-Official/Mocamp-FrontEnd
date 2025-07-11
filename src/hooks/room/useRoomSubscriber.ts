@@ -11,6 +11,7 @@ interface RoomSubscriberHandlers {
   onAdminUpdate?: (payload: any) => void;
   onAlertUpdate?: (payload: any) => void;
   onWorkStatusUpdate?: (payload: any) => void;
+  onCamStatusUpdate?: (payload: any) => void; 
 }
 
 export const useRoomSubscriber = (roomId: string | null, handlers: RoomSubscriberHandlers) => {
