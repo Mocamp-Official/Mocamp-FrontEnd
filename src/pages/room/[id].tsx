@@ -74,6 +74,8 @@ const RoomPage = () => {
     }
   };
 
+  
+
   useEffect(() => {
     if (roomId && myUsername && !session) {
       joinSession();
@@ -126,6 +128,10 @@ const RoomPage = () => {
             roomName={roomData.roomName}
             roomSeq={roomData.roomSeq}
             isOwner={isHost}
+            onResetTutorial={() => {
+              localStorage.setItem('tutorial', '0');
+              startTutorial();
+            }}
           />
           <Sidebar
             startTime={roomData.startedAt}
