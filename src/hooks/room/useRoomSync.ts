@@ -112,6 +112,7 @@ export const useRoomSync = (roomId?: string) => {
       });
     },
 
+
     /*  개별 목표 토글 ------------------- */
     onCompleteUpdate: (d) => toggleGoal(d.userId, d.goalId, d.isCompleted),
 
