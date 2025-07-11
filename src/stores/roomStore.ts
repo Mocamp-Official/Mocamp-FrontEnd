@@ -12,6 +12,8 @@ interface RoomStore {
   setIsHost: (isHost: boolean) => void;
 }
 
+
+
 export const useRoomStoreName = create<RoomStore>((set, get) => ({
   myUserId: null,
   myUsername: '',
@@ -19,13 +21,13 @@ export const useRoomStoreName = create<RoomStore>((set, get) => ({
   isAdmin: false,
   isHost: false,
 
+  
+
   setMyUserId: (id) => {
     const { adminUsername } = get();
     const isAdmin = adminUsername !== null && get().myUsername === adminUsername;
     set({ myUserId: id, isAdmin });
   },
-
-
 
   setMyUsername: (username) => {
     const { adminUsername } = get();

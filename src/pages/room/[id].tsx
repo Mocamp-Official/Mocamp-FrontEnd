@@ -17,6 +17,7 @@ import { useOpenVidu } from '@/hooks/useOpenVidu';
 import { useRoomStore } from '@/stores/todo-store';
 import { useTutorial } from '@/stores/tutorial-store';
 import Tutorial from '@/components/WebCam/tutorial/Tutorial';
+import { useRoomStoreName } from '@/stores/roomStore';
 
 const MAX_VISIBLE = 2;
 
@@ -41,6 +42,7 @@ const RoomPage = () => {
   const roomData = useRoomStore((s) => s.roomData);
   const alertInfo = useRoomStore((s) => s.alertInfo);
   const notice = useRoomStore((s) => s.notice);
+  const { setMyUsername } = useRoomStoreName();
 
   const setAlert = useRoomStore((s) => s.setAlert);
   const setAlertVisible = (visible: boolean) => {
@@ -57,6 +59,12 @@ const RoomPage = () => {
       sessionId: String(roomId),
       userName: myUsername,
     });
+
+  useEffect(() => {
+    if (me?.username) {
+      setMyUsername(me.username);
+    }
+  }, [me]);
 
   useEffect(() => {
     if (session && roomId && myUsername) {

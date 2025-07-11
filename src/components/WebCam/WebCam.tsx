@@ -43,7 +43,7 @@ const WebCamTile = ({
 
   const nickname = JSON.parse(streamManager.stream.connection.data).clientData;
   const isAdmin = nickname === adminUsername;
-  const isMe = nickname === myUsername;
+  const isMe = isLocal || nickname === myUsername; 
 
   console.log('🔍 nickname from stream:', nickname);
   console.log('👤 myUsername from store:', myUsername);
