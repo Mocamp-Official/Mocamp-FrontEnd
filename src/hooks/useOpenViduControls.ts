@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Publisher } from 'openvidu-browser';
 import { useRoomStore } from '@/stores/todo-store';
+import { useRoomStoreName } from '@/stores/roomStore';
 import { signalingSocket } from '@/libs/socket';
 
 export const useOpenViduControls = () => {
@@ -8,7 +9,7 @@ export const useOpenViduControls = () => {
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
 
-  const myUserId = useRoomStore((s) => s.myUserId);
+  const myUserId = useRoomStoreName((s) => s.myUserId);
   const roomId = useRoomStore((s) => s.roomData?.roomId);
 
   const setPublisher = (publisher: Publisher) => {
