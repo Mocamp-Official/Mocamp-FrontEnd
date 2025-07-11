@@ -13,7 +13,6 @@ import type { Participant } from '@/types/room';
 import { useOpenViduControlsStore } from '@/stores/openViduControlsStore';
 import { useModalStore } from '@/stores/modalStore';
 
-
 interface WebCamTileProps {
   streamManager: StreamManager;
   isLocal: boolean;
@@ -64,9 +63,6 @@ const peerIsWorking = participant?.isWorking ?? true;
 
 const { openDelegationModal, openNotDelegationModal } = useModalStore();
 
-  console.log('🔍 nickname from stream:', nickname);
-  console.log('👤 myUsername from store:', myUsername);
-  console.log('✅ isMe 결과:', nickname === myUsername);
 
   useEffect(() => {
   if (videoRef.current && streamManager && videoActive) {
