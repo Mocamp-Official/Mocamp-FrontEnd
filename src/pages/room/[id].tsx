@@ -74,8 +74,6 @@ const RoomPage = () => {
     }
   };
 
-  
-
   useEffect(() => {
     if (roomId && myUsername && !session) {
       joinSession();
@@ -155,18 +153,22 @@ const RoomPage = () => {
                   participants={participants}
                 />
               )}
-              {subscribers.map((subscriber, index) => (
-                <WebCamTile
-                  key={subscriber.stream.connection.connectionId}
-                  streamManager={subscriber}
-                  isLocal={false}
-                  roomId={String(roomId)}
-                  myUserId={myUserId}
-                  participants={participants}
-                />
-              ))}
+              {subscribers
+                .filter((subscriber) => {
+                  const nickname = JSON.parse(subscriber.stream.connection.data).clientData;
+                  return nickname !== myUsername;
+                })
+                .map((subscriber) => (
+                  <WebCamTile
+                    key={subscriber.stream.connection.connectionId}
+                    streamManager={subscriber}
+                    isLocal={false}
+                    roomId={String(roomId)}
+                    myUserId={myUserId}
+                    participants={participants}
+                  />
+                ))}
             </div>
-
             <div className="flex">
               {canSlideLeft && todoGroups.length > 3 && (
                 <Arrow
