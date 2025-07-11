@@ -28,6 +28,7 @@ const RoomPage = () => {
 
   const roomId = Array.isArray(id) ? id[0] : id || '';
   const isHost = from === 'create';
+  
   const camStatus = cam !== 'false';
   const micStatus = mic !== 'false';
 

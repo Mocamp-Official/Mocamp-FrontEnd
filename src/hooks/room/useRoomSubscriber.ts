@@ -50,6 +50,9 @@ export const useRoomSubscriber = (roomId: string | null, handlers: RoomSubscribe
         case 'WORK_STATUS_UPDATED':
           handlers.onWorkStatusUpdate?.(data);
           break;
+        case 'CAM_STATUS_UPDATED':
+  handlers.onCamStatusUpdate?.(data);
+  break;
         default:
           console.warn('알 수 없는 메시지 타입:', data.type);
       }

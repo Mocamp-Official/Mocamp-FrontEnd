@@ -85,6 +85,15 @@ export const useRoomSync = (roomId?: string) => {
       });
     },
 
+/*  카메라 상태 변경 ------------------- */
+    onCamStatusUpdate: (d) => {
+  useRoomStore.setState((state) => {
+    state.participants = state.participants.map((p) =>
+      p.userId === d.userId ? { ...p, camStatus: d.camStatus } : p,
+    );
+  });
+},
+
     /*  작업 상태 변경 ------------------- */
     onWorkStatusUpdate: (d) => {
     useRoomStore.setState((state) => {
