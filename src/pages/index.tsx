@@ -52,7 +52,6 @@ const OnBoarding = ({ metadata, content, buildTime }: OnBoardingProps) => {
         <meta property="og:image:height" content="630" />
         <meta property="og:url" content={metadata.ogUrl} />
         <meta name="robots" content="index, follow" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="theme-color" content="#your-primary-color" />
         <link rel="canonical" href={metadata.ogUrl} />
